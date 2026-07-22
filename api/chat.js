@@ -14,7 +14,7 @@
    ★ 不需任何 npm 套件：直接用 Node 內建 fetch 呼叫 Gemini REST API。
    ========================================================================= */
 
-const MODEL = "gemini-2.0-flash"; // 快又省；可改 "gemini-2.5-flash" 等
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash"; // 可用環境變數 GEMINI_MODEL 覆蓋
 const ALLOW_ORIGIN = "*";         // 部署後可改成你的網域，例如 "https://egrra.com"
 
 export default async function handler(req, res) {
