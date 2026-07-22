@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>煌盛興業 EGRRA｜網站後台管理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#20242b;--muted:#6b7280;--faint:#9aa1ac;
+  --bg:#f3f4f6;--panel:#ffffff;--line:#e5e7eb;--line2:#eef0f3;
+  --nav:#16130f;--nav2:#211c16;--gold:#b08d57;--gold-dk:#8f6f3f;--gold-lt:#c9a878;
+  --ok:#1f9d6b;--danger:#d1495b;--warn:#c78a1e;
+  --r:12px;--sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --sh:0 10px 30px -14px rgba(20,20,30,.22);
+}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+a{color:inherit}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+
+/* ---------- SIDEBAR ---------- */
+.side{background:var(--nav);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.side .brand{padding:26px 24px 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.side .brand b{font-size:20px;font-weight:900;letter-spacing:.08em;display:block}
+.side .brand span{font-size:10px;letter-spacing:.4em;color:var(--gold-lt);font-weight:600}
+.side .brand small{display:block;margin-top:10px;font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.1em}
+.navlist{padding:16px 12px;flex:1}
+.navlist button{width:100%;display:flex;align-items:center;gap:13px;background:none;border:none;color:rgba(255,255,255,.72);
+  padding:13px 15px;border-radius:10px;font-size:14.5px;font-weight:500;text-align:left;transition:.2s;margin-bottom:4px}
+.navlist button:hover{background:rgba(255,255,255,.06);color:#fff}
+.navlist button.on{background:linear-gradient(90deg,rgba(176,141,87,.22),rgba(176,141,87,.06));color:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+.navlist button .i{width:20px;height:20px;flex:0 0 auto}
+.navlist button svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7}
+.navlist .cnt{margin-left:auto;font-size:11px;background:rgba(255,255,255,.12);padding:2px 8px;border-radius:20px;color:rgba(255,255,255,.8)}
+.side .foot{padding:16px 18px;border-top:1px solid rgba(255,255,255,.08);font-size:11.5px;color:rgba(255,255,255,.4)}
+.side .foot a{color:var(--gold-lt);text-decoration:none}
+
+/* ---------- MAIN ---------- */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{background:var(--panel);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:20}
+.topbar h1{font-size:17px;font-weight:700;margin-right:auto}
+.savestate{font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:7px}
+.savestate .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.savestate.dirty{color:var(--warn)}
+.savestate.dirty .dot{background:var(--warn)}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 15px;border-radius:9px;font-size:13.5px;font-weight:500;
+  display:inline-flex;align-items:center;gap:7px;transition:.2s;white-space:nowrap}
+.btn:hover{border-color:var(--faint);background:#fafafa}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#fff}
+.btn.gold:hover{background:var(--gold-dk);border-color:var(--gold-dk)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-radius:7px}
+.btn.danger{color:var(--danger);border-color:#f0d3d8}
+.btn.danger:hover{background:#fdf2f4}
+
+.content{padding:28px;max-width:1100px;width:100%}
+.pagehead{margin-bottom:22px}
+.pagehead h2{font-size:22px;font-weight:800}
+.pagehead p{color:var(--muted);font-size:14px;margin-top:5px}
+
+/* banner */
+.notice{background:#fff7ea;border:1px solid #f0dcae;color:#8a6412;border-radius:var(--r);padding:14px 18px;font-size:13.5px;
+  display:flex;gap:12px;margin-bottom:24px;line-height:1.7}
+.notice b{color:#6b4c0c}
+.notice svg{width:20px;height:20px;flex:0 0 auto;stroke:#c78a1e;fill:none;stroke-width:1.8;margin-top:2px}
+
+/* card / panel */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.panel.pad{padding:26px}
+
+/* form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px}
+.f{display:flex;flex-direction:column;gap:7px}
+.f.full{grid-column:1/-1}
+.f label{font-size:13px;font-weight:600;color:var(--ink)}
+.f label span{color:var(--faint);font-weight:400}
+.f input,.f select,.f textarea{border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:#fff;transition:.2s;color:var(--ink)}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.13)}
+.f textarea{resize:vertical;min-height:88px;line-height:1.7}
+.f .hint{font-size:12px;color:var(--faint)}
+
+/* toolbar for lists */
+.listbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.search{flex:1;max-width:320px;position:relative}
+.search input{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 13px 10px 36px;background:#fff}
+.search svg{position:absolute;left:11px;top:11px;width:17px;height:17px;stroke:var(--faint);fill:none;stroke-width:1.8}
+.listbar .count{color:var(--muted);font-size:13px}
+
+/* grid of item cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:.25s;display:flex;flex-direction:column}
+.item:hover{box-shadow:var(--sh);border-color:#dcdfe4;transform:translateY(-2px)}
+.item .thumb{aspect-ratio:1/.72;background:#eee;position:relative;background-size:cover;background-position:center}
+.item .thumb .tag{position:absolute;top:9px;left:9px;background:rgba(22,19,15,.8);color:#fff;font-size:11px;padding:3px 9px;border-radius:20px;letter-spacing:.03em}
+.item .thumb .photo{position:absolute;top:9px;right:9px;background:var(--ok);color:#fff;font-size:10.5px;padding:3px 8px;border-radius:20px}
+.item .thumb .nophoto{position:absolute;top:9px;right:9px;background:rgba(255,255,255,.85);color:var(--muted);font-size:10.5px;padding:3px 8px;border-radius:20px}
+.item .body{padding:13px 14px;flex:1}
+.item .body h4{font-size:15.5px;font-weight:700}
+.item .body .meta{font-size:12.5px;color:var(--muted);margin-top:3px}
+.item .act{display:flex;gap:8px;padding:0 14px 14px}
+.item .act .btn{flex:1;justify-content:center}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(15,15,20,.5);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;
+  padding:40px 20px;z-index:60;overflow-y:auto}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:640px;box-shadow:0 40px 80px -20px rgba(0,0,0,.4);animation:pop .25s ease}
+@keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.modal .mh{padding:22px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+.modal .mh h3{font-size:18px;font-weight:800}
+.modal .mh .x{margin-left:auto;background:none;border:none;font-size:24px;color:var(--faint);line-height:1;padding:4px 8px;border-radius:8px}
+.modal .mh .x:hover{background:#f3f4f6;color:var(--ink)}
+.modal .mb{padding:26px}
+.modal .mf{padding:18px 26px;border-top:1px solid var(--line);display:flex;gap:12px;justify-content:flex-end;background:#fafbfc;border-radius:0 0 16px 16px}
+
+/* image upload */
+.uploader{display:flex;gap:16px;align-items:center}
+.preview{width:118px;height:88px;border-radius:10px;border:1px solid var(--line);background:#f6f6f6 center/cover no-repeat;flex:0 0 auto;position:relative;overflow:hidden}
+.preview .ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint);font-size:12px;text-align:center;padding:6px}
+.up-actions{display:flex;flex-direction:column;gap:8px}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+
+/* toast */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+  padding:13px 22px;border-radius:11px;font-size:14px;box-shadow:0 16px 40px -10px rgba(0,0,0,.4);opacity:0;pointer-events:none;
+  transition:.35s;z-index:80;display:flex;align-items:center;gap:10px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:#15855a}.toast.err{background:#c23a4b}
+.empty{text-align:center;padding:60px 20px;color:var(--faint)}
+.empty svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:1.4;margin-bottom:12px;opacity:.6}
+
+@media(max-width:820px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap}
+  .side .brand{width:100%;padding:16px 20px}
+  .navlist{display:flex;gap:6px;padding:10px;flex:1;overflow-x:auto}
+  .navlist button{width:auto;margin:0;white-space:nowrap}
+  .side .foot{display:none}
+  .topbar{flex-wrap:wrap}
+  .topbar h1{width:100%;margin-bottom:6px}
+  .form-grid{grid-template-columns:1fr}
+  .content{padding:18px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="brand">
+      <b>煌盛興業</b><span>EGRRA</span>
+      <small>網站內容管理後台</small>
+    </div>
+    <nav class="navlist" id="nav">
+      <button data-tab="info" class="on"><span class="i"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg></span>網站資訊</button>
+      <button data-tab="products"><span class="i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>產品花色 <span class="cnt" id="cnt-p">0</span></button>
+      <button data-tab="cases"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg></span>實績案例 <span class="cnt" id="cnt-c">0</span></button>
+    </nav>
+    <div class="foot">
+      資料儲存在本機瀏覽器<br>要全站生效請「匯出部署檔」<br>
+      <a href="index.html" target="_blank" rel="noopener">↗ 開啟官網</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="ptitle">網站資訊</h1>
+      <div class="savestate" id="savestate"><span class="dot"></span><span id="savetext">已儲存</span></div>
+      <button class="btn" id="btn-preview"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>預覽官網</button>
+      <button class="btn" id="btn-import"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5M5 21h14"/></svg>匯入備份</button>
+      <button class="btn" id="btn-export"><svg viewBox="0 0 24 24"><path d="M12 16V3M7 8l5-5 5 5M5 21h14"/></svg>匯出備份</button>
+      <button class="btn gold" id="btn-save"><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7"/></svg>儲存變更</button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="mh"><h3 id="mtitle">編輯</h3><button class="x" id="mclose">&times;</button></div>
+    <div class="mb" id="mbody"></div>
+    <div class="mf">
+      <button class="btn ghost" id="mcancel">取消</button>
+      <button class="btn gold" id="msave">儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept=".json,application/json" style="display:none" />
+
+<script src="site-data.js"></script>
+<script>
+/* ============ 材質縮圖產生器（與官網相同）============ */
+function stoneSVG(o){
+  var w=240,h=200,f=o.freq||"0.012 0.03",oct=Math.min(o.oct||3,4),seed=o.seed||8;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
+    '<defs><filter id="v"><feTurbulence type="fractalNoise" baseFrequency="'+f+'" numOctaves="'+oct+'" seed="'+seed+'"/>'+
+    '<feColorMatrix type="saturate" values="0"/></filter></defs>'+
+    '<rect width="100%" height="100%" fill="'+o.base+'"/>'+
+    '<rect width="100%" height="100%" fill="'+o.mid+'" opacity="'+(o.midOp||.5)+'"/>'+
+    '<rect width="100%" height="100%" filter="url(#v)" fill="'+o.vein+'" opacity="'+(o.veinOp||.55)+'" style="mix-blend-mode:'+(o.blend||"soft-light")+'"/></svg>';
+  return 'url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+}
+var STONES={
+  carrara:{base:"#f2efe9",mid:"#dedad2",vein:"#9a958c",freq:"0.008 0.04",veinOp:.5,seed:12},
+  beige:{base:"#e8dcc3",mid:"#d8c8a6",vein:"#8f7a52",freq:"0.01 0.03",veinOp:.45,seed:5},
+  amber:{base:"#c48a4a",mid:"#a86f34",vein:"#5f3c19",freq:"0.012 0.028",veinOp:.55,seed:9},
+  gold:{base:"#cbae74",mid:"#b18f4f",vein:"#6e5225",freq:"0.01 0.03",veinOp:.5,seed:3},
+  black:{base:"#1f1c19",mid:"#2b2723",vein:"#6a5f4c",freq:"0.011 0.03",veinOp:.6,blend:"screen",seed:14},
+  purple:{base:"#241f27",mid:"#312838",vein:"#6b5a72",freq:"0.012 0.03",veinOp:.5,blend:"screen",seed:7},
+  darkgrey:{base:"#454440",mid:"#4a4741",vein:"#8c887f",freq:"0.01 0.03",veinOp:.5,seed:20},
+  grey:{base:"#8a8880",mid:"#9d9b93",vein:"#5c5a54",freq:"0.009 0.03",veinOp:.45,seed:17},
+  silver:{base:"#b7b5b0",mid:"#c6c4bf",vein:"#7d7b75",freq:"0.008 0.035",veinOp:.4,seed:22},
+  rust:{base:"#8a5638",mid:"#6d3f26",vein:"#c98a4a",freq:"0.02 0.02",oct:4,veinOp:.6,blend:"overlay",seed:31},
+  wood:{base:"#9a6b3f",mid:"#845a30",vein:"#4d3218",freq:"0.003 0.06",oct:4,veinOp:.55,seed:41}
+};
+var TEX={};for(var k in STONES){TEX[k]=stoneSVG(STONES[k]);}
+function tex(key){return TEX[key]||TEX.carrara;}
+
+var STONE_OPTS=[["carrara","白 / 大理石紋"],["beige","米黃"],["gold","金"],["amber","琥珀棕"],["silver","銀 / 淺灰"],["grey","灰"],["darkgrey","深灰"],["black","黑"],["purple","紫黑"],["rust","鏽蝕"],["wood","木紋"]];
+var SERIES_OPTS=["石紋系列","繡蝕系列","木紋系列","消防箱","防火門"];
+var CAT_OPTS=["全棟廊道","防火消防美化","防火門","消防箱","牆面","天花板","豪宅客製","其他"];
+
+/* ============ 狀態 ============ */
+var LS_KEY="egrra_data";
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function loadData(){
+  try{var s=localStorage.getItem(LS_KEY);if(s){var d=JSON.parse(s);if(d&&d.products)return d;}}catch(e){}
+  return clone(window.EGRRA_DEFAULT_DATA);
+}
+var DATA=loadData();
+var dirty=false;
+var tab="info";
+var search="";
+
+function setDirty(v){
+  dirty=v;
+  var ss=document.getElementById("savestate");
+  document.getElementById("savetext").textContent=v?"尚未儲存":"已儲存";
+  ss.classList.toggle("dirty",v);
+}
+function saveData(silent){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify(DATA));
+    setDirty(false);
+    if(!silent)toast("已儲存！你在這台瀏覽器看官網即會更新","ok");
+    return true;
+  }catch(e){
+    toast("儲存失敗：圖片太多超過瀏覽器容量，請減少或縮小圖片","err");
+    return false;
+  }
+}
+function toast(msg,type){
+  var t=document.getElementById("toast");
+  t.textContent=msg;t.className="toast show"+(type?" "+type:"");
+  clearTimeout(t._t);t._t=setTimeout(function(){t.className="toast";},3200);
+}
+
+/* ============ 圖片處理（上傳自動壓縮）============ */
+function processImage(file,cb){
+  if(!file){cb("");return;}
+  if(!/^image\//.test(file.type)){toast("請選擇圖片檔","err");return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var max=1400,w=img.width,h=img.height;
+      if(w>max||h>max){var r=Math.min(max/w,max/h);w=Math.round(w*r);h=Math.round(h*r);}
+      var c=document.createElement("canvas");c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      cb(c.toDataURL("image/jpeg",0.82));
+    };
+    img.onerror=function(){toast("圖片讀取失敗","err");};
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ============ 導覽 ============ */
+document.getElementById("nav").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-tab]");if(!b)return;
+  tab=b.dataset.tab;search="";
+  document.querySelectorAll("#nav button").forEach(function(x){x.classList.toggle("on",x===b);});
+  render();
+});
+function updateCounts(){
+  document.getElementById("cnt-p").textContent=DATA.products.length;
+  document.getElementById("cnt-c").textContent=DATA.cases.length;
+}
+
+/* ============ 渲染 ============ */
+var content=document.getElementById("content");
+function render(){
+  updateCounts();
+  document.getElementById("ptitle").textContent=tab==="info"?"網站資訊":tab==="products"?"產品花色":"實績案例";
+  if(tab==="info")renderInfo();
+  else if(tab==="products")renderProducts();
+  else renderCases();
+}
+
+/* ---- 網站資訊 ---- */
+function renderInfo(){
+  var i=DATA.info;
+  content.innerHTML=
+  '<div class="pagehead"><h2>網站資訊</h2><p>品牌聯絡方式與首頁、關於段落文字。改完記得按右上「儲存變更」。</p></div>'+
+  '<div class="panel pad"><div class="form-grid">'+
+    field("電話 (顯示用)","info.phone",i.phone)+
+    field("電話 (撥號用，純數字)","info.phoneRaw",i.phoneRaw)+
+    field("傳真","info.fax",i.fax)+
+    field("Facebook 網址","info.fb",i.fb)+
+    area("首頁主標下方簡介","info.heroSub",i.heroSub,true)+
+    area("關於煌盛・第一段","info.aboutP1",i.aboutP1,true)+
+    area("關於煌盛・第二段","info.aboutP2",i.aboutP2,true)+
+    area("經營理念 (引言)","info.mission",i.mission,true)+
+  '</div></div>';
+  content.querySelectorAll("[data-bind]").forEach(function(el){
+    el.addEventListener("input",function(){
+      setByPath(DATA,el.dataset.bind,el.value);setDirty(true);
+    });
+  });
+}
+function field(label,bind,val){
+  return '<div class="f"><label>'+label+'</label><input data-bind="'+bind+'" value="'+esc(val||"")+'" /></div>';
+}
+function area(label,bind,val,full){
+  return '<div class="f '+(full?"full":"")+'"><label>'+label+'</label><textarea data-bind="'+bind+'">'+esc(val||"")+'</textarea></div>';
+}
+function setByPath(obj,path,val){var p=path.split(".");var o=obj;for(var j=0;j<p.length-1;j++)o=o[p[j]];o[p[p.length-1]]=val;}
+
+/* ---- 產品花色 ---- */
+function renderProducts(){
+  content.innerHTML=
+  storageNotice()+
+  '<div class="pagehead"><h2>產品花色</h2><p>共 '+DATA.products.length+' 款。可新增/編輯/刪除，並為每款上傳實際產品照（未上傳時用系統生成的材質示意圖）。</p></div>'+
+  '<div class="listbar">'+
+    '<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>'+
+      '<input id="q" placeholder="搜尋花色名稱 / 系列…" value="'+esc(search)+'"/></div>'+
+    '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增花色</button>'+
+  '</div><div class="cards" id="cards"></div>';
+  var list=DATA.products.filter(function(p){return matches(p.name+" "+p.series,search);});
+  var wrap=document.getElementById("cards");
+  if(!list.length){wrap.outerHTML=emptyBox("沒有符合的花色");}
+  else list.forEach(function(p){wrap.appendChild(productCard(p));});
+  bindList("products");
+}
+function productCard(p){
+  var d=document.createElement("div");d.className="item";
+  var bg=p.img?('url("'+p.img+'")'):tex(p.stone);
+  d.innerHTML=
+    '<div class="thumb" style="background-image:'+bg+'">'+
+      '<span class="tag">'+esc(p.series||"")+'</span>'+
+      (p.img?'<span class="photo">實照</span>':'<span class="nophoto">示意圖</span>')+
+    '</div>'+
+    '<div class="body"><h4>'+esc(p.name)+'</h4><div class="meta">'+esc(p.sizes||"")+'</div></div>'+
+    '<div class="act"><button class="btn sm" data-edit="'+p.id+'">編輯</button>'+
+      '<button class="btn sm danger" data-del="'+p.id+'">刪除</button></div>';
+  return d;
+}
+
+/* ---- 實績案例 ---- */
+function renderCases(){
+  content.innerHTML=
+  storageNotice()+
+  '<div class="pagehead"><h2>實績案例</h2><p>共 '+DATA.cases.length+' 件。可新增/編輯/刪除，並為每件上傳現場照片。</p></div>'+
+  '<div class="listbar">'+
+    '<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>'+
+      '<input id="q" placeholder="搜尋地區 / 案名 / 類別…" value="'+esc(search)+'"/></div>'+
+    '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增案例</button>'+
+  '</div><div class="cards" id="cards"></div>';
+  var list=DATA.cases.filter(function(c){return matches(c.region+" "+c.title+" "+c.category,search);});
+  var wrap=document.getElementById("cards");
+  if(!list.length){wrap.outerHTML=emptyBox("沒有符合的案例");}
+  else list.forEach(function(c){wrap.appendChild(caseCard(c));});
+  bindList("cases");
+}
+function caseCard(c){
+  var d=document.createElement("div");d.className="item";
+  var bg=c.img?('url("'+c.img+'")'):tex(c.stone);
+  d.innerHTML=
+    '<div class="thumb" style="background-image:'+bg+'">'+
+      '<span class="tag">'+esc(c.category||"")+'</span>'+
+      (c.img?'<span class="photo">實照</span>':'<span class="nophoto">示意圖</span>')+
+    '</div>'+
+    '<div class="body"><h4>'+esc(c.region)+'</h4><div class="meta">'+esc(c.title||"")+(c.year?' ・ '+esc(c.year):'')+'</div></div>'+
+    '<div class="act"><button class="btn sm" data-edit="'+c.id+'">編輯</button>'+
+      '<button class="btn sm danger" data-del="'+c.id+'">刪除</button></div>';
+  return d;
+}
+
+function bindList(type){
+  var q=document.getElementById("q");
+  if(q)q.addEventListener("input",function(){search=q.value;var pos=q.selectionStart;render();var q2=document.getElementById("q");if(q2){q2.focus();try{q2.setSelectionRange(pos,pos);}catch(e){}}});
+  var add=document.getElementById("add");
+  if(add)add.addEventListener("click",function(){openEditor(type,null);});
+  content.querySelectorAll("[data-edit]").forEach(function(b){b.addEventListener("click",function(){openEditor(type,b.dataset.edit);});});
+  content.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){delItem(type,b.dataset.del);});});
+}
+function delItem(type,id){
+  var arr=DATA[type];var it=arr.find(function(x){return x.id===id;});
+  if(!it)return;
+  if(!confirm("確定刪除「"+(it.name||it.region||"")+" "+(it.title||"")+"」？"))return;
+  DATA[type]=arr.filter(function(x){return x.id!==id;});
+  setDirty(true);saveData(true);render();toast("已刪除","ok");
+}
+
+/* ============ 編輯 Modal ============ */
+var editing={type:null,id:null,draftImg:undefined};
+function openEditor(type,id){
+  editing.type=type;editing.id=id;editing.draftImg=undefined;
+  var isNew=!id;
+  var it=isNew?{}:clone(DATA[type].find(function(x){return x.id===id;}));
+  document.getElementById("mtitle").textContent=(isNew?"新增":"編輯")+(type==="products"?"花色":"案例");
+  var body=document.getElementById("mbody");
+  if(type==="products"){
+    body.innerHTML='<div class="form-grid">'+
+      '<div class="f"><label>花色名稱</label><input id="e-name" value="'+esc(it.name||"")+'"/></div>'+
+      selField("e-series","系列",SERIES_OPTS,it.series||"石紋系列")+
+      selField("e-stone","材質底色 <span>(無照片時的示意圖)</span>",STONE_OPTS,it.stone||"carrara")+
+      '<div class="f"><label>尺寸</label><input id="e-sizes" value="'+esc(it.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺")+'"/></div>'+
+      '<div class="f full"><label>表面處理</label><input id="e-finish" value="'+esc(it.finish||"立體紋路・霧光・平光・消光")+'"/></div>'+
+      '<div class="f full"><label>產品說明 <span>(選填)</span></label><textarea id="e-desc">'+esc(it.desc||"")+'</textarea></div>'+
+      imgField(it.img)+
+    '</div>';
+  }else{
+    body.innerHTML='<div class="form-grid">'+
+      '<div class="f"><label>地區</label><input id="e-region" placeholder="例：台北大安" value="'+esc(it.region||"")+'"/></div>'+
+      '<div class="f"><label>案名 / 說明</label><input id="e-title" placeholder="例：全棟廊道美化" value="'+esc(it.title||"")+'"/></div>'+
+      selField("e-cat","類別",CAT_OPTS,it.category||"全棟廊道")+
+      selField("e-stone","材質底色 <span>(無照片時的示意圖)</span>",STONE_OPTS,it.stone||"carrara")+
+      '<div class="f"><label>年份 <span>(選填)</span></label><input id="e-year" placeholder="例：2025" value="'+esc(it.year||"")+'"/></div>'+
+      imgField(it.img)+
+    '</div>';
+  }
+  bindImgField();
+  document.getElementById("overlay").classList.add("show");
+}
+function selField(id,label,opts,cur){
+  var o=opts.map(function(x){var v=Array.isArray(x)?x[0]:x,t=Array.isArray(x)?x[1]:x;
+    return '<option value="'+esc(v)+'"'+(v===cur?" selected":"")+'>'+esc(t)+'</option>';}).join("");
+  return '<div class="f"><label>'+label+'</label><select id="'+id+'">'+o+'</select></div>';
+}
+function imgField(img){
+  var has=img&&img.length>5;
+  return '<div class="f full"><label>照片 <span>(選填，會自動壓縮)</span></label>'+
+    '<div class="uploader">'+
+      '<div class="preview" id="e-prev"'+(has?' style="background-image:url(\''+img+'\')"':'')+'>'+(has?'':'<div class="ph">尚無照片<br>用示意圖</div>')+'</div>'+
+      '<div class="up-actions">'+
+        '<label class="btn filebtn"><svg viewBox="0 0 24 24" width="16" height="16" style="stroke:currentColor;fill:none;stroke-width:1.8"><path d="M12 16V6M8 10l4-4 4 4"/><path d="M4 20h16"/></svg>選擇圖片<input type="file" id="e-file" accept="image/*"/></label>'+
+        '<button type="button" class="btn sm ghost" id="e-clear">移除照片</button>'+
+      '</div>'+
+    '</div></div>';
+}
+function bindImgField(){
+  var file=document.getElementById("e-file");
+  var prev=document.getElementById("e-prev");
+  if(file)file.addEventListener("change",function(){
+    processImage(file.files[0],function(data){
+      editing.draftImg=data;
+      prev.style.backgroundImage='url("'+data+'")';prev.innerHTML="";
+      toast("圖片已載入（記得按儲存）","ok");
+    });
+  });
+  var clr=document.getElementById("e-clear");
+  if(clr)clr.addEventListener("click",function(){
+    editing.draftImg="";prev.style.backgroundImage="";prev.innerHTML='<div class="ph">尚無照片<br>用示意圖</div>';
+  });
+}
+function closeModal(){document.getElementById("overlay").classList.remove("show");}
+document.getElementById("mclose").onclick=closeModal;
+document.getElementById("mcancel").onclick=closeModal;
+document.getElementById("overlay").addEventListener("click",function(e){if(e.target===this)closeModal();});
+document.getElementById("msave").onclick=function(){
+  var type=editing.type;var val=function(id){var el=document.getElementById(id);return el?el.value.trim():"";};
+  var obj;
+  if(type==="products"){
+    if(!val("e-name")){toast("請輸入花色名稱","err");return;}
+    obj={name:val("e-name"),series:val("e-series"),stone:val("e-stone"),sizes:val("e-sizes"),finish:val("e-finish"),desc:val("e-desc")};
+  }else{
+    if(!val("e-region")&&!val("e-title")){toast("請至少輸入地區或案名","err");return;}
+    obj={region:val("e-region"),title:val("e-title"),category:val("e-cat"),stone:val("e-stone"),year:val("e-year")};
+  }
+  if(editing.id){
+    var it=DATA[type].find(function(x){return x.id===editing.id;});
+    for(var kk in obj)it[kk]=obj[kk];
+    if(editing.draftImg!==undefined)it.img=editing.draftImg;
+  }else{
+    obj.id=(type==="products"?"p":"c")+Date.now();
+    obj.img=editing.draftImg||"";
+    DATA[type].push(obj);
+  }
+  setDirty(true);var ok=saveData(true);
+  closeModal();render();
+  if(ok)toast(editing.id?"已更新":"已新增","ok");
+};
+
+/* ============ 共用小工具 ============ */
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function matches(hay,q){if(!q)return true;return hay.toLowerCase().indexOf(q.toLowerCase())>=0;}
+function emptyBox(msg){return '<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg><div>'+esc(msg)+'</div></div>';}
+function storageNotice(){
+  return '<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
+    '<div><b>提醒：</b>這裡的修改先存在「你這台電腦的瀏覽器」，你自己看官網會即時更新。要讓<b>所有訪客</b>都看到，請按右上 <b>匯出備份</b> 交給維護者部署，或改用線上 CMS（詳見 README）。</div></div>';
+}
+
+/* ============ 頂部按鈕 ============ */
+document.getElementById("btn-save").onclick=function(){saveData(false);};
+document.getElementById("btn-preview").onclick=function(){
+  if(dirty)saveData(true);
+  window.open("index.html?t="+Date.now(),"_blank");
+};
+document.getElementById("btn-export").onclick=function(){
+  var blob=new Blob([JSON.stringify(DATA,null,2)],{type:"application/json"});
+  downloadBlob(blob,"egrra-data-backup.json");
+  toast("已匯出備份 egrra-data-backup.json","ok");
+};
+document.getElementById("btn-import").onclick=function(){document.getElementById("importFile").click();};
+document.getElementById("importFile").addEventListener("change",function(){
+  var f=this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    try{
+      var d=JSON.parse(e.target.result);
+      if(!d.products||!d.cases||!d.info)throw 0;
+      DATA=d;saveData(true);render();toast("已匯入並儲存","ok");
+    }catch(err){toast("匯入失敗：檔案格式不正確","err");}
+  };
+  r.readAsText(f);this.value="";
+});
+function downloadBlob(blob,name){
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},100);
+}
+
+/* 離開前提醒 */
+window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
+
+/* 啟動 */
+(function(){var h=location.hash;if(h==="#products")tab="products";else if(h==="#cases")tab="cases";
+  document.querySelectorAll("#nav button").forEach(function(x){x.classList.toggle("on",x.dataset.tab===tab);});})();
+render();setDirty(false);
+</script>
+</body>
+</html>

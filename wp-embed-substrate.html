@@ -1,0 +1,81 @@
+<!-- =========================================================================
+     煌盛興業 EGRRA — 基材切換器（WordPress「自訂 HTML」區塊，貼上即用）
+     整段複製，貼進 WordPress 頁面的「自訂 HTML / Custom HTML」區塊即可。
+     自帶樣式與程式，不依賴任何外部檔案；class 皆以 egrra- 前綴，避免與主題衝突。
+     ========================================================================= -->
+<div class="egrra-mat">
+  <style>
+  .egrra-mat{--g:#b08d57;--gl:#c9a878;--dk:#16130f;background:#1e1a15;color:#fff;border-radius:18px;padding:56px 28px 44px;
+    font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;box-sizing:border-box}
+  .egrra-mat *{box-sizing:border-box}
+  .egrra-mat .em-head{max-width:640px;margin:0 auto 40px;text-align:center}
+  .egrra-mat .em-eye{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gl);font-weight:700;display:block;margin-bottom:14px}
+  .egrra-mat .em-h{font-size:clamp(24px,4vw,36px);color:#fff;font-weight:900;margin:0 0 12px;line-height:1.3}
+  .egrra-mat .em-p{color:rgba(255,255,255,.72);font-size:15.5px;margin:0;line-height:1.7}
+  .egrra-mat .em-wrap{max-width:860px;margin:0 auto}
+  .egrra-mat .em-box{position:relative;aspect-ratio:16/7;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 70px -24px rgba(0,0,0,.6)}
+  .egrra-mat .em-tex{position:absolute;inset:0;background-size:cover;background-position:center;transition:.4s cubic-bezier(.22,.61,.36,1)}
+  .egrra-mat .em-fin{position:absolute;inset:0;pointer-events:none;transition:opacity .4s,background .4s}
+  .egrra-mat .fin-al{background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 40%,rgba(0,0,0,.12));mix-blend-mode:soft-light;opacity:.9}
+  .egrra-mat .fin-glass{background:linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,.12) 45%,transparent 62%),linear-gradient(to bottom,rgba(255,255,255,.22),transparent 32%);mix-blend-mode:screen;opacity:.8}
+  .egrra-mat .fin-metal{background:linear-gradient(100deg,rgba(255,255,255,.05),rgba(255,255,255,.35) 12%,rgba(0,0,0,.16) 22%,rgba(255,255,255,.26) 35%,rgba(0,0,0,.1) 50%,rgba(255,255,255,.3) 68%,rgba(0,0,0,.12) 82%,rgba(255,255,255,.2));mix-blend-mode:soft-light;opacity:.82}
+  .egrra-mat .fin-wood{background:linear-gradient(to right,rgba(120,72,30,.26),rgba(150,95,45,.12) 50%,rgba(90,55,25,.3)),repeating-linear-gradient(90deg,rgba(60,35,15,.1) 0 2px,transparent 2px 9px);mix-blend-mode:multiply;opacity:.6}
+  .egrra-mat .em-cap{position:absolute;left:0;bottom:0;padding:15px 20px;color:#fff;font-size:13.5px;z-index:2;width:100%;background:linear-gradient(transparent,rgba(0,0,0,.55))}
+  .egrra-mat .em-cap b{color:var(--gl);font-weight:600}
+  .egrra-mat .em-ctrl{margin-top:24px;display:flex;flex-direction:column;gap:14px}
+  .egrra-mat .em-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+  .egrra-mat .em-cl{font-size:12px;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase;min-width:40px}
+  .egrra-mat .em-subs{display:flex;gap:9px;flex-wrap:wrap}
+  .egrra-mat .em-subs button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.8);padding:9px 20px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;transition:.25s;font-family:inherit}
+  .egrra-mat .em-subs button:hover{border-color:var(--gl);color:#fff}
+  .egrra-mat .em-subs button.on{background:var(--g);border-color:var(--g);color:#fff}
+  .egrra-mat .em-picker{display:flex;gap:9px}
+  .egrra-mat .em-picker button{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-size:cover;background-position:center;transition:.25s;padding:0}
+  .egrra-mat .em-picker button:hover{transform:scale(1.1)}
+  .egrra-mat .em-picker button.on{border-color:var(--gl);box-shadow:0 0 0 3px rgba(201,168,120,.25)}
+  </style>
+
+  <div class="em-head">
+    <span class="em-eye">One Texture · Every Substrate</span>
+    <h2 class="em-h">同一紋理，跨基材呈現</h2>
+    <p class="em-p">PrinTex™ 的獨門優勢：同一種紋理，可製作於鋁、玻璃、金屬、木質等不同基材。點選看看質感變化。</p>
+  </div>
+  <div class="em-wrap">
+    <div class="em-box"><div class="em-tex"></div><div class="em-fin"></div><div class="em-cap"></div></div>
+    <div class="em-ctrl">
+      <div class="em-row"><span class="em-cl">基材</span><div class="em-subs"></div></div>
+      <div class="em-row"><span class="em-cl">紋理</span><div class="em-picker"></div></div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    function stoneSVG(o){
+      var svg="<svg xmlns='http://www.w3.org/2000/svg' width='300' height='260'><defs><filter id='v'><feTurbulence type='fractalNoise' baseFrequency='"+o.f+"' numOctaves='4' seed='"+o.s+"'/><feColorMatrix type='saturate' values='0'/></filter></defs><rect width='100%' height='100%' fill='"+o.b+"'/><rect width='100%' height='100%' fill='"+o.m+"' opacity='.5'/><rect width='100%' height='100%' filter='url(#v)' fill='"+o.v+"' opacity='"+o.o+"' style='mix-blend-mode:"+(o.bl||'soft-light')+"'/></svg>";
+      return "url(\"data:image/svg+xml,"+encodeURIComponent(svg)+"\")";
+    }
+    var ST={
+      carrara:{b:'#f2efe9',m:'#dedad2',v:'#9a958c',f:'0.008 0.04',o:.5,s:12},
+      beige:{b:'#e8dcc3',m:'#d8c8a6',v:'#8f7a52',f:'0.01 0.03',o:.45,s:5},
+      gold:{b:'#cbae74',m:'#b18f4f',v:'#6e5225',f:'0.01 0.03',o:.5,s:3},
+      black:{b:'#1f1c19',m:'#2b2723',v:'#6a5f4c',f:'0.011 0.03',o:.6,bl:'screen',s:14},
+      darkgrey:{b:'#454440',m:'#4a4741',v:'#8c887f',f:'0.01 0.03',o:.5,s:20}
+    };
+    function tex(k){return stoneSVG(ST[k]||ST.carrara);}
+    var SUBS=[['al','鋁'],['glass','玻璃'],['metal','金屬'],['wood','木質']];
+    var TX=[['卡拉拉','carrara'],['帝寶米黃','beige'],['加里奧金','gold'],['聖羅蘭黑','black'],['深灰石紋','darkgrey']];
+    document.querySelectorAll('.egrra-mat').forEach(function(root){
+      if(root.__init)return;root.__init=1;
+      var boxT=root.querySelector('.em-tex'),fin=root.querySelector('.em-fin'),cap=root.querySelector('.em-cap');
+      var subsEl=root.querySelector('.em-subs'),pickEl=root.querySelector('.em-picker');
+      var st={stone:'carrara',name:'卡拉拉',sub:'al',subZh:'鋁'};
+      SUBS.forEach(function(s){var b=document.createElement('button');b.textContent=s[1];if(s[0]===st.sub)b.className='on';
+        b.onclick=function(){st.sub=s[0];st.subZh=s[1];[].forEach.call(subsEl.children,function(c){c.classList.remove('on');});b.classList.add('on');render();};subsEl.appendChild(b);});
+      TX.forEach(function(t){var b=document.createElement('button');b.style.backgroundImage=tex(t[1]);b.title=t[0];if(t[1]===st.stone)b.className='on';
+        b.onclick=function(){st.stone=t[1];st.name=t[0];[].forEach.call(pickEl.children,function(c){c.classList.remove('on');});b.classList.add('on');render();};pickEl.appendChild(b);});
+      function render(){boxT.style.backgroundImage=tex(st.stone);fin.className='em-fin fin-'+st.sub;cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材";}
+      render();
+    });
+  })();
+  </script>
+</div>

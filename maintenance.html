@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>網站維護中｜煌盛興業 EGRRA</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="煌盛興業 EGRRA 網站維護中，我們正在進行升級，很快回來。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#b08d57;--gold-lt:#c9a878;--gold-dk:#8f6f3f;--dark:#16130f;
+  --serif:"Noto Serif TC","PMingLiU",serif;--sans:"Noto Sans TC","Microsoft JhengHei",sans-serif;}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--dark);color:#fff;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative;padding:30px}
+/* 大理石背景 */
+.bg{position:absolute;inset:-10%;z-index:0;
+  background:
+    radial-gradient(120% 90% at 78% 18%, rgba(176,141,87,.30), transparent 55%),
+    radial-gradient(90% 80% at 15% 90%, rgba(120,92,54,.22), transparent 60%),
+    linear-gradient(135deg,#181410,#221b13 45%,#100d09);}
+.noise{position:absolute;inset:0;z-index:0;opacity:.5;mix-blend-mode:soft-light;background-size:820px 820px}
+.wrap{position:relative;z-index:2;max-width:600px;animation:rise 1s cubic-bezier(.22,.61,.36,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.brand{margin-bottom:44px}
+.brand b{font-family:var(--serif);font-size:34px;font-weight:900;letter-spacing:.1em;display:block}
+.brand span{font-size:12px;letter-spacing:.5em;color:var(--gold-lt);margin-top:10px;display:block}
+.badge{display:inline-flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold-lt);border:1px solid rgba(201,168,120,.4);padding:9px 20px;border-radius:100px;margin-bottom:30px}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold-lt);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+h1{font-family:var(--serif);font-size:clamp(34px,7vw,58px);font-weight:900;line-height:1.25;margin-bottom:24px}
+h1 em{font-style:normal;color:var(--gold-lt)}
+p.lead{font-size:clamp(15px,2.4vw,18px);color:rgba(255,255,255,.78);font-weight:300;line-height:1.9;max-width:460px;margin:0 auto 40px}
+.divider{width:54px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 34px}
+.contact{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.contact a,.contact span{display:inline-flex;align-items:center;gap:9px;font-size:14.5px;color:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.16);padding:12px 22px;border-radius:100px;text-decoration:none;transition:.3s;background:rgba(255,255,255,.03)}
+.contact a:hover{border-color:var(--gold);background:rgba(176,141,87,.12);color:#fff}
+.contact svg{width:17px;height:17px;stroke:var(--gold-lt);fill:none;stroke-width:1.7}
+.foot{margin-top:46px;font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.08em}
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="noise" id="noise"></div>
+
+  <div class="wrap">
+    <div class="brand"><b>煌盛興業</b><span>EGRRA</span></div>
+
+    <div class="badge"><span class="dot"></span>UNDER MAINTENANCE</div>
+    <h1>網站升級中<br>敬請<em>稍候片刻</em></h1>
+    <p class="lead">我們正在為您打造更好的瀏覽體驗，網站很快就會與您見面。<br>造成不便，敬請見諒。期間有任何需求，歡迎直接與我們聯繫。</p>
+
+    <div class="divider"></div>
+
+    <!-- ▼ 聯絡方式：如需修改，改這裡即可 -->
+    <div class="contact">
+      <a href="tel:0222221199"><svg viewBox="0 0 24 24"><path d="M4 4h4l2 5-3 2a12 12 0 006 6l2-3 5 2v4a2 2 0 01-2 2A17 17 0 013 6a2 2 0 011-2z"/></svg>02-2222-1199</a>
+      <a href="https://www.facebook.com/Egrra.Lu" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 00-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 011-1z"/></svg>Facebook 私訊</a>
+    </div>
+
+    <div class="foot">© <span id="y"></span> 煌盛興業 EGRRA · PrinTex™ 數位紋理技術</div>
+  </div>
+
+<script>
+/* 大理石雜訊材質（與官網同款產生器，讓維護頁風格一致）*/
+(function(){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><defs>'+
+    '<filter id="v"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.02" numOctaves="4" seed="2"/>'+
+    '<feColorMatrix type="saturate" values="0"/></filter></defs>'+
+    '<rect width="100%" height="100%" filter="url(#v)" fill="#c9a878" opacity="0.7"/></svg>';
+  document.getElementById("noise").style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+  document.getElementById("y").textContent=(new Date()).getFullYear();
+})();
+</script>
+
+<!-- =========================================================================
+  WordPress 使用方式（維護模式 / Maintenance Mode）：
+  1) 最簡單：裝維護模式外掛（如 LightStart – Maintenance Mode、SeedProd、
+     WP Maintenance Mode），把本頁 <body> 內容貼進外掛的「自訂 HTML」即可。
+  2) 或用主題的「Coming Soon / Maintenance」功能貼上本頁內容。
+  3) 進階：把本檔改成 maintenance.php 放主題根目錄，WordPress 更新時會自動顯示；
+     或在網站根目錄放 .maintenance 檔搭配自訂 wp-content/maintenance.php。
+  這頁為純靜態 HTML/CSS，任何 WordPress 環境都可套用，不依賴外部檔案。
+========================================================================= -->
+</body>
+</html>

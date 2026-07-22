@@ -1,0 +1,5 @@
+# WordPress-only bundle (not part of the standalone static site)
+egrra-wp-theme/
+# node
+node_modules/
+.vercel/

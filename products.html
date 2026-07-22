@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>document.documentElement.classList.add('js');</script>
+<title>花色庫｜煌盛興業 EGRRA・藝格板</title>
+<meta name="description" content="煌盛興業 EGRRA 藝格板花色庫，可依系列與色系篩選，重現大理石、金屬繡蝕、木紋等數位紋理。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="lib.css" />
+<style>
+.matsec{padding:80px 0 100px;background:var(--dark);color:#fff}
+.matsec .mh{max-width:640px;margin:0 auto 44px;text-align:center}
+.matsec .mh .eye{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-lt);font-weight:700;display:block;margin-bottom:14px}
+.matsec .mh h2{font-family:var(--serif);font-size:clamp(26px,4vw,40px);color:#fff;font-weight:900;margin-bottom:14px}
+.matsec .mh p{color:rgba(255,255,255,.72);font-size:16px}
+.matwrap{max-width:900px;margin:0 auto}
+.matbox{position:relative;aspect-ratio:16/7;border-radius:16px;overflow:hidden;box-shadow:0 30px 70px -24px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1)}
+.mattex{position:absolute;inset:0;background-size:cover;background-position:center;transition:.4s var(--ease)}
+.finish{position:absolute;inset:0;pointer-events:none;transition:opacity .4s,background .4s}
+.fin-al{background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 40%,rgba(0,0,0,.12));mix-blend-mode:soft-light;opacity:.9}
+.fin-glass{background:linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,.12) 45%,transparent 62%),linear-gradient(to bottom,rgba(255,255,255,.22),transparent 32%);mix-blend-mode:screen;opacity:.8}
+.fin-metal{background:linear-gradient(100deg,rgba(255,255,255,.05),rgba(255,255,255,.35) 12%,rgba(0,0,0,.16) 22%,rgba(255,255,255,.26) 35%,rgba(0,0,0,.1) 50%,rgba(255,255,255,.3) 68%,rgba(0,0,0,.12) 82%,rgba(255,255,255,.2));mix-blend-mode:soft-light;opacity:.82}
+.fin-wood{background:linear-gradient(to right,rgba(120,72,30,.26),rgba(150,95,45,.12) 50%,rgba(90,55,25,.3)),repeating-linear-gradient(90deg,rgba(60,35,15,.1) 0 2px,transparent 2px 9px);mix-blend-mode:multiply;opacity:.6}
+.matcap{position:absolute;left:0;bottom:0;padding:16px 22px;color:#fff;font-size:14px;letter-spacing:.03em;z-index:2;background:linear-gradient(transparent,rgba(0,0,0,.55));width:100%}
+.matcap b{color:var(--gold-lt);font-weight:600}
+.matctrl{margin-top:26px;display:flex;flex-direction:column;gap:16px}
+.ctrl-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.ctrl-row .cl{font-size:12px;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase;min-width:40px}
+.subs{display:flex;gap:10px;flex-wrap:wrap}
+.subs button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.8);padding:10px 22px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;transition:.25s;font-family:inherit}
+.subs button:hover{border-color:var(--gold-lt);color:#fff}
+.subs button.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.tex-picker{display:flex;gap:10px}
+.tex-picker button{width:40px;height:40px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-size:cover;background-position:center;transition:.25s;padding:0}
+.tex-picker button:hover{transform:scale(1.1)}
+.tex-picker button.on{border-color:var(--gold-lt);box-shadow:0 0 0 3px rgba(201,168,120,.25)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><b>煌盛興業</b><span>EGRRA</span></a>
+    <nav class="nav-links">
+      <a href="index.html">首頁</a>
+      <a href="index.html#about">關於煌盛</a>
+      <a href="products.html" class="on">花色庫</a>
+      <a href="cases.html">實績案例</a>
+      <a href="certifications.html">認證</a>
+      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+    </nav>
+    <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="band">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Colour Library</span>
+    <h1>藝格板・花色庫</h1>
+    <p>從純白經典到深邃黑金，以 PrinTex™ 技術重現天然紋理。依系列與色系挑選，點擊看細節。</p>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="wrap">
+    <div class="frow"><span class="lbl">系列</span><div class="fchips" id="f-series"></div></div>
+    <div class="frow"><span class="lbl">色系</span><div class="fchips" id="f-tone"></div><span class="fcount" id="count"></span></div>
+  </div>
+</div>
+
+<section class="libsec">
+  <div class="wrap">
+    <div class="grid sw" id="grid"></div>
+  </div>
+</section>
+
+<!-- ==========  基材切換器  ========== -->
+<section class="matsec">
+  <div class="wrap">
+    <div class="mh">
+      <span class="eye">One Texture · Every Substrate</span>
+      <h2>同一紋理，跨基材呈現</h2>
+      <p>PrinTex™ 的獨門優勢：同一種紋理，可製作於鋁、玻璃、金屬、木質等不同基材。點選看看質感變化。</p>
+    </div>
+    <div class="matwrap">
+      <div class="matbox">
+        <div class="mattex" id="mat-tex"></div>
+        <div class="finish" id="mat-fin"></div>
+        <div class="matcap" id="mat-cap"></div>
+      </div>
+      <div class="matctrl">
+        <div class="ctrl-row"><span class="cl">基材</span><div class="subs" id="mat-subs"></div></div>
+        <div class="ctrl-row"><span class="cl">紋理</span><div class="tex-picker" id="mat-picker"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
+</div>
+
+<!-- 詳情 Modal -->
+<div class="ov" id="ov">
+  <div class="mod">
+    <div class="mimg" id="m-img"></div>
+    <div class="mbody">
+      <button class="mclose" id="m-close">&times;</button>
+      <div class="mk" id="m-series"></div>
+      <h2 id="m-name"></h2>
+      <div class="mdesc" id="m-desc"></div>
+      <div class="mspec" id="m-spec"></div>
+      <div class="mrel" id="m-rel"></div>
+      <a class="mcta" href="index.html#contact">詢價 / 索取樣品 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="site-data.js"></script>
+<script src="textures.js"></script>
+<script>
+(function(){
+  var T=window.EGRRA_TEX;
+  var DATA=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.products)return d;}}catch(e){}return window.EGRRA_DEFAULT_DATA||{products:[]};})();
+  var PRODUCTS=DATA.products||[];
+  var seriesList=["全部"].concat(uniq(PRODUCTS.map(function(p){return p.series;})));
+  var tones=[{key:"全部",label:"全部"}].concat(T.TONES.map(function(t){return {key:t.key,label:t.label};}));
+  var state={series:"全部",tone:"全部"};
+
+  function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function bg(p){return p.img?('url("'+p.img+'")'):T.tex(p.stone);}
+
+  function chips(host,items,cur,onPick){
+    host.innerHTML="";
+    items.forEach(function(it){
+      var val=it.key||it, lab=it.label||it;
+      var b=document.createElement("button");b.className="fchip"+(val===cur?" on":"");b.textContent=lab;
+      b.addEventListener("click",function(){onPick(val);});
+      host.appendChild(b);
+    });
+  }
+  function renderChips(){
+    chips(document.getElementById("f-series"),seriesList,state.series,function(v){state.series=v;render();});
+    chips(document.getElementById("f-tone"),tones,state.tone,function(v){state.tone=v;render();});
+  }
+  function match(p){
+    if(state.series!=="全部"&&p.series!==state.series)return false;
+    if(state.tone!=="全部"&&T.toneOf(p.stone)!==state.tone)return false;
+    return true;
+  }
+  function render(){
+    renderChips();
+    var grid=document.getElementById("grid");grid.innerHTML="";
+    var list=PRODUCTS.filter(match);
+    document.getElementById("count").textContent="共 "+list.length+" 款";
+    if(!list.length){grid.innerHTML='<div class="noresult">找不到符合的花色，換個條件看看 🙂</div>';return;}
+    list.forEach(function(p){
+      var c=document.createElement("div");c.className="card";
+      c.innerHTML='<div class="th" style="background-image:'+bg(p)+'"><span class="tag">'+esc(p.series||"")+'</span></div>'+
+                  '<div class="cap"><h3>'+esc(p.name)+'</h3><p>'+esc(p.sizes||"")+'</p></div>';
+      c.addEventListener("click",function(){openModal(p);});
+      grid.appendChild(c);
+    });
+  }
+
+  var ov=document.getElementById("ov");
+  function openModal(p){
+    document.getElementById("m-img").style.backgroundImage=bg(p);
+    document.getElementById("m-series").textContent=(p.series||"藝格板");
+    document.getElementById("m-name").textContent=p.name||"";
+    document.getElementById("m-desc").textContent=p.desc||"以 PrinTex™ 專利數位紋理技術製作，高仿真還原天然質感，可依需求客製基材與尺寸。";
+    document.getElementById("m-spec").innerHTML=
+      row("尺寸",p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺")+
+      row("表面處理",p.finish||"立體紋路・霧光・平光・消光")+
+      row("計價",p.priceUnit||"以才計價，依需求數量報價");
+    /* 相關花色（同系列，最多 5 款）*/
+    var rel=PRODUCTS.filter(function(x){return x.series===p.series&&x.name!==p.name;}).slice(0,5);
+    var relHtml="";
+    if(rel.length){relHtml='<h4>同系列花色</h4><div class="mrel-items">'+rel.map(function(r){
+      return '<div class="ri" title="'+esc(r.name)+'" style="background-image:'+bg(r)+'" data-name="'+esc(r.name)+'"></div>';}).join("")+'</div>';}
+    var relBox=document.getElementById("m-rel");relBox.innerHTML=relHtml;
+    relBox.querySelectorAll(".ri").forEach(function(ri){ri.addEventListener("click",function(){
+      var t=PRODUCTS.filter(function(x){return x.name===ri.dataset.name;})[0];if(t)openModal(t);});});
+    ov.classList.add("show");
+  }
+  function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';}
+  document.getElementById("m-close").addEventListener("click",function(){ov.classList.remove("show");});
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("show");});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")ov.classList.remove("show");});
+
+  render();
+})();
+</script>
+<script>
+/* 基材切換器 */
+(function(){
+  var T=window.EGRRA_TEX;var box=document.getElementById("mat-tex");if(!T||!box)return;
+  var fin=document.getElementById("mat-fin"),cap=document.getElementById("mat-cap");
+  var subsEl=document.getElementById("mat-subs"),pickEl=document.getElementById("mat-picker");
+  var SUBS=[["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
+  var TX=[["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
+  var st={stone:"carrara",name:"卡拉拉",sub:"al",subZh:"鋁"};
+  SUBS.forEach(function(s){var b=document.createElement("button");b.textContent=s[1];if(s[0]===st.sub)b.className="on";
+    b.addEventListener("click",function(){st.sub=s[0];st.subZh=s[1];[].forEach.call(subsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});subsEl.appendChild(b);});
+  TX.forEach(function(t){var b=document.createElement("button");b.style.backgroundImage=T.tex(t[1]);b.title=t[0];if(t[1]===st.stone)b.className="on";
+    b.addEventListener("click",function(){st.stone=t[1];st.name=t[0];[].forEach.call(pickEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});pickEl.appendChild(b);});
+  function render(){box.style.backgroundImage=T.tex(st.stone);fin.className="finish fin-"+st.sub;cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材";}
+  render();
+})();
+</script>
+<script src="line-widget.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

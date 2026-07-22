@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>document.documentElement.classList.add('js');</script>
+<title>實績案例｜煌盛興業 EGRRA・藝格板</title>
+<meta name="description" content="煌盛興業 EGRRA 藝格板實績案例，遍布全台的全棟廊道、大廳牆面、防火門與消防箱美化工程，可依類別與地區篩選。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="lib.css" />
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><b>煌盛興業</b><span>EGRRA</span></a>
+    <nav class="nav-links">
+      <a href="index.html">首頁</a>
+      <a href="index.html#about">關於煌盛</a>
+      <a href="products.html">花色庫</a>
+      <a href="cases.html" class="on">實績案例</a>
+      <a href="certifications.html">認證</a>
+      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+    </nav>
+    <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="band">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Projects</span>
+    <h1>實績案例</h1>
+    <p>遍布全台的空間實績 —— 從豪宅廊道、大廳牆面到防火門與消防箱美化。依類別與地區瀏覽。</p>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="wrap">
+    <div class="frow"><span class="lbl">類別</span><div class="fchips" id="f-cat"></div></div>
+    <div class="frow"><span class="lbl">地區</span><div class="fchips" id="f-city"></div><span class="fcount" id="count"></span></div>
+  </div>
+</div>
+
+<section class="libsec">
+  <div class="wrap">
+    <div class="grid pf" id="grid"></div>
+  </div>
+</section>
+
+<div class="foot">
+  <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
+</div>
+
+<div class="ov" id="ov">
+  <div class="mod">
+    <div class="mimg" id="m-img"></div>
+    <div class="mbody">
+      <button class="mclose" id="m-close">&times;</button>
+      <div class="mk" id="m-cat"></div>
+      <h2 id="m-title"></h2>
+      <div class="mdesc" id="m-desc"></div>
+      <div class="mspec" id="m-spec"></div>
+      <a class="mcta" href="index.html#contact">洽詢類似案例 →</a>
+    </div>
+  </div>
+</div>
+
+<script src="site-data.js"></script>
+<script src="textures.js"></script>
+<script>
+(function(){
+  var T=window.EGRRA_TEX;
+  var DATA=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.cases)return d;}}catch(e){}return window.EGRRA_DEFAULT_DATA||{cases:[]};})();
+  var CASES=DATA.cases||[];
+  function cityOf(c){return (c.region||"").slice(0,2);}
+  var cats=["全部"].concat(uniq(CASES.map(function(c){return c.category;})));
+  var cities=["全部"].concat(uniq(CASES.map(cityOf)));
+  var state={cat:"全部",city:"全部"};
+
+  function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function bg(c){return c.img?('url("'+c.img+'")'):T.tex(c.stone);}
+
+  function chips(host,items,cur,onPick){
+    host.innerHTML="";
+    items.forEach(function(it){
+      var b=document.createElement("button");b.className="fchip"+(it===cur?" on":"");b.textContent=it;
+      b.addEventListener("click",function(){onPick(it);});host.appendChild(b);
+    });
+  }
+  function renderChips(){
+    chips(document.getElementById("f-cat"),cats,state.cat,function(v){state.cat=v;render();});
+    chips(document.getElementById("f-city"),cities,state.city,function(v){state.city=v;render();});
+  }
+  function match(c){
+    if(state.cat!=="全部"&&c.category!==state.cat)return false;
+    if(state.city!=="全部"&&cityOf(c)!==state.city)return false;
+    return true;
+  }
+  function render(){
+    renderChips();
+    var grid=document.getElementById("grid");grid.innerHTML="";
+    var list=CASES.filter(match);
+    document.getElementById("count").textContent="共 "+list.length+" 件";
+    if(!list.length){grid.innerHTML='<div class="noresult">找不到符合的案例，換個條件看看 🙂</div>';return;}
+    list.forEach(function(c){
+      var card=document.createElement("div");card.className="card";
+      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span></div>'+
+                     '<div class="cap"><h3>'+esc(c.region||"")+'</h3><p>'+esc(c.title||"")+(c.year?' ・ '+esc(c.year):'')+'</p></div>';
+      card.querySelector(".th").style.backgroundImage=bg(c);
+      card.addEventListener("click",function(){openModal(c);});
+      grid.appendChild(card);
+    });
+  }
+
+  var ov=document.getElementById("ov");
+  function openModal(c){
+    document.getElementById("m-img").style.backgroundImage=bg(c);
+    document.getElementById("m-cat").textContent=c.category||"實績案例";
+    document.getElementById("m-title").textContent=(c.region||"")+"　"+(c.title||"");
+    document.getElementById("m-desc").textContent=c.desc||"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。";
+    document.getElementById("m-spec").innerHTML=
+      row("地區",c.region||"—")+row("類別",c.category||"—")+row("年份",c.year||"—");
+    ov.classList.add("show");
+  }
+  function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';}
+  document.getElementById("m-close").addEventListener("click",function(){ov.classList.remove("show");});
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("show");});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")ov.classList.remove("show");});
+
+  render();
+})();
+</script>
+<script src="line-widget.js"></script>
+<script src="chatbot.js"></script>
+</body>
+</html>

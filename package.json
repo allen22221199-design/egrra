@@ -1,0 +1,10 @@
+{
+  "name": "egrra-official",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "煌盛興業 EGRRA 官網（靜態）+ 智能客服 AI 後端 (api/chat.js)",
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  }
+}
