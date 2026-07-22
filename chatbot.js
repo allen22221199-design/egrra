@@ -9,11 +9,13 @@
 
   /* =========================================================================
      ★ 真 AI 設定（預設關閉＝純規則型；填入後端網址即啟用 AI 對答）
-     - AI_ENDPOINT：你部署好的後端網址，例："https://your-app.vercel.app/api/chat"
-       後端範例程式在 api/chat.js（用 API 金鑰呼叫 Claude；金鑰放後端，不可放前端）
+     - AI_ENDPOINT：你部署好的後端網址。已設 "/api/chat"（部署到 Vercel 後同源直通）。
+       ・在 Vercel（含後端）上 = 真 AI（Gemini）作答。
+       ・在 GitHub Pages（純靜態、無後端）上會自動退回規則式，不會出錯。
+       後端程式在 api/chat.js（用 GEMINI_API_KEY 呼叫 Gemini；金鑰放後端，不可放前端）。
      - AI_MODE："fallback" = 只有規則答不出時才問 AI（省錢，建議）；"always" = 每題都問 AI
      ========================================================================= */
-  var AI_ENDPOINT = "";
+  var AI_ENDPOINT = "/api/chat";
   var AI_MODE     = "fallback";
 
   /* ---------- 讀取網站資料（與官網同源）---------- */

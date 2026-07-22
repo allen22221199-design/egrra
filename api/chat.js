@@ -1,28 +1,21 @@
 /* =========================================================================
-   煌盛興業 EGRRA — 智能客服「真 AI」後端（Vercel Serverless Function）
+   煌盛興業 EGRRA — 智能客服「真 AI」後端（Vercel Serverless Function / Gemini 版）
    ---------------------------------------------------------------------------
    啟用方式：
-   1. 這個資料夾用 Vercel 部署（會自動把 /api/chat 變成一個 API）
-   2. 在 Vercel 專案設定 → Environment Variables 新增：
-        ANTHROPIC_API_KEY = 你的 Claude API 金鑰（向 Anthropic 申請）
-   3. 把 chatbot.js 最上方的 AI_ENDPOINT 改成： "/api/chat"
-        （若前端與此後端不同網域，改成完整網址，例如
-         "https://你的專案.vercel.app/api/chat"）
-   4. 重新部署即可。之後客服「答不出的問題」會轉給真 AI 回答。
+   1. 把這個 repo 用 Vercel 部署（Vercel 會自動把 /api/chat 變成一個 API）。
+   2. 在 Vercel 專案 → Settings → Environment Variables 新增：
+        GEMINI_API_KEY = 你的 Google Gemini 金鑰
+        （在 Google AI Studio https://aistudio.google.com/apikey 取得）
+   3. chatbot.js 最上方的 AI_ENDPOINT 已設 "/api/chat"（與此後端同網域即可）。
+   4. 重新部署即可。之後客服「答不出的問題」會轉給真 AI（Gemini）回答。
 
-   ★ 費用：每則 AI 訊息會依 token 向 Anthropic 計費。想更省更快，
-     可把下方 model 改成 "claude-haiku-4-5"（較便宜、較快，適合大量客服問答）。
-
-   ★ Google Cloud Function 版本：把 handler 換成
-        exports.chat = async (req, res) => { ...同樣邏輯... }
-     並用 functions-framework 部署；其餘程式邏輯一致。
+   ★ 費用：走 Gemini 計費（gemini-2.0-flash 便宜且快，適合大量客服問答）。
+     想換模型改下方 MODEL 即可（例如 "gemini-2.5-flash"）。
+   ★ 不需任何 npm 套件：直接用 Node 內建 fetch 呼叫 Gemini REST API。
    ========================================================================= */
-import Anthropic from "@anthropic-ai/sdk";
 
-const client = new Anthropic(); // 自動讀取環境變數 ANTHROPIC_API_KEY
-
-// 部署後建議把 "*" 改成你的網域，例如 "https://egrra.com"
-const ALLOW_ORIGIN = "*";
+const MODEL = "gemini-2.0-flash"; // 快又省；可改 "gemini-2.5-flash" 等
+const ALLOW_ORIGIN = "*";         // 部署後可改成你的網域，例如 "https://egrra.com"
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", ALLOW_ORIGIN);
@@ -30,6 +23,9 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "method_not_allowed" });
+
+  const KEY = process.env.GEMINI_API_KEY;
+  if (!KEY) return res.status(500).json({ error: "missing_api_key", detail: "請在 Vercel 設定 GEMINI_API_KEY 環境變數" });
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
@@ -54,18 +50,28 @@ export default async function handler(req, res) {
 
 規則：只回答與煌盛興業／藝格板相關的問題。不知道、超出範圍、或牽涉報價時，禮貌引導對方來電或私訊 FB，不要編造任何資訊或數字。`;
 
-    const msg = await client.messages.create({
-      model: "claude-opus-4-8", // 想更省更快可改 "claude-haiku-4-5"
-      max_tokens: 600,
-      output_config: { effort: "low" }, // 客服問答用低 effort，快又省
-      system,
-      messages: [{ role: "user", content: q }],
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(KEY)}`;
+    const payload = {
+      system_instruction: { parts: [{ text: system }] },
+      contents: [{ role: "user", parts: [{ text: q }] }],
+      generationConfig: { maxOutputTokens: 400, temperature: 0.4 },
+    };
+
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
 
-    const reply = (msg.content || [])
-      .filter((b) => b.type === "text")
-      .map((b) => b.text)
-      .join("\n")
+    if (!r.ok) {
+      const t = await r.text();
+      return res.status(502).json({ error: "gemini_error", status: r.status, detail: t.slice(0, 300) });
+    }
+
+    const data = await r.json();
+    const reply = (data?.candidates?.[0]?.content?.parts || [])
+      .map((p) => p.text || "")
+      .join("")
       .trim();
 
     return res.status(200).json({ reply: reply || "不好意思，這題我再幫您確認，也歡迎直接來電洽詢 🙂" });
