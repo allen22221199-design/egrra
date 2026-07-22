@@ -166,7 +166,7 @@ a{color:inherit}
       <button data-tab="cases"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg></span>實績案例 <span class="cnt" id="cnt-c">0</span></button>
     </nav>
     <div class="foot">
-      資料儲存在本機瀏覽器<br>要全站生效請「匯出部署檔」<br>
+      改完按「<b>發布上線</b>」<br>約 1 分鐘後全站生效<br>
       <a href="index.html" target="_blank" rel="noopener">↗ 開啟官網</a>
     </div>
   </aside>
@@ -179,7 +179,8 @@ a{color:inherit}
       <button class="btn" id="btn-preview"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>預覽官網</button>
       <button class="btn" id="btn-import"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5M5 21h14"/></svg>匯入備份</button>
       <button class="btn" id="btn-export"><svg viewBox="0 0 24 24"><path d="M12 16V3M7 8l5-5 5 5M5 21h14"/></svg>匯出備份</button>
-      <button class="btn gold" id="btn-save"><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7"/></svg>儲存變更</button>
+      <button class="btn" id="btn-save"><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h7"/></svg>暫存(本機)</button>
+      <button class="btn gold" id="btn-publish"><svg viewBox="0 0 24 24"><path d="M12 2c3 3 4 6 4 9a4 4 0 0 1-8 0c0-3 1-6 4-9z"/><path d="M8 15l-2 4M16 15l2 4M12 17v4"/></svg>發布上線</button>
     </div>
     <div class="content" id="content"></div>
   </div>
@@ -511,11 +512,28 @@ function matches(hay,q){if(!q)return true;return hay.toLowerCase().indexOf(q.toL
 function emptyBox(msg){return '<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg><div>'+esc(msg)+'</div></div>';}
 function storageNotice(){
   return '<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
-    '<div><b>提醒：</b>這裡的修改先存在「你這台電腦的瀏覽器」，你自己看官網會即時更新。要讓<b>所有訪客</b>都看到，請按右上 <b>匯出備份</b> 交給維護者部署，或改用線上 CMS（詳見 README）。</div></div>';
+    '<div><b>提醒：</b>改完內容後，按右上 <b>發布上線</b> 並輸入密碼，約 1 分鐘後<b>所有訪客</b>都會看到新內容。（「暫存(本機)」只會更新你這台瀏覽器的預覽。）</div></div>';
 }
 
 /* ============ 頂部按鈕 ============ */
 document.getElementById("btn-save").onclick=function(){saveData(false);};
+document.getElementById("btn-publish").onclick=function(){
+  if(dirty)saveData(true);
+  var pw=sessionStorage.getItem("egrra_pw")||"";
+  if(!pw){ pw=prompt("請輸入發布密碼（在 Vercel 設定的 ADMIN_PASSWORD）："); if(!pw)return; }
+  var btn=this, old=btn.innerHTML; btn.disabled=true; btn.textContent="發布中…";
+  fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({password:pw,data:DATA})})
+    .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+    .then(function(res){
+      btn.disabled=false; btn.innerHTML=old;
+      if(res.ok&&res.j&&res.j.ok){ sessionStorage.setItem("egrra_pw",pw); toast("已發布！約 1 分鐘後全站生效 🚀","ok"); }
+      else if(res.j&&res.j.error==="bad_password"){ sessionStorage.removeItem("egrra_pw"); toast("發布密碼錯誤，請再試一次","err"); }
+      else if(res.j&&res.j.error==="server_not_configured"){ toast("後端尚未設定：請先在 Vercel 設 ADMIN_PASSWORD 與 GITHUB_TOKEN","err"); }
+      else { toast("發布失敗："+((res.j&&(res.j.detail||res.j.error))||"未知錯誤"),"err"); }
+    })
+    .catch(function(){ btn.disabled=false; btn.innerHTML=old; toast("發布失敗：連不到後端（請在 egrra.vercel.app 上操作，勿用 github.io）","err"); });
+};
 document.getElementById("btn-preview").onclick=function(){
   if(dirty)saveData(true);
   window.open("index.html?t="+Date.now(),"_blank");
