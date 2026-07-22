@@ -521,16 +521,23 @@ document.getElementById("btn-publish").onclick=function(){
   if(dirty)saveData(true);
   var pw=sessionStorage.getItem("egrra_pw")||"";
   if(!pw){ pw=prompt("請輸入發布密碼（在 Vercel 設定的 ADMIN_PASSWORD）："); if(!pw)return; }
+  var payload=JSON.stringify({password:pw,data:DATA});
+  /* 預檢：Vercel 後端請求上限約 4.5MB；照片以 base64 內嵌時容易超過 */
+  if(payload.length>4200000){
+    toast("照片資料量太大（超過約 4.5MB 上限），請減少照片數量或縮小尺寸，或改用圖片網址","err");
+    return;
+  }
   var btn=this, old=btn.innerHTML; btn.disabled=true; btn.textContent="發布中…";
-  fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({password:pw,data:DATA})})
-    .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+  fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},body:payload})
+    /* 防呆：不要假設回應一定是 JSON（413 等平台錯誤會回 HTML）*/
+    .then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}return {status:r.status,ok:r.ok,j:j};});})
     .then(function(res){
       btn.disabled=false; btn.innerHTML=old;
-      if(res.ok&&res.j&&res.j.ok){ sessionStorage.setItem("egrra_pw",pw); toast("已發布！約 1 分鐘後全站生效 🚀","ok"); }
-      else if(res.j&&res.j.error==="bad_password"){ sessionStorage.removeItem("egrra_pw"); toast("發布密碼錯誤，請再試一次","err"); }
-      else if(res.j&&res.j.error==="server_not_configured"){ toast("後端尚未設定：請先在 Vercel 設 ADMIN_PASSWORD 與 GITHUB_TOKEN","err"); }
-      else { toast("發布失敗："+((res.j&&(res.j.detail||res.j.error))||"未知錯誤"),"err"); }
+      if(res.ok&&res.j&&res.j.ok){ sessionStorage.setItem("egrra_pw",pw); toast("已發布！約 1 分鐘後全站生效 🚀","ok"); return; }
+      if(res.status===413){ toast("照片太多，資料超過約 4.5MB 上限，請減少或縮小照片","err"); return; }
+      if(res.j&&res.j.error==="bad_password"){ sessionStorage.removeItem("egrra_pw"); toast("發布密碼錯誤，請再試一次","err"); return; }
+      if(res.j&&res.j.error==="server_not_configured"){ toast("後端尚未設定：請先在 Vercel 建立 Blob 儲存庫並設定 ADMIN_PASSWORD","err"); return; }
+      toast("發布失敗："+((res.j&&(res.j.detail||res.j.error))||("HTTP "+res.status)),"err");
     })
     .catch(function(){ btn.disabled=false; btn.innerHTML=old; toast("發布失敗：連不到後端（請在 egrra.vercel.app 上操作，勿用 github.io）","err"); });
 };

@@ -753,6 +753,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 </footer>
 
 <script src="site-data.js"></script>
+<script src="/api/published"></script><!-- 後台「發布上線」的內容（Blob），覆蓋上方預設；無/失敗則沿用預設 -->
 <script>
 /* ----------  SVG STONE TEXTURE GENERATOR  ---------- */
 function stoneSVG(o){
@@ -800,7 +801,9 @@ var DATA=(function(){
   try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.products)return d;}}catch(e){}
   return (window.EGRRA_DEFAULT_DATA||{products:[],cases:[],info:{}});
 })();
-var HAS_OVERRIDE=false;try{HAS_OVERRIDE=!!localStorage.getItem('egrra_data');}catch(e){}
+/* 有「已發布(blob)」或「本機暫存(localStorage)」時才把 info 文字寫回 DOM；
+   兩者皆無(全新訪客、尚未發布)則保留 HTML 內原本的排版標記 */
+var HAS_OVERRIDE=!!window.EGRRA_PUBLISHED;try{if(localStorage.getItem('egrra_data'))HAS_OVERRIDE=true;}catch(e){}
 if(HAS_OVERRIDE && DATA.info){
   (function(i){
     function setTx(sel,v){if(v==null||v==="")return;document.querySelectorAll(sel).forEach(function(el){el.textContent=v;});}

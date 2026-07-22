@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "煌盛興業 EGRRA 官網（靜態）+ 智能客服 AI 後端 api/chat.js（Gemini，用 Node 內建 fetch，無需套件）"
+  "description": "煌盛興業 EGRRA 官網（靜態）+ 智能客服 AI 後端 api/chat.js（Gemini）+ 後台發布 api/save.js / 讀取 api/published.js（Vercel Blob）",
+  "dependencies": {
+    "@vercel/blob": "^2"
+  }
 }
