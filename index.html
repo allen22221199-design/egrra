@@ -3,7 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script>document.documentElement.classList.add('js');</script>
+<script>
+document.documentElement.classList.add('js');
+/* 沒有指定錨點時一律從首屏開始：
+   關閉瀏覽器的捲動位置還原，避免重新整理/返回時停在頁面中段 */
+(function(){
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  if(location.hash) return;
+  /* 若使用者在載入期間已自行捲動，就不要把他拉回頂端 */
+  var touched=false, mark=function(){touched=true;};
+  ['wheel','touchstart','keydown','pointerdown'].forEach(function(ev){
+    window.addEventListener(ev,mark,{passive:true,once:true});
+  });
+  window.addEventListener('load',function(){ if(!touched) window.scrollTo(0,0); });
+})();
+</script>
 <title>煌盛興業 EGRRA｜PrinTex™ 數位紋理・藝格板</title>
 <meta name="description" content="煌盛興業 EGRRA — 專為建築與設計市場打造的數位紋理品牌。以 PrinTex™ 專利技術高仿真還原石材紋理，通過耐燃一級認證，重量僅天然石材 1/30。提供藝格板、消防箱、防火門客製化解決方案。" />
 <meta name="robots" content="index, follow" />
@@ -152,6 +166,7 @@ header.solid .burger span{background:var(--ink)}
 
 /* ===============  STATS  =============== */
 .stats{background:var(--dark-2);color:#fff;position:relative;z-index:3}
+.stats .num{font-style:normal;font-variant-numeric:tabular-nums}
 .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
 .stat{padding:42px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
 .stat:last-child{border-right:none}
@@ -278,21 +293,6 @@ header.solid .burger span{background:var(--ink)}
 .cl-note{text-align:center;font-size:12.5px;color:var(--faint);margin-top:20px;letter-spacing:.06em}
 @media(max-width:900px){.cl-grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:600px){.cl-grid{grid-template-columns:repeat(2,1fr)}.cl-item b{font-size:14px}}
-
-/* 其他品項（開發中）：虛線框 + 敬請期待 */
-.prod-soon{margin-top:26px;border:1.5px dashed rgba(176,141,87,.5);border-radius:var(--r);
-  padding:30px 34px;display:flex;align-items:center;gap:30px;flex-wrap:wrap;background:rgba(176,141,87,.05)}
-.prod-soon .ps-head{min-width:170px}
-.prod-soon .ps-k{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:6px}
-.prod-soon .ps-head h3{font-family:var(--serif);font-size:23px;font-weight:800;color:var(--ink)}
-.prod-soon .ps-items{display:flex;gap:14px;flex-wrap:wrap;flex:1}
-.prod-soon .ps-item{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 20px;min-width:190px}
-.prod-soon .ps-item b{display:block;font-size:16px;font-weight:700;color:var(--ink)}
-.prod-soon .ps-item span{font-size:11.5px;letter-spacing:.1em;color:var(--faint)}
-.prod-soon .ps-note{font-size:13.5px;letter-spacing:.2em;color:var(--gold);
-  border:1px solid rgba(176,141,87,.45);border-radius:100px;padding:9px 22px;white-space:nowrap}
-@media(max-width:700px){.prod-soon{flex-direction:column;align-items:flex-start;gap:18px}
-  .prod-soon .ps-items{width:100%}.prod-soon .ps-item{flex:1}}
 
 /* 首頁精選花色：只露出三行，下方以深色漸層帶過（完整清單在花色庫）
    磁磚為正方形，7 欄 3 行 → 容器比例約 7/3，改欄數時同步調整 */
@@ -490,10 +490,10 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 <!-- ==========  STATS  ========== -->
 <section class="stats">
   <div class="wrap">
-    <div class="stat"><b>46<small>+</small></b><span data-i18n="stats.exp">年產業經驗</span></div>
-    <div class="stat"><b data-i18n-html="stats.fireval">4<small>項</small></b><span data-i18n="stats.fire">國家發明專利</span></div>
-    <div class="stat"><b>100<small>%</small></b><span data-i18n="stats.weight">全面客製化技術</span></div>
-    <div class="stat"><b>200<small>+</small></b><span data-i18n="stats.projects">建築實績案例</span></div>
+    <div class="stat"><b><i class="num" data-to="46">46</i><small>+</small></b><span data-i18n="stats.exp">年產業經驗</span></div>
+    <div class="stat"><b data-i18n-html="stats.fireval"><i class="num" data-to="4">4</i><small>項</small></b><span data-i18n="stats.fire">國家發明專利</span></div>
+    <div class="stat"><b><i class="num" data-to="100">100</i><small>%</small></b><span data-i18n="stats.weight">全面客製化技術</span></div>
+    <div class="stat"><b><i class="num" data-to="200">200</i><small>+</small></b><span data-i18n="stats.projects">建築實績案例</span></div>
   </div>
 </section>
 
@@ -639,26 +639,13 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 
     <div class="prod-sub">
       <div class="pcard wide reveal">
-        <div class="fill" data-stone="black"></div><div class="grad"></div>
-        <div class="cap"><span class="k">Application</span><h3>消防箱美化</h3><p>將冰冷的消防設備，融入整體空間美學。</p></div>
+        <div class="fill" data-stone="silver"></div><div class="grad"></div>
+        <div class="cap"><span class="k">Coating</span><h3>斷熱鍍膜</h3><p>提升隔熱效能的表面鍍膜技術，兼顧節能與外觀質感。</p></div>
       </div>
       <div class="pcard wide reveal d1">
-        <div class="fill" data-stone="beige"></div><div class="grad"></div>
-        <div class="cap"><span class="k">Application</span><h3>防火門</h3><p>兼具防火機能與設計質感的門片解決方案。</p></div>
+        <div class="fill" data-stone="darkgrey"></div><div class="grad"></div>
+        <div class="cap"><span class="k">Structure</span><h3>蜂窩板 / 焊接板</h3><p>輕量高剛性的結構板材，適用大跨距與高承重需求。</p></div>
       </div>
-    </div>
-
-    <!-- 其他品項：開發中 -->
-    <div class="prod-soon reveal">
-      <div class="ps-head">
-        <span class="ps-k">Coming Soon</span>
-        <h3>其他品項</h3>
-      </div>
-      <div class="ps-items">
-        <div class="ps-item"><b>斷熱鍍膜</b><span>Thermal Coating</span></div>
-        <div class="ps-item"><b>蜂窩板 / 焊接板</b><span>Honeycomb / Welded Panel</span></div>
-      </div>
-      <div class="ps-note">敬請期待</div>
     </div>
   </div>
 </section>
@@ -954,6 +941,51 @@ document.querySelectorAll(".acc-item").forEach(function(item){
     if(!open){item.classList.add("open");a.style.maxHeight=a.scrollHeight+"px";}
   });
 });
+
+/* ----------  數據跑動動畫  ----------
+   進入畫面時從 0 數到目標值；#all(截圖模式)或使用者偏好減少動態時直接顯示最終值 */
+(function(){
+  var nums=[].slice.call(document.querySelectorAll(".stats .num"));
+  if(!nums.length)return;
+  var reduce=false;
+  try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
+  if(location.hash==="#all"||reduce||!("IntersectionObserver" in window)){
+    nums.forEach(function(n){n.textContent=n.dataset.to;});
+    return;
+  }
+  nums.forEach(function(n){n.textContent="0";});
+  function run(el){
+    if(el.dataset.done)return; el.dataset.done="1";
+    var to=parseInt(el.dataset.to,10)||0, dur=1500, t0=null;
+    function step(ts){
+      if(t0===null)t0=ts;
+      var p=Math.min((ts-t0)/dur,1);
+      var e=1-Math.pow(1-p,3);                 /* easeOutCubic：先快後慢 */
+      el.textContent=Math.round(to*e);
+      if(p<1)requestAnimationFrame(step); else el.textContent=to;
+    }
+    requestAnimationFrame(step);
+    /* 保險：背景分頁會暫停 requestAnimationFrame，若動畫未如期完成，
+       仍確保顯示正確數字，避免卡在 0 */
+    setTimeout(function(){ if(el.textContent!==String(to)) el.textContent=to; }, dur+900);
+  }
+  /* 以捲動位置判斷（比 IntersectionObserver 對 inline 元素更可靠）：
+     區塊進入視窗下緣即開始跑動；若一進頁面就已在畫面內也會立即觸發 */
+  var sec=document.querySelector(".stats");
+  function check(){
+    if(!sec)return;
+    var r=sec.getBoundingClientRect();
+    if(r.top < window.innerHeight - 60 && r.bottom > 0){
+      nums.forEach(run);
+      window.removeEventListener("scroll",check);
+      window.removeEventListener("resize",check);
+    }
+  }
+  window.addEventListener("scroll",check,{passive:true});
+  window.addEventListener("resize",check);
+  check();
+  window.addEventListener("load",function(){ setTimeout(check,80); });
+})();
 
 /* ----------  REVEAL ON SCROLL  ---------- */
 if(location.hash==="#all"){
