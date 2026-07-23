@@ -54,13 +54,13 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 /* ---- GRID ---- */
 .libsec{padding:38px 0 90px}
 .grid{display:grid;gap:18px}
-.grid.sw{grid-template-columns:repeat(6,1fr)}
+.grid.sw{grid-template-columns:repeat(5,1fr)}
 .grid.pf{grid-template-columns:repeat(4,1fr)}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.3s var(--ease);opacity:1}
 .card:hover{transform:translateY(-5px);box-shadow:var(--sh);border-color:transparent}
 .card .th{position:relative;background-size:cover;background-position:center}
-/* 花色庫：比例對齊板材原圖(400×800 直式) → 紋理全貌完整呈現、不裁切 */
-.grid.sw .th{aspect-ratio:1/2}
+/* 花色庫：正方形卡片（與後台一致）；紋理取中央區段，質感辨識度最高 */
+.grid.sw .th{aspect-ratio:1/1}
 /* 實績照(800×1200 直式)：加高以保留更多畫面 */
 .grid.pf .th{aspect-ratio:1/1.2}
 .card .th .tag{position:absolute;top:10px;left:10px;background:rgba(22,19,15,.78);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
