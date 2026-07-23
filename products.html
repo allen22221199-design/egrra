@@ -26,28 +26,38 @@
 .fin-glass{background:linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,.12) 45%,transparent 62%),linear-gradient(to bottom,rgba(255,255,255,.22),transparent 32%);mix-blend-mode:screen;opacity:.8}
 .fin-metal{background:linear-gradient(100deg,rgba(255,255,255,.05),rgba(255,255,255,.35) 12%,rgba(0,0,0,.16) 22%,rgba(255,255,255,.26) 35%,rgba(0,0,0,.1) 50%,rgba(255,255,255,.3) 68%,rgba(0,0,0,.12) 82%,rgba(255,255,255,.2));mix-blend-mode:soft-light;opacity:.82}
 .fin-wood{background:linear-gradient(to right,rgba(120,72,30,.26),rgba(150,95,45,.12) 50%,rgba(90,55,25,.3)),repeating-linear-gradient(90deg,rgba(60,35,15,.1) 0 2px,transparent 2px 9px);mix-blend-mode:multiply;opacity:.6}
-/* ---- 走道場景模擬（CSS 3D 一點透視）---- */
-.mscene{position:absolute;inset:0;--d:2300px;perspective:880px;perspective-origin:50% 46%;background:#0c0b0a}
+/* ---- 3D 場景模擬（依實照建模：左牆拱門/右牆開窗/端牆玻璃門/黑燈帶天花/地毯）---- */
+.mscene{position:absolute;inset:0;--d:2200px;perspective:950px;perspective-origin:53% 54%;background:#0d0c0b}
 .mscene .room{position:absolute;inset:0;transform-style:preserve-3d}
 .mscene .pl{position:absolute;background-repeat:repeat}
 .mscene .wallL{left:0;top:-3%;height:106%;width:var(--d);transform-origin:left center;transform:rotateY(90deg)}
 .mscene .wallR{right:0;top:-3%;height:106%;width:var(--d);transform-origin:right center;transform:rotateY(-90deg)}
 .mscene .floor{left:-2%;width:104%;bottom:0;height:var(--d);transform-origin:center bottom;transform:rotateX(90deg);
   background:
-    linear-gradient(to top,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 72%,rgba(0,0,0,.78) 100%),
-    linear-gradient(105deg,rgba(255,255,255,.16) 0%,transparent 28%),
-    repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 250px),
-    repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0 2px,transparent 2px 250px),
-    linear-gradient(120deg,#b6b0a5,#cdc7bc 45%,#a5a095)}
+    linear-gradient(to top,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.8) 100%),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.1) 0 2px,transparent 2px 7px),
+    linear-gradient(115deg,#716f69,#84827c 50%,#67655f)}
 .mscene .ceil{left:-2%;width:104%;top:0;height:var(--d);transform-origin:center top;transform:rotateX(-90deg);
-  background:
-    linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 75%,rgba(0,0,0,.8) 100%),
-    repeating-linear-gradient(to bottom,rgba(255,243,214,.75) 0 7px,rgba(24,22,20,0) 7px 240px),
-    #232120}
+  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 78%,rgba(0,0,0,.75) 100%),#e9e6e1}
+.mscene .strip{position:absolute;left:33%;width:7%;top:0;height:100%;background:#141210;box-shadow:0 0 34px rgba(0,0,0,.4)}
+.mscene .dots{position:absolute;left:60%;width:4%;top:60px;height:100%;
+  background:radial-gradient(circle at 50% 16px,#16130f 9px,transparent 11px);background-size:100% 230px;background-repeat:repeat-y}
 .mscene .endw{left:-2%;top:-3%;width:104%;height:106%;transform:translateZ(calc(var(--d) * -1))}
+.mscene .gdoor{position:absolute;left:39%;width:24%;top:24%;bottom:0;
+  background:linear-gradient(#211f1d,#191715);box-shadow:0 0 0 6px #0f0d0c,inset 0 0 34px rgba(130,150,160,.16)}
+.mscene .arch{position:absolute;left:50%;width:16%;top:30%;bottom:5%;background:linear-gradient(#332e29,#211d19 70%,#191512);
+  border-radius:50% 50% 0 0/24% 24% 0 0;box-shadow:0 0 0 7px #12100e,inset 0 -30px 70px rgba(0,0,0,.55)}
+.mscene .arch::before{content:"";position:absolute;left:12%;right:12%;top:3%;height:13%;
+  background:radial-gradient(52% 100% at 50% 0,rgba(255,220,165,.85),transparent 72%)}
+.mscene .win{position:absolute;top:15%;bottom:23%;
+  background:linear-gradient(115deg,#e9eef3,#ccd6dd 55%,#b9c4cc);box-shadow:0 0 0 8px #14110f,inset 0 0 44px rgba(255,255,255,.55)}
+.mscene .win::after{content:"";position:absolute;left:48%;width:4%;top:0;bottom:0;background:#14110f}
+.mscene .w1{left:58%;width:25%}
+.mscene .w2{left:24%;width:19%}
 .mscene .wfin{position:absolute;inset:0;pointer-events:none}
 .mscene .fog{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%,rgba(10,9,8,0) 26%,rgba(10,9,8,.38) 70%,rgba(10,9,8,.7) 100%)}
+  background:radial-gradient(ellipse at 53% 54%,rgba(10,9,8,0) 30%,rgba(10,9,8,.34) 72%,rgba(10,9,8,.62) 100%)}
 /* ---- 實景照片模擬（真實照片 + 牆面紋理疊加，保留原光影）---- */
 .matbox.ph{aspect-ratio:3500/1967}
 .mphoto{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat}
@@ -128,14 +138,14 @@
     </div>
     <div class="matwrap">
       <div class="matbox">
-        <!-- 場景模擬：公設大樓走道（CSS 3D） -->
+        <!-- 3D 場景模擬（依實照建模，牆面可整面換材質） -->
         <div class="mscene" id="mat-scene">
           <div class="room">
-            <div class="pl ceil"></div>
+            <div class="pl ceil"><div class="strip"></div><div class="dots"></div></div>
             <div class="pl floor"></div>
-            <div class="pl wallL" id="sc-wl"><div class="wfin finish" id="sc-fl"></div></div>
-            <div class="pl wallR" id="sc-wr"><div class="wfin finish" id="sc-fr"></div></div>
-            <div class="pl endw" id="sc-ew"></div>
+            <div class="pl wallL" id="sc-wl"><div class="arch"></div><div class="wfin finish" id="sc-fl"></div></div>
+            <div class="pl wallR" id="sc-wr"><div class="win w2"></div><div class="win w1"></div><div class="wfin finish" id="sc-fr"></div></div>
+            <div class="pl endw" id="sc-ew"><div class="gdoor"></div></div>
           </div>
           <div class="fog"></div>
         </div>
@@ -322,8 +332,8 @@
     var img=new Image();
     img.onload=function(){
       try{
-        var c=document.createElement("canvas");c.width=400;c.height=500;
-        c.getContext("2d").drawImage(img,0,0,400,500);
+        var c=document.createElement("canvas");c.width=640;c.height=800;
+        c.getContext("2d").drawImage(img,0,0,640,800);
         rasterCache[stone]='url("'+c.toDataURL("image/png")+'")';
         cb(rasterCache[stone]);
       }catch(e){cb(u);}
@@ -333,50 +343,69 @@
   }
   var SUBS=[["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
   var TX=[["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
-  var VIEWS=[["photo","實景照片"],["scene","走道場景"],["flat","平面樣板"]];
+  var VIEWS=[["photo","實景照片"],["scene","3D 場景"],["flat","平面樣板"]];
   var st={stone:"carrara",name:"卡拉拉",sub:"al",subZh:"鋁",view:"photo"};
 
   VIEWS.forEach(function(v){var b=document.createElement("button");b.textContent=v[1];if(v[0]===st.view)b.className="on";
     b.addEventListener("click",function(){st.view=v[0];[].forEach.call(viewsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});viewsEl.appendChild(b);});
-  /* 牆面開關（實景照片模式；彩虹屋式：各牆獨立套用/還原）*/
-  [["s1","左側大牆"],["s2","拱內石牆"]].forEach(function(w){
-    var b=document.createElement("button");b.textContent=w[1];if(surf[w[0]])b.className="on";
-    b.addEventListener("click",function(){surf[w[0]]=!surf[w[0]];b.classList.toggle("on",surf[w[0]]);render();});
-    wallsEl.appendChild(b);});
+  /* 牆面開關（彩虹屋式：各牆獨立整面套用/還原）——實景照片與 3D 場景各一組 */
+  var w3={L:true,R:true,E:true};
+  function wallChip(key,label,store,group){
+    var b=document.createElement("button");b.textContent=label;b.dataset.g=group;if(store[key])b.className="on";
+    b.addEventListener("click",function(){store[key]=!store[key];b.classList.toggle("on",store[key]);render();});
+    wallsEl.appendChild(b);
+  }
+  wallChip("s1","左側大牆",surf,"photo");wallChip("s2","拱內石牆",surf,"photo");
+  wallChip("L","左牆",w3,"scene");wallChip("R","右牆",w3,"scene");wallChip("E","端牆",w3,"scene");
   SUBS.forEach(function(s){var b=document.createElement("button");b.textContent=s[1];if(s[0]===st.sub)b.className="on";
     b.addEventListener("click",function(){st.sub=s[0];st.subZh=s[1];[].forEach.call(subsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});subsEl.appendChild(b);});
   TX.forEach(function(t){var b=document.createElement("button");b.style.backgroundImage=T.tex(t[1]);b.title=t[0];if(t[1]===st.stone)b.className="on";
     b.addEventListener("click",function(){st.stone=t[1];st.name=t[0];[].forEach.call(pickEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});pickEl.appendChild(b);});
 
-  /* 牆面圖層：深度陰影 + 踢腳線 + 板材分割縫 + 石紋（far=遠端方向）*/
-  function wallBg(texUrl,far){
-    return "linear-gradient(to "+far+",rgba(0,0,0,.04) 0%,rgba(0,0,0,.42) 62%,rgba(0,0,0,.72) 100%),"+
-           "linear-gradient(to top,rgba(18,16,14,.92) 0 3.5%,rgba(18,16,14,0) 3.5%),"+
-           "repeating-linear-gradient(90deg,rgba(0,0,0,.30) 0 2px,rgba(255,255,255,.06) 2px 3px,transparent 3px 240px),"+
-           texUrl;
+  /* 3D 牆面圖層：深度陰影 + 踢腳線 + 板材分割縫 + 石紋（far=遠端方向；整面套用）*/
+  function wall3d(png,far){
+    return "linear-gradient(to "+far+",rgba(0,0,0,.04) 0%,rgba(0,0,0,.4) 62%,rgba(0,0,0,.7) 100%),"+
+           "linear-gradient(to top,rgba(18,16,14,.92) 0 3.2%,rgba(18,16,14,0) 3.2%),"+
+           "repeating-linear-gradient(90deg,rgba(0,0,0,.30) 0 2px,rgba(255,255,255,.06) 2px 3px,transparent 3px 250px),"+
+           png;
+  }
+  function wallPaint(far){ /* 牆面「關」＝中性烤漆 */
+    return "linear-gradient(to "+far+",rgba(0,0,0,.04) 0%,rgba(0,0,0,.4) 62%,rgba(0,0,0,.7) 100%),"+
+           "linear-gradient(to top,rgba(18,16,14,.92) 0 3.2%,rgba(18,16,14,0) 3.2%),"+
+           "linear-gradient(#dad6cf,#dad6cf)";
+  }
+  function applyScene(png){
+    wl.style.backgroundImage = w3.L? wall3d(png,"right") : wallPaint("right");
+    wl.style.backgroundSize  = w3.L? "auto,auto,auto,250px 100%" : "auto";
+    wr.style.backgroundImage = w3.R? wall3d(png,"left") : wallPaint("left");
+    wr.style.backgroundSize  = w3.R? "auto,auto,auto,250px 100%" : "auto";
+    if(w3.E){
+      ew.style.backgroundImage="linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.36)),"+
+        "repeating-linear-gradient(90deg,rgba(0,0,0,.3) 0 2px,transparent 2px 170px),"+png;
+      ew.style.backgroundSize="auto,auto,170px 100%";
+    }else{
+      ew.style.backgroundImage="linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.36)),linear-gradient(#d6d2cb,#d6d2cb)";
+      ew.style.backgroundSize="auto";
+    }
+    fl.className="wfin finish fin-"+st.sub;fr.className="wfin finish fin-"+st.sub;
+    fl.style.display=w3.L?"":"none";fr.style.display=w3.R?"":"none";
   }
   function render(){
     var tex=T.tex(st.stone);
     /* 平面樣板 */
     box.style.backgroundImage=tex;fin.className="finish fin-"+st.sub;
-    /* 走道場景：左右牆 + 端牆 */
-    wl.style.backgroundImage=wallBg(tex,"right");
-    wl.style.backgroundSize="auto,auto,auto,240px 400px";
-    wr.style.backgroundImage=wallBg(tex,"left");
-    wr.style.backgroundSize="auto,auto,auto,240px 400px";
-    ew.style.backgroundImage="radial-gradient(60% 32% at 50% 0%,rgba(255,240,208,.22),transparent 70%),"+
-      "linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),"+tex;
-    ew.style.backgroundSize="auto,auto,240px 400px";
-    fl.className="wfin finish fin-"+st.sub;fr.className="wfin finish fin-"+st.sub;
-    /* 實景照片：兩面牆各自套紋理（板材分縫跟著單應性透視精準收斂） */
-    if(tex1){
-      (function(stone){rasterTex(stone,function(png){
-        if(stone!==st.stone)return; /* 使用者已換色，略過過期回呼 */
+    /* 紋理（烙成 PNG 後）套用到：實景照片兩牆 + 3D 場景三牆 */
+    (function(stone){rasterTex(stone,function(png){
+      if(stone!==st.stone)return; /* 使用者已換色，略過過期回呼 */
+      if(tex1){
         tex1.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 2px,rgba(255,255,255,.08) 2px 3px,transparent 3px 200px),"+png;
         tex1.style.backgroundSize="auto,200px 100%";
         tex2.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 2px,rgba(255,255,255,.08) 2px 3px,transparent 3px 133px),"+png;
         tex2.style.backgroundSize="auto,133px 100%";
-      });})(st.stone);
+      }
+      applyScene(png);
+    });})(st.stone);
+    if(tex1){
       fin1.className="wfin finish fin-"+st.sub;fin2.className="wfin finish fin-"+st.sub;
       s1.style.display=surf.s1?"":"none";
       s2.style.display=surf.s2?"":"none";
@@ -387,10 +416,15 @@
     scene.style.display=sc?"":"none";
     if(photo)photo.style.display=ph?"":"none";
     if(matbox)matbox.classList.toggle("ph",ph);
-    if(rowWalls)rowWalls.style.display=ph?"":"none";
+    if(rowWalls){
+      rowWalls.style.display=(ph||sc)?"":"none";
+      [].forEach.call(wallsEl.children,function(b){
+        b.style.display=((ph&&b.dataset.g==="photo")||(sc&&b.dataset.g==="scene"))?"":"none";
+      });
+    }
     box.style.display=(sc||ph)?"none":"";fin.style.display=(sc||ph)?"none":"";
     if(ph)requestAnimationFrame(fit);
-    cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材"+(sc?"　·　公設走道模擬":(ph?"　·　社區健身房・實景模擬":""));
+    cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材"+(sc?"　·　3D 場景模擬":(ph?"　·　社區健身房・實景模擬":""));
   }
   render();
 })();
