@@ -44,8 +44,8 @@ function init() {
 
   /* ---------- 相機（比照實照視角） ---------- */
   const cam = new THREE.PerspectiveCamera(52, 16/7, 0.1, 60);
-  cam.position.set(2.35, 1.5, L - 0.4);
-  cam.lookAt(2.75, 1.28, 0);
+  cam.position.set(2.4, 1.5, L - 1.6);   /* 鏡頭拉近(適中) */
+  cam.lookAt(2.7, 1.3, 0);
 
   /* ---------- 材質 ---------- */
   const SUBP = { /* 基材 → PBR 參數 */
@@ -182,7 +182,7 @@ function init() {
       new THREE.MeshBasicMaterial({ color:0xe9f0f5 }));
     sky.rotation.y = -Math.PI/2; sky.position.set(W + .12, win.y0 + win.h/2, win.z0 + win.w/2);
     scene.add(sky);
-    const ra = new THREE.RectAreaLight(0xdfe9f2, 7.5, win.w, win.h);
+    const ra = new THREE.RectAreaLight(0xeef1f2, 5.5, win.w, win.h); /* 窗光近中性、降強度（減少右側偏色） */
     ra.position.set(W - .02, win.y0 + win.h/2, win.z0 + win.w/2);
     ra.lookAt(0, win.y0 + win.h/2, win.z0 + win.w/2);
     scene.add(ra);
@@ -206,8 +206,8 @@ function init() {
   doorGlow.lookAt(DOOR.x0 + DOOR.w/2, DOOR.h/2, L); scene.add(doorGlow);
 
   /* ---------- 燈光 ---------- */
-  scene.add(new THREE.HemisphereLight(0xcfd8de, 0x35302b, .48));
-  const sun = new THREE.DirectionalLight(0xfff2e2, 2.2);   /* 窗外日光斜射 */
+  scene.add(new THREE.HemisphereLight(0xd9dad8, 0x3d3a36, .5)); /* 中性環境光（統一色調） */
+  const sun = new THREE.DirectionalLight(0xfff8ee, 1.7);   /* 窗外日光斜射（近中性） */
   sun.position.set(W + 6, 4.6, 5.4); sun.target.position.set(1.2, 0, 6.8);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
@@ -218,18 +218,29 @@ function init() {
 
   /* 崁燈：沿左牆洗牆（光斑=寫實關鍵），交錯陰影 */
   const dlZ = [1.6, 3.4, 5.2, 7.0, 8.8, 10.6];
+  const DLCOL = 0xfff0dc; /* 統一崁燈色溫（微暖，兩側相同 → 無色差） */
   dlZ.forEach((z, i) => {
-    const sp = new THREE.SpotLight(0xffe6c2, 14, 7.5, .62, .5, 2);
+    /* 左牆洗牆 */
+    const sp = new THREE.SpotLight(DLCOL, 12, 7.5, .62, .5, 2);
     sp.position.set(.55, H - .04, z); sp.target.position.set(.12, 0, z);
     sp.castShadow = (i % 2 === 0);
     sp.shadow.mapSize.set(512, 512); sp.shadow.bias = -0.0005;
     scene.add(sp); scene.add(sp.target);
+    /* 右牆洗牆（補齊 → 左右亮度/色調一致） */
+    const sp2 = new THREE.SpotLight(DLCOL, 12, 7.5, .62, .5, 2);
+    sp2.position.set(W - .55, H - .04, z); sp2.target.position.set(W - .12, 0, z);
+    scene.add(sp2); scene.add(sp2.target);
     /* 燈具 */
     const fixture = new THREE.Mesh(new THREE.CylinderGeometry(.055, .055, .02, 16),
       new THREE.MeshStandardMaterial({ color:0x0d0c0a, roughness:.4 }));
     fixture.position.set(.55, H - .012, z); scene.add(fixture);
     const fx2 = fixture.clone(); fx2.position.x = 3.4; scene.add(fx2);
+    const fx3 = fixture.clone(); fx3.position.x = W - .55; scene.add(fx3);
   });
+  /* 端牆補光（與側牆同色溫，避免端牆偏暗造成色差感） */
+  const endWash = new THREE.RectAreaLight(DLCOL, 2.2, W - .6, 1.2);
+  endWash.position.set(W/2, H - .35, 1.2); endWash.lookAt(W/2, 0, 0);
+  scene.add(endWash);
 
   /* ---------- 控制列 ---------- */
   const subsEl = document.getElementById("mat-subs"),
