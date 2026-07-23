@@ -26,38 +26,9 @@
 .fin-glass{background:linear-gradient(115deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 22%,rgba(255,255,255,.12) 45%,transparent 62%),linear-gradient(to bottom,rgba(255,255,255,.22),transparent 32%);mix-blend-mode:screen;opacity:.8}
 .fin-metal{background:linear-gradient(100deg,rgba(255,255,255,.05),rgba(255,255,255,.35) 12%,rgba(0,0,0,.16) 22%,rgba(255,255,255,.26) 35%,rgba(0,0,0,.1) 50%,rgba(255,255,255,.3) 68%,rgba(0,0,0,.12) 82%,rgba(255,255,255,.2));mix-blend-mode:soft-light;opacity:.82}
 .fin-wood{background:linear-gradient(to right,rgba(120,72,30,.26),rgba(150,95,45,.12) 50%,rgba(90,55,25,.3)),repeating-linear-gradient(90deg,rgba(60,35,15,.1) 0 2px,transparent 2px 9px);mix-blend-mode:multiply;opacity:.6}
-/* ---- 3D 場景模擬（依實照建模：左牆拱門/右牆開窗/端牆玻璃門/黑燈帶天花/地毯）---- */
-.mscene{position:absolute;inset:0;--d:2200px;perspective:950px;perspective-origin:53% 54%;background:#0d0c0b}
-.mscene .room{position:absolute;inset:0;transform-style:preserve-3d}
-.mscene .pl{position:absolute;background-repeat:repeat}
-.mscene .wallL{left:0;top:-3%;height:106%;width:var(--d);transform-origin:left center;transform:rotateY(90deg)}
-.mscene .wallR{right:0;top:-3%;height:106%;width:var(--d);transform-origin:right center;transform:rotateY(-90deg)}
-.mscene .floor{left:-2%;width:104%;bottom:0;height:var(--d);transform-origin:center bottom;transform:rotateX(90deg);
-  background:
-    linear-gradient(to top,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.8) 100%),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(0deg,rgba(0,0,0,.1) 0 2px,transparent 2px 7px),
-    linear-gradient(115deg,#716f69,#84827c 50%,#67655f)}
-.mscene .ceil{left:-2%;width:104%;top:0;height:var(--d);transform-origin:center top;transform:rotateX(-90deg);
-  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 78%,rgba(0,0,0,.75) 100%),#e9e6e1}
-.mscene .strip{position:absolute;left:33%;width:7%;top:0;height:100%;background:#141210;box-shadow:0 0 34px rgba(0,0,0,.4)}
-.mscene .dots{position:absolute;left:60%;width:4%;top:60px;height:100%;
-  background:radial-gradient(circle at 50% 16px,#16130f 9px,transparent 11px);background-size:100% 230px;background-repeat:repeat-y}
-.mscene .endw{left:-2%;top:-3%;width:104%;height:106%;transform:translateZ(calc(var(--d) * -1))}
-.mscene .gdoor{position:absolute;left:39%;width:24%;top:24%;bottom:0;
-  background:linear-gradient(#211f1d,#191715);box-shadow:0 0 0 6px #0f0d0c,inset 0 0 34px rgba(130,150,160,.16)}
-.mscene .arch{position:absolute;left:50%;width:16%;top:30%;bottom:5%;background:linear-gradient(#332e29,#211d19 70%,#191512);
-  border-radius:50% 50% 0 0/24% 24% 0 0;box-shadow:0 0 0 7px #12100e,inset 0 -30px 70px rgba(0,0,0,.55)}
-.mscene .arch::before{content:"";position:absolute;left:12%;right:12%;top:3%;height:13%;
-  background:radial-gradient(52% 100% at 50% 0,rgba(255,220,165,.85),transparent 72%)}
-.mscene .win{position:absolute;top:15%;bottom:23%;
-  background:linear-gradient(115deg,#e9eef3,#ccd6dd 55%,#b9c4cc);box-shadow:0 0 0 8px #14110f,inset 0 0 44px rgba(255,255,255,.55)}
-.mscene .win::after{content:"";position:absolute;left:48%;width:4%;top:0;bottom:0;background:#14110f}
-.mscene .w1{left:58%;width:25%}
-.mscene .w2{left:24%;width:19%}
-.mscene .wfin{position:absolute;inset:0;pointer-events:none}
-.mscene .fog{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 53% 54%,rgba(10,9,8,0) 30%,rgba(10,9,8,.34) 72%,rgba(10,9,8,.62) 100%)}
+/* ---- 3D 物理渲染場景（Three.js PBR）---- */
+#scene3d{position:absolute;inset:0;background:#0d0c0b}
+#scene3d canvas{display:block;width:100%;height:100%}
 .matcap{position:absolute;left:0;bottom:0;padding:16px 22px;color:#fff;font-size:14px;letter-spacing:.03em;z-index:2;background:linear-gradient(transparent,rgba(0,0,0,.55));width:100%}
 .matcap b{color:var(--gold-lt);font-weight:600}
 .matctrl{margin-top:26px;display:flex;flex-direction:column;gap:16px}
@@ -121,22 +92,14 @@
     </div>
     <div class="matwrap">
       <div class="matbox">
-        <!-- 3D 場景模擬（依實照建模，牆面可整面換材質） -->
-        <div class="mscene" id="mat-scene">
-          <div class="room">
-            <div class="pl ceil"><div class="strip"></div><div class="dots"></div></div>
-            <div class="pl floor"></div>
-            <div class="pl wallL" id="sc-wl"><div class="arch"></div><div class="wfin finish" id="sc-fl"></div></div>
-            <div class="pl wallR" id="sc-wr"><div class="win w2"></div><div class="win w1"></div><div class="wfin finish" id="sc-fr"></div></div>
-            <div class="pl endw" id="sc-ew"><div class="gdoor"></div></div>
-          </div>
-          <div class="fog"></div>
-        </div>
+        <!-- 3D 物理渲染場景（Three.js PBR；依實照建模，UV 依真實板材尺寸計算） -->
+        <div id="scene3d"></div>
         <div class="matcap" id="mat-cap"></div>
       </div>
       <div class="matctrl">
         <div class="ctrl-row" id="row-walls"><span class="cl">牆面</span><div class="subs" id="mat-walls"></div></div>
         <div class="ctrl-row"><span class="cl">基材</span><div class="subs" id="mat-subs"></div></div>
+        <div class="ctrl-row"><span class="cl">板材</span><div class="subs" id="mat-panel"></div></div>
         <div class="ctrl-row"><span class="cl">紋理</span><div class="tex-picker" id="mat-picker"></div></div>
       </div>
     </div>
@@ -240,86 +203,10 @@
   render();
 })();
 </script>
-<script>
-/* 基材切換器：3D 場景（依實照建模，左/右/端三面牆整面換材質） */
-(function(){
-  var T=window.EGRRA_TEX;var scene=document.getElementById("mat-scene");if(!T||!scene)return;
-  var cap=document.getElementById("mat-cap"),
-      subsEl=document.getElementById("mat-subs"),pickEl=document.getElementById("mat-picker"),
-      wallsEl=document.getElementById("mat-walls"),
-      wl=document.getElementById("sc-wl"),wr=document.getElementById("sc-wr"),ew=document.getElementById("sc-ew"),
-      fl=document.getElementById("sc-fl"),fr=document.getElementById("sc-fr");
-  var SUBS=[["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
-  var TX=[["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
-  var st={stone:"carrara",name:"卡拉拉",sub:"al",subZh:"鋁"};
-  var w3={L:true,R:true,E:true};
-
-  /* 牆面開關（彩虹屋式：各牆整面套用/還原） */
-  [["L","左牆"],["R","右牆"],["E","端牆"]].forEach(function(w){
-    var b=document.createElement("button");b.textContent=w[1];if(w3[w[0]])b.className="on";
-    b.addEventListener("click",function(){w3[w[0]]=!w3[w[0]];b.classList.toggle("on",w3[w[0]]);render();});
-    wallsEl.appendChild(b);});
-  SUBS.forEach(function(s){var b=document.createElement("button");b.textContent=s[1];if(s[0]===st.sub)b.className="on";
-    b.addEventListener("click",function(){st.sub=s[0];st.subZh=s[1];[].forEach.call(subsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});subsEl.appendChild(b);});
-  TX.forEach(function(t){var b=document.createElement("button");b.style.backgroundImage=T.tex(t[1]);b.title=t[0];if(t[1]===st.stone)b.className="on";
-    b.addEventListener("click",function(){st.stone=t[1];st.name=t[0];[].forEach.call(pickEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});pickEl.appendChild(b);});
-
-  /* Chrome 對含 feTurbulence 的 SVG 背景在 3D 變形下渲染異常 → canvas 先烙成 PNG */
-  var rasterCache={};
-  function rasterTex(stone,cb){
-    if(rasterCache[stone])return cb(rasterCache[stone]);
-    var u=T.tex(stone),src=u.slice(5,-2);
-    var img=new Image();
-    img.onload=function(){
-      try{
-        var c=document.createElement("canvas");c.width=640;c.height=800;
-        c.getContext("2d").drawImage(img,0,0,640,800);
-        rasterCache[stone]='url("'+c.toDataURL("image/png")+'")';
-        cb(rasterCache[stone]);
-      }catch(e){cb(u);}
-    };
-    img.onerror=function(){cb(u);};
-    img.src=src;
-  }
-
-  /* 3D 牆面圖層：深度陰影 + 踢腳線 + 板材分割縫 + 石紋（far=遠端方向；整面套用）*/
-  function wall3d(png,far){
-    return "linear-gradient(to "+far+",rgba(0,0,0,.04) 0%,rgba(0,0,0,.4) 62%,rgba(0,0,0,.7) 100%),"+
-           "linear-gradient(to top,rgba(18,16,14,.92) 0 3.2%,rgba(18,16,14,0) 3.2%),"+
-           "repeating-linear-gradient(90deg,rgba(0,0,0,.30) 0 2px,rgba(255,255,255,.06) 2px 3px,transparent 3px 250px),"+
-           png;
-  }
-  function wallPaint(far){ /* 牆面「關」＝中性烤漆 */
-    return "linear-gradient(to "+far+",rgba(0,0,0,.04) 0%,rgba(0,0,0,.4) 62%,rgba(0,0,0,.7) 100%),"+
-           "linear-gradient(to top,rgba(18,16,14,.92) 0 3.2%,rgba(18,16,14,0) 3.2%),"+
-           "linear-gradient(#dad6cf,#dad6cf)";
-  }
-  function applyScene(png){
-    wl.style.backgroundImage = w3.L? wall3d(png,"right") : wallPaint("right");
-    wl.style.backgroundSize  = w3.L? "auto,auto,auto,250px 100%" : "auto";
-    wr.style.backgroundImage = w3.R? wall3d(png,"left") : wallPaint("left");
-    wr.style.backgroundSize  = w3.R? "auto,auto,auto,250px 100%" : "auto";
-    if(w3.E){
-      ew.style.backgroundImage="linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.36)),"+
-        "repeating-linear-gradient(90deg,rgba(0,0,0,.3) 0 2px,transparent 2px 170px),"+png;
-      ew.style.backgroundSize="auto,auto,170px 100%";
-    }else{
-      ew.style.backgroundImage="linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.36)),linear-gradient(#d6d2cb,#d6d2cb)";
-      ew.style.backgroundSize="auto";
-    }
-    fl.className="wfin finish fin-"+st.sub;fr.className="wfin finish fin-"+st.sub;
-    fl.style.display=w3.L?"":"none";fr.style.display=w3.R?"":"none";
-  }
-  function render(){
-    (function(stone){rasterTex(stone,function(png){
-      if(stone!==st.stone)return; /* 使用者已換色，略過過期回呼 */
-      applyScene(png);
-    });})(st.stone);
-    cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材　·　3D 場景模擬";
-  }
-  render();
-})();
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
 </script>
+<script type="module" src="scene3d.js"></script>
 <script src="line-widget.js"></script>
 <script src="chatbot.js"></script>
 </body>

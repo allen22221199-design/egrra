@@ -1,0 +1,276 @@
+/* =========================================================================
+   煌盛興業 EGRRA — 3D 場景模擬（Three.js / PBR 物理渲染）
+   ・依健身房實照建模：12m × 5.2m × 2.9m，左牆拱門、右牆雙窗、端牆玻璃門、
+     黑燈帶天花、崁燈、方塊地毯
+   ・UV 依真實板材尺寸計算：repeat = 牆面實際尺寸 ÷ 板材尺寸（板縫=真實分割）
+   ・物理因素：窗光(方向光+面光源)、崁燈洗牆、軟陰影、ACES tone mapping、
+     環境反射(PMREM RoomEnvironment)、基材=PBR 粗糙度/金屬度/清漆
+   ========================================================================= */
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js";
+import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
+
+const T = window.EGRRA_TEX;
+const holder = document.getElementById("scene3d");
+if (T && holder) init();
+
+function init() {
+  /* ---------- 房間實際尺寸（公尺） ---------- */
+  const L = 12, W = 5.2, H = 2.9;          // 長(z)、寬(x)、高(y)；左牆 x=0
+
+  /* ---------- 狀態 ---------- */
+  const TX = [["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
+  const SUBS = [["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
+  const PANELS = [["4×8尺",1.212,2.424],["4×10尺",1.212,3.03],["5×10尺",1.515,3.03]];
+  const st = { stone:"carrara", name:"卡拉拉", sub:"al", subZh:"鋁", panel:2 };
+  const w3 = { L:true, R:true, E:true };
+
+  /* ---------- 渲染器 ---------- */
+  const renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  holder.appendChild(renderer.domElement);
+  RectAreaLightUniformsLib.init();
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d0c0b);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  /* ---------- 相機（比照實照視角） ---------- */
+  const cam = new THREE.PerspectiveCamera(52, 16/7, 0.1, 60);
+  cam.position.set(2.35, 1.5, L - 0.4);
+  cam.lookAt(2.75, 1.28, 0);
+
+  /* ---------- 材質 ---------- */
+  const SUBP = { /* 基材 → PBR 參數 */
+    al:    { roughness:.42, metalness:.12, clearcoat:.15, ccr:.5 },
+    glass: { roughness:.10, metalness:.05, clearcoat:1.0, ccr:.06 },
+    metal: { roughness:.30, metalness:.85, clearcoat:0,   ccr:.5 },
+    wood:  { roughness:.62, metalness:0,   clearcoat:.06, ccr:.6 }
+  };
+  function stoneMat() {
+    return new THREE.MeshPhysicalMaterial({ color:0xffffff, roughness:.42, metalness:.1 });
+  }
+  const paintMat = new THREE.MeshPhysicalMaterial({ color:0xd8d4cd, roughness:.85, metalness:0 });
+  const matL = stoneMat(), matR = stoneMat(), matE = stoneMat();
+
+  /* 紋理：SVG → canvas 烙成點陣（板縫畫進磚邊，隨 UV 重複＝真實分割線） */
+  const texCache = {};
+  function makeTexture(stone, cb) {
+    const key = stone;
+    if (texCache[key]) return cb(texCache[key]);
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = 512; c.height = 1024;
+      const g = c.getContext("2d");
+      g.drawImage(img, 0, 0, 512, 1024);
+      /* 板縫：右緣+下緣 倒角縫(深-亮-深)＝拼板時的真實分割 */
+      g.fillStyle = "rgba(0,0,0,.55)"; g.fillRect(508, 0, 4, 1024); g.fillRect(0, 1020, 512, 4);
+      g.fillStyle = "rgba(255,255,255,.18)"; g.fillRect(505, 0, 2, 1024); g.fillRect(0, 1017, 512, 2);
+      const t = new THREE.CanvasTexture(c);
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texCache[key] = t; cb(t);
+    };
+    img.src = T.tex(stone).slice(5, -2);
+  }
+
+  /* UV：每面牆依「實際尺寸 ÷ 板材尺寸」計算重複（ShapeGeometry 的 UV=公尺座標） */
+  function applyStone() {
+    makeTexture(st.stone, base => {
+      const p = PANELS[st.panel];                       // [名, 寬m, 高m]
+      const sp = SUBP[st.sub];
+      [[matL, w3.L], [matR, w3.R], [matE, w3.E]].forEach(([m, on]) => {
+        const t = base.clone(); t.needsUpdate = true;
+        t.repeat.set(1 / p[1], 1 / p[2]);               // ShapeGeometry UV 單位=公尺
+        m.map = on ? t : null;
+        m.color.set(on ? 0xffffff : 0xd8d4cd);
+        m.roughness = on ? sp.roughness : .85;
+        m.metalness = on ? sp.metalness : 0;
+        m.clearcoat = on ? sp.clearcoat : 0;
+        m.clearcoatRoughness = sp.ccr;
+        m.needsUpdate = true;
+      });
+      cap();
+    });
+  }
+
+  /* ---------- 幾何：牆（含開口）用 Shape+holes，UV=公尺 ---------- */
+  function wallShape(w, h, holes) {
+    const s = new THREE.Shape();
+    s.moveTo(0,0); s.lineTo(w,0); s.lineTo(w,h); s.lineTo(0,h); s.closePath();
+    (holes||[]).forEach(hl => s.holes.push(hl));
+    return new THREE.ShapeGeometry(s, 24);
+  }
+  function archHole(zc, w, hSide, hTop) { /* 圓拱：直邊+半橢圓頂 */
+    const p = new THREE.Path();
+    p.moveTo(zc - w/2, 0); p.lineTo(zc - w/2, hSide);
+    p.absellipse(zc, hSide, w/2, hTop - hSide, Math.PI, 0, true);
+    p.lineTo(zc + w/2, 0); p.closePath();
+    return p;
+  }
+  function rectHole(x0, y0, w, h) {
+    const p = new THREE.Path();
+    p.moveTo(x0,y0); p.lineTo(x0+w,y0); p.lineTo(x0+w,y0+h); p.lineTo(x0,y0+h); p.closePath();
+    return p;
+  }
+
+  /* 左牆 x=0（面向 +x），拱門在 z≈6.4，寬1.1m 高2.15m */
+  const ARCH = { z:6.4, w:1.1, hs:1.75, ht:2.15 };
+  const wallL = new THREE.Mesh(wallShape(L, H, [archHole(ARCH.z, ARCH.w, ARCH.hs, ARCH.ht)]), matL);
+  wallL.rotation.y = Math.PI/2; wallL.position.set(0, 0, L);  /* shape x→ -z */
+  wallL.receiveShadow = true; scene.add(wallL);
+
+  /* 右牆 x=W（面向 -x），兩窗 */
+  const WIN1 = { z0:1.2, w:2.6, y0:.9, h:1.35 }, WIN2 = { z0:5.6, w:1.9, y0:.9, h:1.35 };
+  const wallR = new THREE.Mesh(
+    wallShape(L, H, [rectHole(WIN1.z0, WIN1.y0, WIN1.w, WIN1.h), rectHole(WIN2.z0, WIN2.y0, WIN2.w, WIN2.h)]), matR);
+  wallR.rotation.y = -Math.PI/2; wallR.position.set(W, 0, 0);
+  wallR.receiveShadow = true; scene.add(wallR);
+
+  /* 端牆 z=0（面向 +z），玻璃門洞 */
+  const DOOR = { x0:2.05, w:1.3, h:2.15 };
+  const wallE = new THREE.Mesh(wallShape(W, H, [rectHole(DOOR.x0, 0, DOOR.w, DOOR.h)]), matE);
+  wallE.position.set(0, 0, 0);
+  wallE.receiveShadow = true; scene.add(wallE);
+
+  /* 相機後方牆（反光用，看不到） */
+  const wallB = new THREE.Mesh(new THREE.PlaneGeometry(W, H), paintMat);
+  wallB.rotation.y = Math.PI; wallB.position.set(W/2, H/2, L); scene.add(wallB);
+
+  /* ---------- 天花板：白 + 黑燈帶 ---------- */
+  const ceilMat = new THREE.MeshStandardMaterial({ color:0xeceae6, roughness:.9 });
+  const ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, L), ceilMat);
+  ceil.rotation.x = Math.PI/2; ceil.position.set(W/2, H, L/2); ceil.receiveShadow = true; scene.add(ceil);
+  const strip = new THREE.Mesh(new THREE.BoxGeometry(.42, .06, L),
+    new THREE.MeshStandardMaterial({ color:0x121110, roughness:.65 }));
+  strip.position.set(1.72, H - .03, L/2); scene.add(strip);
+
+  /* ---------- 地板：方塊地毯（UV=0.5m 磚） ---------- */
+  const cc = document.createElement("canvas"); cc.width = cc.height = 256;
+  const cg = cc.getContext("2d");
+  cg.fillStyle = "#55534f"; cg.fillRect(0,0,256,256);
+  for (let i=0;i<2600;i++){ cg.fillStyle = Math.random()>.5?"rgba(255,255,255,.05)":"rgba(0,0,0,.08)";
+    cg.fillRect(Math.random()*256, Math.random()*256, 2, 1+Math.random()*3); }
+  cg.fillStyle="rgba(0,0,0,.25)"; cg.fillRect(0,0,256,2); cg.fillRect(0,0,2,256);
+  const carpet = new THREE.CanvasTexture(cc);
+  carpet.wrapS = carpet.wrapT = THREE.RepeatWrapping; carpet.repeat.set(W/.5, L/.5);
+  carpet.colorSpace = THREE.SRGBColorSpace; carpet.anisotropy = 8;
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, L),
+    new THREE.MeshStandardMaterial({ map:carpet, roughness:.96 }));
+  floor.rotation.x = -Math.PI/2; floor.position.set(W/2, 0, L/2);
+  floor.receiveShadow = true; scene.add(floor);
+
+  /* ---------- 開口內容 ---------- */
+  /* 拱門內：暗龕 + 暖光 */
+  const nook = new THREE.Mesh(new THREE.BoxGeometry(1.2, ARCH.ht + .2, ARCH.w + .3),
+    new THREE.MeshStandardMaterial({ color:0x241f1a, roughness:.9, side:THREE.BackSide }));
+  nook.position.set(-.6, (ARCH.ht + .2)/2, ARCH.z); scene.add(nook);
+  const nookL = new THREE.PointLight(0xffc37a, 3.2, 3.4, 2);
+  nookL.position.set(-.35, ARCH.ht - .12, ARCH.z); scene.add(nookL);
+
+  /* 窗：天空面 + 面光源；玻璃門：深色玻璃 */
+  function addWindow(win) {
+    const sky = new THREE.Mesh(new THREE.PlaneGeometry(win.w, win.h),
+      new THREE.MeshBasicMaterial({ color:0xe9f0f5 }));
+    sky.rotation.y = -Math.PI/2; sky.position.set(W + .12, win.y0 + win.h/2, win.z0 + win.w/2);
+    scene.add(sky);
+    const ra = new THREE.RectAreaLight(0xdfe9f2, 7.5, win.w, win.h);
+    ra.position.set(W - .02, win.y0 + win.h/2, win.z0 + win.w/2);
+    ra.lookAt(0, win.y0 + win.h/2, win.z0 + win.w/2);
+    scene.add(ra);
+    /* 窗框 */
+    const fm = new THREE.MeshStandardMaterial({ color:0x14110f, roughness:.5, metalness:.4 });
+    const fw = .05;
+    [[win.w + .1, fw, win.y0], [win.w + .1, fw, win.y0 + win.h]].forEach(([w_, t_, y_]) => {
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(.06, t_ + .06, w_), fm);
+      bar.position.set(W - .01, y_, win.z0 + win.w/2); scene.add(bar);
+    });
+    const mid = new THREE.Mesh(new THREE.BoxGeometry(.06, win.h, .05), fm);
+    mid.position.set(W - .01, win.y0 + win.h/2, win.z0 + win.w/2); scene.add(mid);
+  }
+  addWindow(WIN1); addWindow(WIN2);
+
+  const gdoor = new THREE.Mesh(new THREE.PlaneGeometry(DOOR.w, DOOR.h),
+    new THREE.MeshPhysicalMaterial({ color:0x101418, roughness:.05, metalness:.4, clearcoat:1, clearcoatRoughness:.05 }));
+  gdoor.position.set(DOOR.x0 + DOOR.w/2, DOOR.h/2, -.06); scene.add(gdoor);
+  const doorGlow = new THREE.RectAreaLight(0xbfd0da, 1.6, DOOR.w, DOOR.h);
+  doorGlow.position.set(DOOR.x0 + DOOR.w/2, DOOR.h/2, .02);
+  doorGlow.lookAt(DOOR.x0 + DOOR.w/2, DOOR.h/2, L); scene.add(doorGlow);
+
+  /* ---------- 燈光 ---------- */
+  scene.add(new THREE.HemisphereLight(0xcfd8de, 0x35302b, .48));
+  const sun = new THREE.DirectionalLight(0xfff2e2, 2.2);   /* 窗外日光斜射 */
+  sun.position.set(W + 6, 4.6, 5.4); sun.target.position.set(1.2, 0, 6.8);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.left = -8; sun.shadow.camera.right = 8;
+  sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
+  sun.shadow.bias = -0.0004;
+  scene.add(sun); scene.add(sun.target);
+
+  /* 崁燈：沿左牆洗牆（光斑=寫實關鍵），交錯陰影 */
+  const dlZ = [1.6, 3.4, 5.2, 7.0, 8.8, 10.6];
+  dlZ.forEach((z, i) => {
+    const sp = new THREE.SpotLight(0xffe6c2, 14, 7.5, .62, .5, 2);
+    sp.position.set(.55, H - .04, z); sp.target.position.set(.12, 0, z);
+    sp.castShadow = (i % 2 === 0);
+    sp.shadow.mapSize.set(512, 512); sp.shadow.bias = -0.0005;
+    scene.add(sp); scene.add(sp.target);
+    /* 燈具 */
+    const fixture = new THREE.Mesh(new THREE.CylinderGeometry(.055, .055, .02, 16),
+      new THREE.MeshStandardMaterial({ color:0x0d0c0a, roughness:.4 }));
+    fixture.position.set(.55, H - .012, z); scene.add(fixture);
+    const fx2 = fixture.clone(); fx2.position.x = 3.4; scene.add(fx2);
+  });
+
+  /* ---------- 控制列 ---------- */
+  const subsEl = document.getElementById("mat-subs"),
+        pickEl = document.getElementById("mat-picker"),
+        wallsEl = document.getElementById("mat-walls"),
+        panelEl = document.getElementById("mat-panel"),
+        capEl = document.getElementById("mat-cap");
+  function chip(host, label, on, fn, bgTex) {
+    const b = document.createElement("button");
+    if (bgTex) { b.style.backgroundImage = bgTex; b.title = label; } else b.textContent = label;
+    if (on) b.className = "on";
+    b.addEventListener("click", () => fn(b)); host.appendChild(b); return b;
+  }
+  function solo(host, b) { [].forEach.call(host.children, c => c.classList.remove("on")); b.classList.add("on"); }
+  [["L","左牆"],["R","右牆"],["E","端牆"]].forEach(w =>
+    chip(wallsEl, w[1], w3[w[0]], b => { w3[w[0]] = !w3[w[0]]; b.classList.toggle("on", w3[w[0]]); applyStone(); }));
+  SUBS.forEach(s =>
+    chip(subsEl, s[1], s[0]===st.sub, b => { st.sub = s[0]; st.subZh = s[1]; solo(subsEl, b); applyStone(); }));
+  PANELS.forEach((p, i) =>
+    chip(panelEl, p[0], i===st.panel, b => { st.panel = i; solo(panelEl, b); applyStone(); }));
+  TX.forEach(t =>
+    chip(pickEl, t[0], t[1]===st.stone, b => { st.stone = t[1]; st.name = t[0]; solo(pickEl, b); applyStone(); }, T.tex(t[1])));
+  function cap() {
+    capEl.innerHTML = "PrinTex™　<b>" + st.name + "</b>　·　" + st.subZh + "基材　·　板材 " +
+      PANELS[st.panel][0] + "　·　3D 物理渲染";
+  }
+
+  /* ---------- 尺寸/渲染循環 ---------- */
+  function resize() {
+    const r = holder.getBoundingClientRect();
+    if (!r.width) return;
+    renderer.setSize(r.width, r.height, false);
+    renderer.domElement.style.width = "100%"; renderer.domElement.style.height = "100%";
+    cam.aspect = r.width / r.height; cam.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", resize);
+  resize();
+  let needsRender = 60; /* 靜態場景：互動後渲染數幀即停，省電 */
+  const tick = () => { requestAnimationFrame(tick); if (needsRender > 0) { needsRender--; renderer.render(scene, cam); } };
+  const _apply = applyStone;
+  applyStone = function(){ _apply(); needsRender = 60; };
+  applyStone();
+  tick();
+}
