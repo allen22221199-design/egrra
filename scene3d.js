@@ -195,6 +195,33 @@ function init() {
   const nookL = new THREE.PointLight(0xffc37a, 3.2, 3.4, 2);
   nookL.position.set(-.35, ARCH.ht - .12, ARCH.z); scene.add(nookL);
 
+  /* ---- 圓拱門：拱形門扇（深色木質 + 把手 + 門框收邊） ---- */
+  function archShape(zc, w, hs, ht) {
+    const s = new THREE.Shape();
+    s.moveTo(zc - w/2, 0); s.lineTo(zc - w/2, hs);
+    s.absellipse(zc, hs, w/2, ht - hs, Math.PI, 0, true);
+    s.lineTo(zc + w/2, 0); s.closePath();
+    return s;
+  }
+  const archGroup = new THREE.Group();
+  archGroup.rotation.y = Math.PI/2; archGroup.position.set(0, 0, L);
+  /* 門框收邊（略大於門洞） */
+  const archFrame = new THREE.Mesh(
+    new THREE.ShapeGeometry(archShape(ARCH.z, ARCH.w + .09, ARCH.hs + .04, ARCH.ht + .045), 28),
+    new THREE.MeshStandardMaterial({ color:0x14110f, roughness:.5, metalness:.35 }));
+  archFrame.position.set(0, 0, 0.024); archGroup.add(archFrame);
+  /* 門扇（內縮 1cm，深色木質 PBR） */
+  const archDoor = new THREE.Mesh(
+    new THREE.ShapeGeometry(archShape(ARCH.z, ARCH.w - .02, ARCH.hs - .01, ARCH.ht - .012), 28),
+    new THREE.MeshPhysicalMaterial({ color:0x4a382a, roughness:.55, metalness:.05, clearcoat:.25, clearcoatRoughness:.4 }));
+  archDoor.position.set(0, 0, 0.03); archGroup.add(archDoor);
+  /* 門把（直立長把手） */
+  const archHandle = new THREE.Mesh(new THREE.CylinderGeometry(.017, .017, .42, 12),
+    new THREE.MeshStandardMaterial({ color:0x9b9182, roughness:.28, metalness:.9 }));
+  archHandle.position.set(ARCH.z + ARCH.w/2 - .16, 1.0, .06); archGroup.add(archHandle);
+  archGroup.traverse(o => { if (o.isMesh) o.castShadow = false; });
+  scene.add(archGroup);
+
   /* 窗：天空面 + 面光源；玻璃門：深色玻璃 */
   function addWindow(win) {
     const sky = new THREE.Mesh(new THREE.PlaneGeometry(win.w, win.h),
@@ -217,9 +244,33 @@ function init() {
   }
   addWindow(WIN1); addWindow(WIN2);
 
-  const gdoor = new THREE.Mesh(new THREE.PlaneGeometry(DOOR.w, DOOR.h),
-    new THREE.MeshPhysicalMaterial({ color:0x101418, roughness:.05, metalness:.4, clearcoat:1, clearcoatRoughness:.05 }));
-  gdoor.position.set(DOOR.x0 + DOOR.w/2, DOOR.h/2, -.06); scene.add(gdoor);
+  /* ---- 端牆：玻璃門（門框 + 玻璃 + 直立把手 + 橫檔） ---- */
+  const frameMat = new THREE.MeshStandardMaterial({ color:0x171513, roughness:.42, metalness:.55 });
+  const glassMat = new THREE.MeshPhysicalMaterial({
+    color:0x1b2226, roughness:.06, metalness:.25, clearcoat:1, clearcoatRoughness:.04,
+    transparent:true, opacity:.92
+  });
+  const gGroup = new THREE.Group();
+  gGroup.position.set(DOOR.x0 + DOOR.w/2, 0, -.05);
+  /* 玻璃（雙開，中間留分割） */
+  [-1, 1].forEach(side => {
+    const leafW = DOOR.w/2 - .012;
+    const leaf = new THREE.Mesh(new THREE.PlaneGeometry(leafW, DOOR.h - .06), glassMat);
+    leaf.position.set(side * (DOOR.w/4), (DOOR.h - .06)/2, 0);
+    gGroup.add(leaf);
+    /* 直立把手 */
+    const hd = new THREE.Mesh(new THREE.CylinderGeometry(.016, .016, .55, 12),
+      new THREE.MeshStandardMaterial({ color:0x8d8578, roughness:.3, metalness:.85 }));
+    hd.position.set(side * .075, 1.05, .045);
+    gGroup.add(hd);
+  });
+  /* 門框：左右柱 + 上檻 + 中挺 */
+  const jamb = (x) => { const m = new THREE.Mesh(new THREE.BoxGeometry(.05, DOOR.h, .09), frameMat);
+    m.position.set(x, DOOR.h/2, 0); gGroup.add(m); };
+  jamb(-DOOR.w/2); jamb(DOOR.w/2); jamb(0);
+  const lintel = new THREE.Mesh(new THREE.BoxGeometry(DOOR.w + .1, .06, .09), frameMat);
+  lintel.position.set(0, DOOR.h, 0); gGroup.add(lintel);
+  scene.add(gGroup);
   const doorGlow = new THREE.RectAreaLight(0xbfd0da, 1.6, DOOR.w, DOOR.h);
   doorGlow.position.set(DOOR.x0 + DOOR.w/2, DOOR.h/2, .02);
   doorGlow.lookAt(DOOR.x0 + DOOR.w/2, DOOR.h/2, L); scene.add(doorGlow);
@@ -239,8 +290,8 @@ function init() {
   const dlZ = [1.6, 3.4, 5.2, 7.0, 8.8, 10.6];
   const DLCOL = 0xfff0dc; /* 統一崁燈色溫（微暖，兩側相同 → 無色差） */
   dlZ.forEach((z, i) => {
-    /* 左牆洗牆 */
-    const sp = new THREE.SpotLight(DLCOL, 12, 7.5, .62, .5, 2);
+    /* 左牆洗牆（調暗：避免淺色石紋過曝） */
+    const sp = new THREE.SpotLight(DLCOL, 6.5, 7.5, .62, .5, 2);
     sp.position.set(.55, H - .04, z); sp.target.position.set(.12, 0, z);
     sp.castShadow = (i % 2 === 0);
     sp.shadow.mapSize.set(512, 512); sp.shadow.bias = -0.0005;
@@ -257,7 +308,7 @@ function init() {
     const fx3 = fixture.clone(); fx3.position.x = W - .55; scene.add(fx3);
   });
   /* 端牆補光（與側牆同色溫，避免端牆偏暗造成色差感） */
-  const endWash = new THREE.RectAreaLight(DLCOL, 2.2, W - .6, 1.2);
+  const endWash = new THREE.RectAreaLight(DLCOL, 1.0, W - .6, 1.2);
   endWash.position.set(W/2, H - .35, 1.2); endWash.lookAt(W/2, 0, 0);
   scene.add(endWash);
 
