@@ -163,7 +163,11 @@ header.solid .burger span{background:var(--ink)}
 .about{padding:120px 0}
 .about-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:center}
 .about-visual{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-.about-visual .stone-fill{position:absolute;inset:0}
+.about-visual .about-photo{position:absolute;inset:0;background:url('img/about-building.jpg') center/cover no-repeat}
+/* 落款簽名（經營理念下方） */
+.about-sign{margin-top:22px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.about-sign img{height:58px;width:auto;opacity:.88}
+.about-sign span{font-size:12.5px;letter-spacing:.14em;color:var(--faint)}
 .about-visual .badge{position:absolute;left:26px;bottom:26px;background:rgba(22,19,15,.82);backdrop-filter:blur(6px);
   color:#fff;padding:20px 26px;border-radius:12px;border:1px solid rgba(201,168,120,.4)}
 .about-visual .badge b{font-family:var(--serif);font-size:30px;color:var(--gold-lt);display:block}
@@ -454,7 +458,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 <section class="about" id="about">
   <div class="wrap about-grid">
     <div class="about-visual reveal">
-      <div class="stone-fill" data-stone="carrara"></div>
+      <div class="about-photo"></div>
       <div class="badge"><b>1978</b><span>王子彩色 × 煌盛興業</span></div>
     </div>
     <div class="about-text reveal d1">
@@ -463,6 +467,10 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       <p id="aboutP2">煌盛興業是專為建築、設計市場打造的<strong>數位紋理品牌</strong>，已累積超過 46 年以上經驗，擅長色彩控管、圖紋製作等設計，提供從紋理開發到成品的全方位解決方案。</p>
       <div class="about-quote">
         <p id="missionText">「提供最優質的裝修建材，傳承過去、延續現今、開創未來，站穩業界的領導品牌；並為減少石材開採、保護大自然，盡一份棉薄之力。」</p>
+      </div>
+      <div class="about-sign">
+        <img src="img/signature.png" alt="煌盛興業 負責人簽名" loading="lazy" />
+        <span>煌盛興業　負責人</span>
       </div>
     </div>
   </div>
