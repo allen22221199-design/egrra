@@ -162,14 +162,20 @@ header.solid .burger span{background:var(--ink)}
 /* ===============  ABOUT  =============== */
 .about{padding:120px 0}
 .about-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:center}
-.about-visual{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-.about-visual .about-photo{position:absolute;inset:0;background:url('img/about-building.jpg') center/cover no-repeat}
+/* 主視覺：白底卡片，照片縮小靠下＋圓角。
+   照片原始 800×502，縮小顯示(不放大)才不會出現馬賽克/模糊 */
+.about-visual{position:relative;aspect-ratio:1/1;border-radius:var(--r);overflow:hidden;
+  background:#fff;box-shadow:var(--shadow)}
+.about-visual .about-photo{position:absolute;left:22px;right:22px;bottom:22px;
+  aspect-ratio:800/502;border-radius:12px;
+  background:url('img/about-building.jpg') center/cover no-repeat;
+  box-shadow:0 16px 36px -18px rgba(40,30,18,.4)}
 /* 落款簽名（經營理念下方） */
 .about-sign{margin-top:22px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .about-sign img{height:58px;width:auto;opacity:.88}
 .about-sign span{font-size:12.5px;letter-spacing:.14em;color:var(--faint)}
-.about-visual .badge{position:absolute;left:26px;bottom:26px;background:rgba(22,19,15,.82);backdrop-filter:blur(6px);
-  color:#fff;padding:20px 26px;border-radius:12px;border:1px solid rgba(201,168,120,.4)}
+.about-visual .badge{position:absolute;left:26px;top:30px;background:rgba(22,19,15,.9);backdrop-filter:blur(6px);
+  color:#fff;padding:18px 24px;border-radius:12px;border:1px solid rgba(201,168,120,.4)}
 .about-visual .badge b{font-family:var(--serif);font-size:30px;color:var(--gold-lt);display:block}
 .about-visual .badge span{font-size:13px;color:rgba(255,255,255,.8);letter-spacing:.1em}
 .about-text h2{font-size:clamp(28px,4vw,42px);margin:8px 0 26px}
