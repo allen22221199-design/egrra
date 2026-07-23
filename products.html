@@ -48,6 +48,19 @@
 .mscene .wfin{position:absolute;inset:0;pointer-events:none}
 .mscene .fog{position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%,rgba(10,9,8,0) 26%,rgba(10,9,8,.38) 70%,rgba(10,9,8,.7) 100%)}
+/* ---- 實景照片模擬（真實照片 + 牆面紋理疊加，保留原光影）---- */
+.matbox.ph{aspect-ratio:3500/1967}
+.mphoto{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat}
+.ph-wall{position:absolute;inset:0;overflow:hidden;
+  clip-path:polygon(0% 8.2%, 43.6% 48.9%, 43.6% 78%, 0% 112%)}
+.ph-tex{position:absolute;left:-6%;top:-42%;width:170%;height:214%;
+  transform-origin:0% 50%;transform:perspective(1250px) rotateY(57deg)}
+.ph-shade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.05) 0%,rgba(0,0,0,.18) 55%,rgba(0,0,0,.38) 100%)}
+.ph-soft{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:soft-light;opacity:.9}
+.ph-lum{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:luminosity;opacity:.38}
+.ph-restore{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat}
+.ph-arch{clip-path:polygon(22.6% 82%, 22.6% 48%, 23.3% 41.2%, 24.5% 38%, 26.8% 36.4%, 29.6% 36.4%, 31.7% 38%, 33.1% 40.4%, 33.7% 44.3%, 33.9% 81%)}
+.ph-door{clip-path:polygon(36.2% 49.4%, 40% 50.7%, 40.1% 78.6%, 36.3% 79.6%)}
 .matcap{position:absolute;left:0;bottom:0;padding:16px 22px;color:#fff;font-size:14px;letter-spacing:.03em;z-index:2;background:linear-gradient(transparent,rgba(0,0,0,.55));width:100%}
 .matcap b{color:var(--gold-lt);font-weight:600}
 .matctrl{margin-top:26px;display:flex;flex-direction:column;gap:16px}
@@ -121,6 +134,18 @@
             <div class="pl endw" id="sc-ew"></div>
           </div>
           <div class="fog"></div>
+        </div>
+        <!-- 實景照片模擬（真照片牆面套紋理，保留光影） -->
+        <div class="mphoto" id="mat-photo" style="display:none">
+          <div class="ph-wall">
+            <div class="ph-tex" id="ph-tex"></div>
+            <div class="ph-shade"></div>
+            <div class="ph-soft"></div>
+            <div class="ph-lum"></div>
+            <div class="wfin finish" id="ph-fin"></div>
+          </div>
+          <div class="ph-restore ph-arch"></div>
+          <div class="ph-restore ph-door"></div>
         </div>
         <!-- 平面樣板 -->
         <div class="mattex" id="mat-tex" style="display:none"></div>
@@ -242,10 +267,12 @@
   var scene=document.getElementById("mat-scene"),
       wl=document.getElementById("sc-wl"),wr=document.getElementById("sc-wr"),ew=document.getElementById("sc-ew"),
       fl=document.getElementById("sc-fl"),fr=document.getElementById("sc-fr");
+  var photo=document.getElementById("mat-photo"),phTex=document.getElementById("ph-tex"),phFin=document.getElementById("ph-fin"),
+      matbox=document.querySelector(".matbox");
   var SUBS=[["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
   var TX=[["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
-  var VIEWS=[["scene","走道場景"],["flat","平面樣板"]];
-  var st={stone:"carrara",name:"卡拉拉",sub:"al",subZh:"鋁",view:"scene"};
+  var VIEWS=[["photo","實景照片"],["scene","走道場景"],["flat","平面樣板"]];
+  var st={stone:"carrara",name:"卡拉拉",sub:"al",subZh:"鋁",view:"photo"};
 
   VIEWS.forEach(function(v){var b=document.createElement("button");b.textContent=v[1];if(v[0]===st.view)b.className="on";
     b.addEventListener("click",function(){st.view=v[0];[].forEach.call(viewsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});viewsEl.appendChild(b);});
@@ -274,11 +301,19 @@
       "linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),"+tex;
     ew.style.backgroundSize="auto,auto,240px 400px";
     fl.className="wfin finish fin-"+st.sub;fr.className="wfin finish fin-"+st.sub;
+    /* 實景照片：牆面紋理（含板材分縫，隨透視收斂） */
+    if(phTex){
+      phTex.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 3px,rgba(255,255,255,.07) 3px 5px,transparent 5px 320px),"+tex;
+      phTex.style.backgroundSize="auto,320px 540px";
+      phFin.className="wfin finish fin-"+st.sub;
+    }
     /* 顯示模式 */
-    var sc=st.view==="scene";
+    var sc=st.view==="scene",ph=st.view==="photo";
     scene.style.display=sc?"":"none";
-    box.style.display=sc?"none":"";fin.style.display=sc?"none":"";
-    cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材"+(sc?"　·　公設走道模擬":"");
+    if(photo)photo.style.display=ph?"":"none";
+    if(matbox)matbox.classList.toggle("ph",ph);
+    box.style.display=(sc||ph)?"none":"";fin.style.display=(sc||ph)?"none":"";
+    cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材"+(sc?"　·　公設走道模擬":(ph?"　·　社區健身房・實景模擬":""));
   }
   render();
 })();
