@@ -167,6 +167,19 @@ header.solid .burger span{background:var(--ink)}
 /* ===============  STATS  =============== */
 .stats{background:var(--dark-2);color:#fff;position:relative;z-index:3}
 .stats .num{font-style:normal;font-variant-numeric:tabular-nums}
+
+/* ---- 合作建商跑馬燈（向右無縫循環）---- */
+.marquee{background:var(--paper);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mq-track{display:flex;align-items:center;width:max-content;animation:mq-right 70s linear infinite}
+.marquee:hover .mq-track{animation-play-state:paused}
+@keyframes mq-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.mq-item{display:flex;align-items:center;gap:16px;padding:0 22px;white-space:nowrap;
+  font-size:15px;font-weight:600;letter-spacing:.06em;color:var(--muted)}
+.mq-item::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;flex:0 0 auto}
+@media(prefers-reduced-motion:reduce){.mq-track{animation:none;transform:translateX(0)}}
+@media(max-width:600px){.mq-item{font-size:13.5px;padding:0 15px;gap:12px}}
 .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
 .stat{padding:42px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
 .stat:last-child{border-right:none}
@@ -498,6 +511,11 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 </section>
 
 <!-- ==========  ABOUT  ========== -->
+<!-- 合作建商跑馬燈（向右） -->
+<div class="marquee" aria-label="合作建設・營造夥伴">
+  <div class="mq-track" id="mqTrack"></div>
+</div>
+
 <section class="about" id="about">
   <div class="wrap about-grid">
     <div class="about-visual reveal">
@@ -894,6 +912,24 @@ swatches.forEach(function(s,i){
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
   sw.appendChild(d);
 });
+
+/* ----------  合作建商跑馬燈  ----------
+   名單重複兩份，配合 translateX(-50%)→0 的動畫達成無縫循環 */
+(function(){
+  var list=(DATA.clients||[]), track=document.getElementById("mqTrack");
+  if(!track||!list.length){var m=document.querySelector(".marquee");if(m)m.style.display="none";return;}
+  var html="";
+  for(var pass=0;pass<2;pass++){
+    list.forEach(function(c){
+      var d=document.createElement("div");d.className="mq-item";
+      d.textContent=c.name||"";
+      html+=d.outerHTML;
+    });
+  }
+  track.innerHTML=html;
+  /* 名單較少時放慢速度，避免跑太快 */
+  track.style.animationDuration=Math.max(35,list.length*1.8)+"s";
+})();
 
 /* ----------  合作客戶  ---------- */
 (function(){
