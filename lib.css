@@ -54,13 +54,15 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 /* ---- GRID ---- */
 .libsec{padding:38px 0 90px}
 .grid{display:grid;gap:18px}
-.grid.sw{grid-template-columns:repeat(5,1fr)}
+.grid.sw{grid-template-columns:repeat(6,1fr)}
 .grid.pf{grid-template-columns:repeat(4,1fr)}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.3s var(--ease);opacity:1}
 .card:hover{transform:translateY(-5px);box-shadow:var(--sh);border-color:transparent}
 .card .th{position:relative;background-size:cover;background-position:center}
-.grid.sw .th{aspect-ratio:1/1}
-.grid.pf .th{aspect-ratio:1/.8}
+/* 花色庫：比例對齊板材原圖(400×800 直式) → 紋理全貌完整呈現、不裁切 */
+.grid.sw .th{aspect-ratio:1/2}
+/* 實績照(800×1200 直式)：加高以保留更多畫面 */
+.grid.pf .th{aspect-ratio:1/1.2}
 .card .th .tag{position:absolute;top:10px;left:10px;background:rgba(22,19,15,.78);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
 .card .cap{padding:14px 15px}
 .card .cap h3{font-size:16.5px;font-weight:700;color:var(--ink)}
@@ -76,7 +78,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 .mod{background:#fff;border-radius:18px;width:100%;max-width:820px;max-height:88vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;
   box-shadow:0 40px 90px -20px rgba(0,0,0,.5);animation:mp .3s var(--ease)}
 @keyframes mp{from{transform:translateY(16px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-.mod .mimg{background-size:cover;background-position:center;min-height:360px}
+/* 詳情彈窗：contain 讓整張紋理/照片完整入鏡，不裁切 */
+.mod .mimg{background-size:contain;background-repeat:no-repeat;background-position:center;background-color:#f2f0ec;min-height:420px}
 .mod .mbody{padding:36px 34px;overflow-y:auto;position:relative}
 .mod .mclose{position:absolute;top:16px;right:16px;background:#f2efe9;border:none;width:34px;height:34px;border-radius:50%;font-size:22px;
   cursor:pointer;color:var(--ink-soft);line-height:1}
