@@ -264,6 +264,42 @@ header.solid .burger span{background:var(--ink)}
 .gallery-wrap .section-head h2{color:#fff}
 .gallery-wrap .eyebrow{color:var(--gold-lt)}
 .gallery-wrap .section-head p{color:rgba(255,255,255,.7)}
+/* 合作客戶（實績區） */
+.clients{margin:6px 0 54px}
+.clients .cl-head{text-align:center;margin-bottom:26px}
+.clients .cl-head .eyebrow{color:var(--gold)}
+.clients .cl-head h3{font-family:var(--serif);font-size:clamp(21px,2.6vw,27px);font-weight:800;color:var(--ink);margin:8px 0 6px}
+.clients .cl-head p{font-size:14px;color:var(--muted)}
+.cl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cl-item{background:#fff;border:1px solid var(--line);border-radius:11px;padding:15px 16px;transition:.25s var(--ease)}
+.cl-item:hover{border-color:var(--gold);box-shadow:0 12px 26px -16px rgba(40,30,18,.35);transform:translateY(-3px)}
+.cl-item b{display:block;font-size:15px;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.cl-item span{display:block;font-size:11.5px;color:var(--faint);margin-top:3px;line-height:1.5;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cl-note{text-align:center;font-size:12.5px;color:var(--faint);margin-top:20px;letter-spacing:.06em}
+@media(max-width:900px){.cl-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.cl-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* 其他品項（開發中）：虛線框 + 敬請期待 */
+.prod-soon{margin-top:26px;border:1.5px dashed rgba(176,141,87,.5);border-radius:var(--r);
+  padding:30px 34px;display:flex;align-items:center;gap:30px;flex-wrap:wrap;background:rgba(176,141,87,.05)}
+.prod-soon .ps-head{min-width:170px}
+.prod-soon .ps-k{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:6px}
+.prod-soon .ps-head h3{font-family:var(--serif);font-size:23px;font-weight:800;color:var(--ink)}
+.prod-soon .ps-items{display:flex;gap:14px;flex-wrap:wrap;flex:1}
+.prod-soon .ps-item{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 20px;min-width:190px}
+.prod-soon .ps-item b{display:block;font-size:16px;font-weight:700;color:var(--ink)}
+.prod-soon .ps-item span{font-size:11.5px;letter-spacing:.1em;color:var(--faint)}
+.prod-soon .ps-note{font-size:13.5px;letter-spacing:.2em;color:var(--gold);
+  border:1px solid rgba(176,141,87,.45);border-radius:100px;padding:9px 22px;white-space:nowrap}
+@media(max-width:700px){.prod-soon{flex-direction:column;align-items:flex-start;gap:18px}
+  .prod-soon .ps-items{width:100%}.prod-soon .ps-item{flex:1}}
+
+/* 首頁精選花色：只露出三行，下方以深色漸層帶過（完整清單在花色庫）
+   磁磚為正方形，7 欄 3 行 → 容器比例約 7/3，改欄數時同步調整 */
+.sw-clip{position:relative;overflow:hidden;aspect-ratio:2/1}
+.sw-clip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:52%;pointer-events:none;z-index:3;
+  background:linear-gradient(to bottom,rgba(22,19,15,0) 0%,rgba(22,19,15,.55) 42%,rgba(22,19,15,.92) 78%,var(--dark) 100%)}
 .swatches{display:grid;grid-template-columns:repeat(7,1fr);gap:14px}
 .sw{aspect-ratio:1;border-radius:10px;position:relative;overflow:hidden;cursor:pointer}
 .sw .fill{position:absolute;inset:0;transition:transform .7s var(--ease)}
@@ -369,6 +405,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   .process{grid-template-columns:1fr;gap:36px}
   .feat-grid,.prod-grid{grid-template-columns:repeat(2,1fr)}
   .swatches{grid-template-columns:repeat(4,1fr)}
+  .sw-clip{aspect-ratio:8/7}
   .pf-grid{grid-template-columns:repeat(3,1fr)}
   .stats .wrap{grid-template-columns:repeat(2,1fr)}
   .stat:nth-child(2){border-right:none}
@@ -387,6 +424,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   .about,.tech,.feats,.products,.gallery-wrap,.portfolio,.qa,.contact{padding:80px 0}
   .feat-grid,.prod-grid,.prod-sub,.tech-feats{grid-template-columns:1fr}
   .swatches{grid-template-columns:repeat(3,1fr)}
+  .sw-clip{aspect-ratio:6/7}
   .pf-grid{grid-template-columns:repeat(2,1fr)}
   .hero-inner{padding:120px 0 100px}
   .hero-cta{flex-direction:column}
@@ -581,22 +619,22 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">產品系列</span>
-      <h2>藝格板・三大質感系列</h2>
-      <p>以 PrinTex™ 技術淬鍊出的三種紋理語彙，滿足不同空間的美學想像。</p>
+      <h2>三大產品線</h2>
+      <p>以 PrinTex™ 專利數位紋理為核心，依基材與應用需求，發展出三條產品線。</p>
     </div>
 
     <div class="prod-grid">
       <div class="pcard reveal">
         <div class="fill" data-stone="carrara"></div><div class="grad"></div>
-        <div class="cap"><span class="k">Stone</span><h3>石紋系列</h3><p>重現大理石、板岩等天然石材的溫潤脈絡與層次。</p></div>
+        <div class="cap"><span class="k">Panel</span><h3>藝格板</h3><p>鋁基材數位紋理板，石紋／繡蝕／木紋三大質感，耐燃一級的空間主力。</p></div>
       </div>
       <div class="pcard reveal d1">
-        <div class="fill" data-stone="rust"></div><div class="grad"></div>
-        <div class="cap"><span class="k">Rust</span><h3>繡蝕系列</h3><p>金屬繡蝕與歲月斑駁的工業美學，冷冽而深邃。</p></div>
+        <div class="fill" data-stone="silver"></div><div class="grad"></div>
+        <div class="cap"><span class="k">Crystal</span><h3>藝格晶</h3><p>玻璃基材工法，通透晶亮的鏡面層次，適用精品門面與端景牆。</p></div>
       </div>
       <div class="pcard reveal d2">
-        <div class="fill" data-stone="wood"></div><div class="grad"></div>
-        <div class="cap"><span class="k">Wood</span><h3>木紋系列</h3><p>溫潤自然的木質紋理，為空間注入柔和暖意。</p></div>
+        <div class="fill" data-stone="darkgrey"></div><div class="grad"></div>
+        <div class="cap"><span class="k">Titanium</span><h3>藝格鈦</h3><p>金屬基材強化質感，沉穩內斂的鈦金屬光澤，展現高階建築語彙。</p></div>
       </div>
     </div>
 
@@ -610,6 +648,19 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
         <div class="cap"><span class="k">Application</span><h3>防火門</h3><p>兼具防火機能與設計質感的門片解決方案。</p></div>
       </div>
     </div>
+
+    <!-- 其他品項：開發中 -->
+    <div class="prod-soon reveal">
+      <div class="ps-head">
+        <span class="ps-k">Coming Soon</span>
+        <h3>其他品項</h3>
+      </div>
+      <div class="ps-items">
+        <div class="ps-item"><b>斷熱鍍膜</b><span>Thermal Coating</span></div>
+        <div class="ps-item"><b>蜂窩板 / 焊接板</b><span>Honeycomb / Welded Panel</span></div>
+      </div>
+      <div class="ps-note">敬請期待</div>
+    </div>
   </div>
 </section>
 
@@ -621,7 +672,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       <h2>一牆一石，各有風骨</h2>
       <p>多樣花色任您挑選，從純白經典到深邃黑金，總有一款貼合您的空間敘事。</p>
     </div>
-    <div class="swatches" id="swatches"></div>
+    <div class="sw-clip"><div class="swatches" id="swatches"></div></div>
     <div class="spec-bar reveal">
       <div><b>表面處理</b>立體紋路・霧光・平光・消光</div>
       <div><b>標準尺寸</b>4×4 ・ 4×8 ・ 4×10 ・ 5×10 尺</div>
@@ -644,6 +695,17 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       </div>
       <a href="#contact" class="btn btn-line">洽詢您的專案 <span class="arrow">→</span></a>
     </div>
+    <!-- 合作客戶 -->
+    <div class="clients reveal">
+      <div class="cl-head">
+        <span class="eyebrow">Our Clients</span>
+        <h3>合作建設・營造夥伴</h3>
+        <p>長期服務全台建設公司、營造廠與室內設計團隊</p>
+      </div>
+      <div class="cl-grid" id="clientGrid"></div>
+      <p class="cl-note">— 依合作時序排列，部分專案依客戶要求不予揭露 —</p>
+    </div>
+
     <div class="pf-grid" id="pfgrid"></div>
     <p class="pf-more">— 以上為部分案例 —</p>
     <div class="reveal" style="text-align:center;margin-top:26px">
@@ -846,6 +908,21 @@ swatches.forEach(function(s,i){
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
   sw.appendChild(d);
 });
+
+/* ----------  合作客戶  ---------- */
+(function(){
+  var list=(DATA.clients||[]), host=document.getElementById("clientGrid");
+  if(!host||!list.length){var c=document.querySelector(".clients");if(c)c.style.display="none";return;}
+  list.forEach(function(c,i){
+    var d=document.createElement("div");d.className="cl-item reveal";
+    d.style.transitionDelay=(Math.min(i,10)*0.03)+"s";
+    d.innerHTML='<b></b><span></span>';
+    d.querySelector("b").textContent=c.name||"";
+    d.querySelector("span").textContent=c.note||"";
+    if(c.note)d.title=c.name+"　"+c.note;
+    host.appendChild(d);
+  });
+})();
 
 /* ----------  PORTFOLIO GRID  ---------- */
 var projects=(DATA.cases||[]).slice(0,24);

@@ -10,7 +10,7 @@ window.EGRRA_DEFAULT_DATA = {
   /* dataVersion：程式端內容版本。後台「發布上線」的快照若版本較舊，
      官網會自動忽略它、沿用這裡的新內容（避免舊快照蓋掉新資料）。
      ※ 每次在程式端改內容請往上調整這個日期時間。 */
-  dataVersion: "2026-07-23T15:30:00Z",
+  dataVersion: "2026-07-23T16:00:00Z",
 
   /* ---- 網站資訊（可在後台「網站資訊」分頁修改）---- */
   info: {
@@ -62,6 +62,51 @@ window.EGRRA_DEFAULT_DATA = {
     { id:"p28", name:"木紋 GEH1215",series:"木紋系列", stone:"wood",    sizes:"4×4 / 4×8 / 4×10 / 5×10 尺", finish:"立體紋路・霧光・平光・消光", img:"img/tex/SCS054.jpg", desc:"" },
     { id:"p29", name:"木紋 UE106C",series:"木紋系列", stone:"wood",     sizes:"4×4 / 4×8 / 4×10 / 5×10 尺", finish:"立體紋路・霧光・平光・消光", img:"img/tex/SCS055.jpg", desc:"" },
     { id:"p30", name:"木紋 EN628", series:"木紋系列", stone:"wood",     sizes:"4×4 / 4×8 / 4×10 / 5×10 尺", finish:"立體紋路・霧光・平光・消光", img:"img/tex/SCS056.jpg", desc:"" }
+  ],
+
+  /* ---- 合作客戶（首頁實績區展示；整理自業務專案總表）----
+     name = 公司名稱，note = 代表建案（可留空） */
+  clients: [
+    { name:"長虹建設",   note:"大直案" },
+    { name:"宏普建設",   note:"中央公園二期・陽明" },
+    { name:"惠宇建設",   note:"覞山・謙富・仁山My Park・大然" },
+    { name:"國泰室裝",   note:"瓏山林・三重案" },
+    { name:"隆大建設",   note:"岡山・楠梓藍田西・燕巢觀水段" },
+    { name:"璞園建築",   note:"璞園天玉" },
+    { name:"皇普建設",   note:"皇普 Lavie" },
+    { name:"茂德建設",   note:"米蘭花園・公園 YOYO" },
+    { name:"全坤建設",   note:"御大安・峰碩" },
+    { name:"頤昌建設",   note:"柏舍・松琚・筑岳" },
+    { name:"龍霖建設",   note:"龍霖初心" },
+    { name:"大賞建設",   note:"詠大賞" },
+    { name:"合銘建設",   note:"合環 Land Mark" },
+    { name:"新業建設",   note:"京御苑" },
+    { name:"得墾建設",   note:"京之硯" },
+    { name:"裕盛發建設", note:"新莊福美段" },
+    { name:"宏碁建設",   note:"七賢案" },
+    { name:"萬企大業",   note:"祥囊" },
+    { name:"新家坡建設", note:"桃大真 27／29 期" },
+    { name:"永豐泰建設", note:"雲川" },
+    { name:"慶山建設",   note:"慶山明仁" },
+    { name:"大亮建設",   note:"桃園龜山案" },
+    { name:"鴻信建設",   note:"公園 66・紅布朗" },
+    { name:"陽明營造",   note:"維正北士科" },
+    { name:"璞承營造",   note:"璞園天玉" },
+    { name:"久年營造",   note:"中央公園二期" },
+    { name:"承優營造",   note:"公園 YOYO" },
+    { name:"辰豐營造",   note:"宏普陽明" },
+    { name:"盤鈺營建",   note:"草間漫漫" },
+    { name:"長興茂室",   note:"福樺中央大樓" },
+    { name:"順緯建泰",   note:"石牌順緯案" },
+    { name:"得呈工程",   note:"有富彩玉・有富藍玉" },
+    { name:"聖輝工程",   note:"宏普陽明箱體" },
+    { name:"旭宣系統",   note:"瓏山林" },
+    { name:"雅富室內",   note:"新濠一川" },
+    { name:"詰律室裝",   note:"咊暘和" },
+    { name:"珩美室設",   note:"帆登" },
+    { name:"李林設計",   note:"睦昇天朗" },
+    { name:"瀚鼎設計",   note:"蘆竹案" },
+    { name:"奇研所",     note:"新花開" }
   ],
 
   /* ---- 實績案例（後台「實績案例」分頁可增刪改）----
