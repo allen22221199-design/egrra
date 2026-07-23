@@ -51,15 +51,19 @@
 /* ---- 實景照片模擬（真實照片 + 牆面紋理疊加，保留原光影）---- */
 .matbox.ph{aspect-ratio:3500/1967}
 .mphoto{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat}
-.ph-wall{position:absolute;inset:0;overflow:hidden;
-  clip-path:polygon(0% 8.2%, 43.6% 48.9%, 43.6% 78%, 0% 112%)}
-.ph-tex{position:absolute;left:-6%;top:-42%;width:170%;height:214%;
-  transform-origin:0% 50%;transform:perspective(1250px) rotateY(57deg)}
+.ph-surf{position:absolute;inset:0;overflow:hidden}
+.ph-s1{clip-path:polygon(0% 8.2%, 43.6% 48.9%, 43.6% 76.8%, 0% 112%)}
+.ph-s2{clip-path:polygon(22.6% 82%, 22.6% 48%, 23.3% 41.2%, 24.5% 38%, 26.8% 36.4%, 29.6% 36.4%, 31.7% 38%, 33.1% 40.4%, 33.7% 44.3%, 33.9% 81%)}
+.ph-tex{position:absolute;left:0;top:0;transform-origin:0 0}   /* matrix3d 由 JS 依照片角點精算 */
+#ph-tex1{width:1000px;height:360px}
+#ph-tex2{width:400px;height:520px}
 .ph-shade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.05) 0%,rgba(0,0,0,.18) 55%,rgba(0,0,0,.38) 100%)}
-.ph-soft{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:soft-light;opacity:.9}
-.ph-lum{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:luminosity;opacity:.38}
+.ph-soft{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:soft-light;opacity:.32}
+.ph-lum{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat;mix-blend-mode:luminosity;opacity:.12}
 .ph-restore{position:absolute;inset:0;background:url("scene-gym.webp") center/100% 100% no-repeat}
 .ph-arch{clip-path:polygon(22.6% 82%, 22.6% 48%, 23.3% 41.2%, 24.5% 38%, 26.8% 36.4%, 29.6% 36.4%, 31.7% 38%, 33.1% 40.4%, 33.7% 44.3%, 33.9% 81%)}
+/* 拱門黑框（建築細節）：略大於開口的還原補丁，夾在 s1 與 s2 之間 */
+.ph-archframe{clip-path:polygon(21.6% 83.4%, 21.6% 47.4%, 22.4% 39.9%, 23.7% 36.5%, 26.4% 34.8%, 30% 34.8%, 32.4% 36.6%, 33.9% 39.3%, 34.5% 43.5%, 34.7% 82.4%)}
 .ph-door{clip-path:polygon(36.2% 49.4%, 40% 50.7%, 40.1% 78.6%, 36.3% 79.6%)}
 .matcap{position:absolute;left:0;bottom:0;padding:16px 22px;color:#fff;font-size:14px;letter-spacing:.03em;z-index:2;background:linear-gradient(transparent,rgba(0,0,0,.55));width:100%}
 .matcap b{color:var(--gold-lt);font-weight:600}
@@ -135,16 +139,23 @@
           </div>
           <div class="fog"></div>
         </div>
-        <!-- 實景照片模擬（真照片牆面套紋理，保留光影） -->
+        <!-- 實景照片模擬（真照片牆面套紋理，保留光影；透視=依照片角點做單應性精算） -->
         <div class="mphoto" id="mat-photo" style="display:none">
-          <div class="ph-wall">
-            <div class="ph-tex" id="ph-tex"></div>
+          <div class="ph-surf ph-s1" id="ph-s1">
+            <div class="ph-tex" id="ph-tex1"></div>
             <div class="ph-shade"></div>
             <div class="ph-soft"></div>
             <div class="ph-lum"></div>
-            <div class="wfin finish" id="ph-fin"></div>
+            <div class="wfin finish" id="ph-fin1"></div>
           </div>
-          <div class="ph-restore ph-arch"></div>
+          <div class="ph-restore ph-archframe"></div>
+          <div class="ph-surf ph-s2" id="ph-s2">
+            <div class="ph-tex" id="ph-tex2"></div>
+            <div class="ph-soft"></div>
+            <div class="ph-lum"></div>
+            <div class="wfin finish" id="ph-fin2"></div>
+          </div>
+          <div class="ph-restore ph-arch" id="ph-r2" style="display:none"></div>
           <div class="ph-restore ph-door"></div>
         </div>
         <!-- 平面樣板 -->
@@ -154,6 +165,7 @@
       </div>
       <div class="matctrl">
         <div class="ctrl-row"><span class="cl">展示</span><div class="subs" id="mat-views"></div></div>
+        <div class="ctrl-row" id="row-walls"><span class="cl">牆面</span><div class="subs" id="mat-walls"></div></div>
         <div class="ctrl-row"><span class="cl">基材</span><div class="subs" id="mat-subs"></div></div>
         <div class="ctrl-row"><span class="cl">紋理</span><div class="tex-picker" id="mat-picker"></div></div>
       </div>
@@ -267,8 +279,58 @@
   var scene=document.getElementById("mat-scene"),
       wl=document.getElementById("sc-wl"),wr=document.getElementById("sc-wr"),ew=document.getElementById("sc-ew"),
       fl=document.getElementById("sc-fl"),fr=document.getElementById("sc-fr");
-  var photo=document.getElementById("mat-photo"),phTex=document.getElementById("ph-tex"),phFin=document.getElementById("ph-fin"),
-      matbox=document.querySelector(".matbox");
+  var photo=document.getElementById("mat-photo"),matbox=document.querySelector(".matbox"),
+      tex1=document.getElementById("ph-tex1"),tex2=document.getElementById("ph-tex2"),
+      fin1=document.getElementById("ph-fin1"),fin2=document.getElementById("ph-fin2"),
+      s1=document.getElementById("ph-s1"),s2=document.getElementById("ph-s2"),r2=document.getElementById("ph-r2"),
+      wallsEl=document.getElementById("mat-walls"),rowWalls=document.getElementById("row-walls");
+
+  /* ---- 單應性（homography）：把矩形紋理精準映射到照片上牆面的四個角點 ---- */
+  function adjM(m){return[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],
+    m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],
+    m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]];}
+  function mulMM(a,b){var c=[],i,j,k,s;for(i=0;i<3;i++)for(j=0;j<3;j++){s=0;for(k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s;}return c;}
+  function mulMV(m,v){return[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]];}
+  function basis(x1,y1,x2,y2,x3,y3,x4,y4){var m=[x1,x2,x3,y1,y2,y3,1,1,1];var v=mulMV(adjM(m),[x4,y4,1]);
+    return mulMM(m,[v[0],0,0,0,v[1],0,0,0,v[2]]);}
+  function proj2d(w,h,d){ /* (0,0)(w,0)(0,h)(w,h) → 四個目的點 d=[[x,y]x4: TL,TR,BL,BR] */
+    var s=basis(0,0,w,0,0,h,w,h),t=basis(d[0][0],d[0][1],d[1][0],d[1][1],d[2][0],d[2][1],d[3][0],d[3][1]);
+    var m=mulMM(t,adjM(s));for(var i=0;i<9;i++)m[i]/=m[8];
+    return "matrix3d("+[m[0],m[3],0,m[6],m[1],m[4],0,m[7],0,0,1,0,m[2],m[5],0,m[8]].join(",")+")";}
+
+  /* 牆面角點（照片 % 座標；TL,TR,BL,BR）——量自實照 */
+  var Q1=[[0,8.2],[43.6,48.9],[0,112],[43.6,76.8]];      /* 左側木紋大牆 */
+  var Q2=[[21.4,34.6],[34.6,37.6],[21.4,84],[34.6,81]];/* 拱內石牆（略帶角度）*/
+  function fit(){
+    if(!photo||photo.style.display==="none")return;
+    var r=photo.getBoundingClientRect();if(!r.width)return;
+    function px(q){return q.map(function(p){return[p[0]*r.width/100,p[1]*r.height/100];});}
+    tex1.style.transformOrigin="0 0";tex2.style.transformOrigin="0 0"; /* inline 保證生效 */
+    tex1.style.transform=proj2d(tex1.offsetWidth,tex1.offsetHeight,px(Q1));
+    tex2.style.transform=proj2d(tex2.offsetWidth,tex2.offsetHeight,px(Q2));
+  }
+  window.addEventListener("resize",fit);
+  var surf={s1:true,s2:true};
+
+  /* Chrome 對「含 feTurbulence 的 SVG 背景」在 matrix3d 下會渲染異常（濾鏡失效/範圍被裁）
+     → 先用 canvas 把 SVG 紋理烙成 PNG 再當背景 */
+  var rasterCache={};
+  function rasterTex(stone,cb){
+    if(rasterCache[stone])return cb(rasterCache[stone]);
+    var u=T.tex(stone);              /* url("data:image/svg+xml,...") */
+    var src=u.slice(5,-2);
+    var img=new Image();
+    img.onload=function(){
+      try{
+        var c=document.createElement("canvas");c.width=400;c.height=500;
+        c.getContext("2d").drawImage(img,0,0,400,500);
+        rasterCache[stone]='url("'+c.toDataURL("image/png")+'")';
+        cb(rasterCache[stone]);
+      }catch(e){cb(u);}
+    };
+    img.onerror=function(){cb(u);};
+    img.src=src;
+  }
   var SUBS=[["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
   var TX=[["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
   var VIEWS=[["photo","實景照片"],["scene","走道場景"],["flat","平面樣板"]];
@@ -276,6 +338,11 @@
 
   VIEWS.forEach(function(v){var b=document.createElement("button");b.textContent=v[1];if(v[0]===st.view)b.className="on";
     b.addEventListener("click",function(){st.view=v[0];[].forEach.call(viewsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});viewsEl.appendChild(b);});
+  /* 牆面開關（實景照片模式；彩虹屋式：各牆獨立套用/還原）*/
+  [["s1","左側大牆"],["s2","拱內石牆"]].forEach(function(w){
+    var b=document.createElement("button");b.textContent=w[1];if(surf[w[0]])b.className="on";
+    b.addEventListener("click",function(){surf[w[0]]=!surf[w[0]];b.classList.toggle("on",surf[w[0]]);render();});
+    wallsEl.appendChild(b);});
   SUBS.forEach(function(s){var b=document.createElement("button");b.textContent=s[1];if(s[0]===st.sub)b.className="on";
     b.addEventListener("click",function(){st.sub=s[0];st.subZh=s[1];[].forEach.call(subsEl.children,function(c){c.classList.remove("on");});b.classList.add("on");render();});subsEl.appendChild(b);});
   TX.forEach(function(t){var b=document.createElement("button");b.style.backgroundImage=T.tex(t[1]);b.title=t[0];if(t[1]===st.stone)b.className="on";
@@ -301,18 +368,28 @@
       "linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),"+tex;
     ew.style.backgroundSize="auto,auto,240px 400px";
     fl.className="wfin finish fin-"+st.sub;fr.className="wfin finish fin-"+st.sub;
-    /* 實景照片：牆面紋理（含板材分縫，隨透視收斂） */
-    if(phTex){
-      phTex.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 3px,rgba(255,255,255,.07) 3px 5px,transparent 5px 320px),"+tex;
-      phTex.style.backgroundSize="auto,320px 540px";
-      phFin.className="wfin finish fin-"+st.sub;
+    /* 實景照片：兩面牆各自套紋理（板材分縫跟著單應性透視精準收斂） */
+    if(tex1){
+      (function(stone){rasterTex(stone,function(png){
+        if(stone!==st.stone)return; /* 使用者已換色，略過過期回呼 */
+        tex1.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 2px,rgba(255,255,255,.08) 2px 3px,transparent 3px 200px),"+png;
+        tex1.style.backgroundSize="auto,200px 100%";
+        tex2.style.backgroundImage="repeating-linear-gradient(90deg,rgba(0,0,0,.32) 0 2px,rgba(255,255,255,.08) 2px 3px,transparent 3px 133px),"+png;
+        tex2.style.backgroundSize="auto,133px 100%";
+      });})(st.stone);
+      fin1.className="wfin finish fin-"+st.sub;fin2.className="wfin finish fin-"+st.sub;
+      s1.style.display=surf.s1?"":"none";
+      s2.style.display=surf.s2?"":"none";
+      r2.style.display=surf.s2?"none":"";
     }
     /* 顯示模式 */
     var sc=st.view==="scene",ph=st.view==="photo";
     scene.style.display=sc?"":"none";
     if(photo)photo.style.display=ph?"":"none";
     if(matbox)matbox.classList.toggle("ph",ph);
+    if(rowWalls)rowWalls.style.display=ph?"":"none";
     box.style.display=(sc||ph)?"none":"";fin.style.display=(sc||ph)?"none":"";
+    if(ph)requestAnimationFrame(fit);
     cap.innerHTML="PrinTex™　<b>"+st.name+"</b>　·　"+st.subZh+"基材"+(sc?"　·　公設走道模擬":(ph?"　·　社區健身房・實景模擬":""));
   }
   render();
