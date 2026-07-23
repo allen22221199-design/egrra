@@ -772,7 +772,7 @@ function stoneSVG(o){
      '<rect width="100%" height="100%" filter="url(#v)" fill="'+o.vein+'" opacity="'+(o.veinOp||.55)+'" style="mix-blend-mode:'+(o.blend||"soft-light")+'"/>'+
      (o.glow?'<rect width="100%" height="100%" fill="url(#g)"/>':'')+
    '</svg>';
-  return 'url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+  return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"')";
 }
 /* palette per stone */
 var STONES={
@@ -828,7 +828,7 @@ swatches.forEach(function(s,i){
   d.style.transitionDelay=(i%7*0.05)+"s";
   d.innerHTML='<div class="fill"></div><div class="nm">'+(s.name||"")+'</div>';
   var f=d.querySelector(".fill");
-  f.style.backgroundImage=s.img?('url("'+s.img+'")'):tex(s.stone);
+  f.style.backgroundImage=s.img?("url('"+s.img+"')"):tex(s.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
   sw.appendChild(d);
 });
@@ -841,7 +841,7 @@ projects.forEach(function(p,i){
   d.style.transitionDelay=(i%4*0.06)+"s";
   d.innerHTML='<div class="fill"></div><div class="ov"><small>'+(p.region||"")+'</small><b>'+(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
-  f.style.backgroundImage=p.img?('url("'+p.img+'")'):tex(p.stone);
+  f.style.backgroundImage=p.img?("url('"+p.img+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
   pf.appendChild(d);
 });

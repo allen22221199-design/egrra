@@ -11,7 +11,7 @@ window.EGRRA_TEX = (function(){
       '<rect width="100%" height="100%" fill="'+o.base+'"/>'+
       '<rect width="100%" height="100%" fill="'+o.mid+'" opacity="'+(o.midOp||.5)+'"/>'+
       '<rect width="100%" height="100%" filter="url(#v)" fill="'+o.vein+'" opacity="'+(o.veinOp||.55)+'" style="mix-blend-mode:'+(o.blend||"soft-light")+'"/></svg>';
-    return 'url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+    return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"')";
   }
   var STONES={
     carrara:{base:"#f2efe9",mid:"#dedad2",vein:"#9a958c",freq:"0.008 0.04",veinOp:.5,seed:12},

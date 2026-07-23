@@ -358,7 +358,7 @@ function renderProducts(){
 }
 function productCard(p){
   var d=document.createElement("div");d.className="item";
-  var bg=p.img?('url("'+p.img+'")'):tex(p.stone);
+  var bg=p.img?("url('"+p.img+"')"):tex(p.stone);
   d.innerHTML=
     '<div class="thumb" style="background-image:'+bg+'">'+
       '<span class="tag">'+esc(p.series||"")+'</span>'+
@@ -388,7 +388,7 @@ function renderCases(){
 }
 function caseCard(c){
   var d=document.createElement("div");d.className="item";
-  var bg=c.img?('url("'+c.img+'")'):tex(c.stone);
+  var bg=c.img?("url('"+c.img+"')"):tex(c.stone);
   d.innerHTML=
     '<div class="thumb" style="background-image:'+bg+'">'+
       '<span class="tag">'+esc(c.category||"")+'</span>'+

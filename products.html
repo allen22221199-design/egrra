@@ -140,7 +140,7 @@
 
   function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-  function bg(p){return p.img?('url("'+p.img+'")'):T.tex(p.stone);}
+  function bg(p){return p.img?("url('"+p.img+"')"):T.tex(p.stone);}
 
   function chips(host,items,cur,onPick){
     host.innerHTML="";
