@@ -20,10 +20,12 @@ function init() {
   const L = 12, W = 5.2, H = 2.9;          // 長(z)、寬(x)、高(y)；左牆 x=0
 
   /* ---------- 狀態 ---------- */
-  const TX = [["卡拉拉","carrara"],["帝寶米黃","beige"],["加里奧金","gold"],["聖羅蘭黑","black"],["深灰石紋","darkgrey"]];
+  /* 紋理清單＝舊站真實板材照（site-data products 內有 img 的全部花色） */
+  const DATA = window.EGRRA_DEFAULT_DATA || {};
+  const PRODS = (DATA.products || []).filter(p => p.img);
   const SUBS = [["al","鋁"],["glass","玻璃"],["metal","金屬"],["wood","木質"]];
   const PANELS = [["4×8尺",1.212,2.424],["4×10尺",1.212,3.03],["5×10尺",1.515,3.03]];
-  const st = { stone:"carrara", name:"卡拉拉", sub:"al", subZh:"鋁", panel:2 };
+  const st = { prod: PRODS[0] || { id:"gen", name:"卡拉拉", stone:"carrara", img:"" }, sub:"al", subZh:"鋁", panel:2 };
   const w3 = { L:true, R:true, E:true };
 
   /* ---------- 渲染器 ---------- */
@@ -60,16 +62,20 @@ function init() {
   const paintMat = new THREE.MeshPhysicalMaterial({ color:0xd8d4cd, roughness:.85, metalness:0 });
   const matL = stoneMat(), matR = stoneMat(), matE = stoneMat();
 
-  /* 紋理：SVG → canvas 烙成點陣（板縫畫進磚邊，隨 UV 重複＝真實分割線） */
+  /* 紋理：真實板材照（舊站高解析原圖）→ canvas 滿版裁切 + 板縫烙進磚邊
+     （照片為同源本站託管 → canvas 不會 taint；無照片時退回程式生成紋理） */
   const texCache = {};
-  function makeTexture(stone, cb) {
-    const key = stone;
+  function makeTexture(prod, cb) {
+    const key = prod.id;
     if (texCache[key]) return cb(texCache[key]);
     const img = new Image();
     img.onload = () => {
       const c = document.createElement("canvas"); c.width = 512; c.height = 1024;
       const g = c.getContext("2d");
-      g.drawImage(img, 0, 0, 512, 1024);
+      /* cover 裁切：照片等比放大鋪滿 512×1024（單片板材比例） */
+      const s = Math.max(512 / img.width, 1024 / img.height);
+      const dw = img.width * s, dh = img.height * s;
+      g.drawImage(img, (512 - dw) / 2, (1024 - dh) / 2, dw, dh);
       /* 板縫：右緣+下緣 倒角縫(深-亮-深)＝拼板時的真實分割 */
       g.fillStyle = "rgba(0,0,0,.55)"; g.fillRect(508, 0, 4, 1024); g.fillRect(0, 1020, 512, 4);
       g.fillStyle = "rgba(255,255,255,.18)"; g.fillRect(505, 0, 2, 1024); g.fillRect(0, 1017, 512, 2);
@@ -79,12 +85,25 @@ function init() {
       t.anisotropy = renderer.capabilities.getMaxAnisotropy();
       texCache[key] = t; cb(t);
     };
-    img.src = T.tex(stone).slice(5, -2);
+    img.onerror = () => { /* 照片載入失敗 → 程式生成紋理備援 */
+      const fallback = new Image();
+      fallback.onload = () => {
+        const c = document.createElement("canvas"); c.width = 512; c.height = 1024;
+        c.getContext("2d").drawImage(fallback, 0, 0, 512, 1024);
+        const t = new THREE.CanvasTexture(c);
+        t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace;
+        texCache[key] = t; cb(t);
+      };
+      fallback.src = T.tex(prod.stone).slice(5, -2);
+    };
+    img.src = prod.img || T.tex(prod.stone).slice(5, -2);
   }
 
   /* UV：每面牆依「實際尺寸 ÷ 板材尺寸」計算重複（ShapeGeometry 的 UV=公尺座標） */
   function applyStone() {
-    makeTexture(st.stone, base => {
+    const cur = st.prod;
+    makeTexture(cur, base => {
+      if (cur.id !== st.prod.id) return; /* 使用者已換色，略過過期回呼 */
       const p = PANELS[st.panel];                       // [名, 寬m, 高m]
       const sp = SUBP[st.sub];
       [[matL, w3.L], [matR, w3.R], [matE, w3.E]].forEach(([m, on]) => {
@@ -261,11 +280,12 @@ function init() {
     chip(subsEl, s[1], s[0]===st.sub, b => { st.sub = s[0]; st.subZh = s[1]; solo(subsEl, b); applyStone(); }));
   PANELS.forEach((p, i) =>
     chip(panelEl, p[0], i===st.panel, b => { st.panel = i; solo(panelEl, b); applyStone(); }));
-  TX.forEach(t =>
-    chip(pickEl, t[0], t[1]===st.stone, b => { st.stone = t[1]; st.name = t[0]; solo(pickEl, b); applyStone(); }, T.tex(t[1])));
+  PRODS.forEach(p =>
+    chip(pickEl, p.name, p.id===st.prod.id, b => { st.prod = p; solo(pickEl, b); applyStone(); },
+      'url("' + p.img + '")'));
   function cap() {
-    capEl.innerHTML = "PrinTex™　<b>" + st.name + "</b>　·　" + st.subZh + "基材　·　板材 " +
-      PANELS[st.panel][0] + "　·　3D 物理渲染";
+    capEl.innerHTML = "PrinTex™　<b>" + st.prod.name + "</b>（" + (st.prod.series || "") + "）　·　" +
+      st.subZh + "基材　·　板材 " + PANELS[st.panel][0] + "　·　3D 物理渲染";
   }
 
   /* ---------- 尺寸/渲染循環 ---------- */
