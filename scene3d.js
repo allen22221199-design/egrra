@@ -192,8 +192,8 @@ function init() {
   const nook = new THREE.Mesh(new THREE.BoxGeometry(1.2, ARCH.ht + .2, ARCH.w + .3),
     new THREE.MeshStandardMaterial({ color:0x241f1a, roughness:.9, side:THREE.BackSide }));
   nook.position.set(-.6, (ARCH.ht + .2)/2, ARCH.z); scene.add(nook);
-  const nookL = new THREE.PointLight(0xffc37a, 3.2, 3.4, 2);
-  nookL.position.set(-.35, ARCH.ht - .12, ARCH.z); scene.add(nookL);
+  /* 註：拱門已加門扇，原本的暖光 PointLight 因不投射陰影會「穿透牆面」
+     在左牆與天花板造成暖色光斑（各面牆亮度/色溫不一致的元凶），故移除。 */
 
   /* ---- 圓拱門：拱形門扇（深色木質 + 把手 + 門框收邊） ---- */
   function archShape(zc, w, hs, ht) {
@@ -290,8 +290,8 @@ function init() {
   const dlZ = [1.6, 3.4, 5.2, 7.0, 8.8, 10.6];
   const DLCOL = 0xfff0dc; /* 統一崁燈色溫（微暖，兩側相同 → 無色差） */
   dlZ.forEach((z, i) => {
-    /* 左牆洗牆（調暗：避免淺色石紋過曝） */
-    const sp = new THREE.SpotLight(DLCOL, 6.5, 7.5, .62, .5, 2);
+    /* 左牆洗牆（參數與右牆完全一致 → 兩側亮度/色溫統一） */
+    const sp = new THREE.SpotLight(DLCOL, 12, 7.5, .62, .5, 2);
     sp.position.set(.55, H - .04, z); sp.target.position.set(.12, 0, z);
     sp.castShadow = (i % 2 === 0);
     sp.shadow.mapSize.set(512, 512); sp.shadow.bias = -0.0005;
@@ -308,7 +308,7 @@ function init() {
     const fx3 = fixture.clone(); fx3.position.x = W - .55; scene.add(fx3);
   });
   /* 端牆補光（與側牆同色溫，避免端牆偏暗造成色差感） */
-  const endWash = new THREE.RectAreaLight(DLCOL, 1.0, W - .6, 1.2);
+  const endWash = new THREE.RectAreaLight(DLCOL, 1.8, W - .6, 1.2);
   endWash.position.set(W/2, H - .35, 1.2); endWash.lookAt(W/2, 0, 0);
   scene.add(endWash);
 
