@@ -101,7 +101,7 @@ header.solid{background:rgba(247,244,239,.92);backdrop-filter:blur(14px);box-sha
 .brand b{font-family:var(--serif);font-size:23px;font-weight:900;letter-spacing:.06em;color:#fff;transition:color .4s}
 .brand span{font-size:10px;letter-spacing:.42em;color:var(--gold-lt);margin-top:5px;font-weight:600}
 header.solid .brand b{color:var(--ink)}
-.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links{display:flex;gap:26px;align-items:center}
 .nav-links a{font-size:15px;color:rgba(255,255,255,.88);font-weight:500;position:relative;transition:color .3s}
 .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1.5px;background:var(--gold);transition:width .35s var(--ease)}
 .nav-links a:hover::after{width:100%}
@@ -455,8 +455,9 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       <a href="#about" data-i18n="nav.about">關於煌盛</a>
       <a href="#tech" data-i18n="nav.tech">核心技術</a>
       <a href="#products" data-i18n="nav.products">產品系列</a>
+      <a href="products.html" data-i18n="nav.library">花色庫</a>
+      <a href="cases.html" data-i18n="nav.portfolio">實績案例</a>
       <a href="certifications.html" data-i18n="nav.certs">認證</a>
-      <a href="#portfolio" data-i18n="nav.portfolio">實績案例</a>
       <a href="#contact" class="nav-cta" data-i18n="nav.contact">聯絡我們</a>
       <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
@@ -1072,7 +1073,7 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
 /* ----------  中英雙語切換（phase 1：導覽 / 首屏 / 數據 / 基材 / CTA）---------- */
 (function(){
   var DICT={
-    "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.certs":"Certifications","nav.portfolio":"Projects","nav.contact":"Contact",
+    "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.library":"Colours","nav.certs":"Certifications","nav.portfolio":"Projects","nav.contact":"Contact",
     "hero.eye":"PrinTex™ Digital Texture Technology",
     "hero.h1":"Digital Texture,<br>Nature <em>Reimagined</em>",
     "hero.sub":"EGRRA — a digital-texture brand built for architecture and design. From texture development to finished panels, a full-scope building-material solution.",
