@@ -24,6 +24,25 @@
 .cert .dl{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-size:13px;color:var(--gold-dk);font-weight:600;text-decoration:none}
 .cert .dl svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
 .cert .dl.soon{color:var(--faint);cursor:default}
+/* 證書縮圖（點擊放大、不提供下載）*/
+.cert-doc{margin-top:18px;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#f4f2ee;cursor:zoom-in;position:relative;aspect-ratio:1/1.32}
+.cert-doc img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
+  -webkit-user-select:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.cert-doc::after{content:"點擊放大檢視";position:absolute;left:0;right:0;bottom:0;padding:8px;
+  font-size:12px;letter-spacing:.05em;color:#fff;text-align:center;
+  background:linear-gradient(transparent,rgba(20,17,13,.72))}
+.cert-doc:hover{border-color:var(--gold-lt)}
+/* 燈箱 */
+.lb{position:fixed;inset:0;background:rgba(15,12,9,.9);backdrop-filter:blur(3px);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:34px}
+.lb.show{display:flex}
+.lb img{max-width:min(560px,92vw);max-height:90vh;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+  -webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.lb .x{position:absolute;top:20px;right:24px;width:44px;height:44px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.lb .x:hover{background:rgba(255,255,255,.26)}
+.lb .cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font-size:13.5px;letter-spacing:.08em}
 .cta-band{background:linear-gradient(135deg,#1c1811,var(--dark));color:#fff;border-radius:18px;padding:44px;margin-top:56px;text-align:center;position:relative;overflow:hidden}
 .cta-band .glow{position:absolute;inset:0;background:radial-gradient(70% 120% at 50% 0,rgba(176,141,87,.22),transparent 60%)}
 .cta-band .wrap2{position:relative;max-width:640px;margin:0 auto}
@@ -74,15 +93,29 @@
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2s7 3 7 10-3 10-7 10-7-3-7-10 7-10 7-10z"/><path d="M12 8v8"/></svg></div>
         <h3>耐燃一級</h3>
         <p>通過台灣消防規範中<strong>最高等級的耐燃一級</strong>測試，防火安全性高，並可應用於防火門、消防箱等防火設備美化。</p>
-        <a class="dl soon"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>測試報告（上線後附上）</a>
+        <div class="cert-doc" data-full="img/certs/cert-fire.jpg" data-cap="SGS 耐燃一級試驗報告（CNS 14705-1）">
+          <img src="img/certs/cert-fire.jpg" alt="SGS 耐燃一級試驗報告" draggable="false" loading="lazy" />
+        </div>
       </div>
 
       <div class="cert">
         <span class="tag">SGS</span>
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
         <h3>SGS 抗菌認證</h3>
-        <p>可提供 <strong>SGS 抗菌認證</strong>，抑制細菌孳生、維持空間潔淨，適合飯店、醫療、公共空間等注重衛生的場域。</p>
-        <a class="dl soon"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>認證文件（上線後附上）</a>
+        <p>通過 <strong>SGS 抗菌測試</strong>（JIS Z2801），抑制細菌孳生、維持空間潔淨，適合飯店、醫療、公共空間等注重衛生的場域。</p>
+        <div class="cert-doc" data-full="img/certs/cert-antibacterial.jpg" data-cap="SGS 抗菌測試報告（JIS Z2801）">
+          <img src="img/certs/cert-antibacterial.jpg" alt="SGS 抗菌測試報告" draggable="false" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="tag">環保</span>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 21c5-3 7-7 7-11a7 7 0 0 0-14 0c0 4 2 8 7 11z"/><path d="M12 12c0-3 1.5-4.5 4-5"/></svg></div>
+        <h3>無甲醛認證</h3>
+        <p>經 SGS 檢測，<strong>甲醛釋出量「未檢出」</strong>（參考 CNS 1349），無有害逸散，健康安心，適用居家、長照與醫療空間。</p>
+        <div class="cert-doc" data-full="img/certs/cert-formaldehyde.jpg" data-cap="SGS 無甲醛試驗報告（甲醛釋出量未檢出）">
+          <img src="img/certs/cert-formaldehyde.jpg" alt="SGS 無甲醛試驗報告" draggable="false" loading="lazy" />
+        </div>
       </div>
 
       <div class="cert">
@@ -135,6 +168,13 @@
   <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
 </div>
 
+<!-- 證書放大燈箱（無下載） -->
+<div class="lb" id="lb" oncontextmenu="return false">
+  <button class="x" id="lbx" aria-label="關閉">&times;</button>
+  <img id="lbimg" src="" alt="認證文件" draggable="false" />
+  <div class="cap" id="lbcap"></div>
+</div>
+
 <script src="site-data.js"></script>
 <script src="/api/published"></script><!-- 後台發布內容（Blob）覆蓋，無/失敗沿用預設 -->
 <script>
@@ -143,6 +183,19 @@
   var i=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.info)return d.info;}}catch(e){}return (window.EGRRA_DEFAULT_DATA||{}).info||{};})();
   if(i.line)document.querySelectorAll('.js-line').forEach(function(a){a.href=i.line;});
   if(i.phoneRaw)document.querySelectorAll('.js-phone-link').forEach(function(a){a.href='tel:'+i.phoneRaw;});
+})();
+
+/* 證書縮圖 → 燈箱放大（不提供下載；防右鍵/拖曳） */
+(function(){
+  var lb=document.getElementById("lb"), img=document.getElementById("lbimg"), cap=document.getElementById("lbcap");
+  function open(src,c){ img.src=src; cap.textContent=c||""; lb.classList.add("show"); }
+  function close(){ lb.classList.remove("show"); img.src=""; }
+  document.querySelectorAll(".cert-doc").forEach(function(d){
+    d.addEventListener("click",function(){ open(d.dataset.full, d.dataset.cap); });
+  });
+  document.getElementById("lbx").addEventListener("click",close);
+  lb.addEventListener("click",function(e){ if(e.target===lb) close(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") close(); });
 })();
 </script>
 <script src="line-widget.js"></script>
