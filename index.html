@@ -334,6 +334,34 @@ header.solid .burger span{background:var(--ink)}
 .pf .ov small{color:var(--gold-lt);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
 .pf .ov b{font-family:var(--serif);font-size:16px;font-weight:600;margin-top:4px}
 .pf-more{text-align:center;margin-top:44px;color:var(--ink-faint);font-size:14px}
+/* 案例可點擊放大：zoom 游標 + hover 放大鏡提示 */
+.pf{cursor:zoom-in}
+.pf::after{content:"⤢";position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
+  background:rgba(15,12,9,.55);backdrop-filter:blur(4px);color:#fff;font-size:15px;
+  display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);
+  transition:.3s var(--ease);z-index:4;pointer-events:none}
+.pf:hover::after{opacity:1;transform:scale(1)}
+/* 案例放大燈箱 */
+.plb{position:fixed;inset:0;background:rgba(12,10,7,.93);backdrop-filter:blur(5px);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:30px}
+.plb.show{display:flex}
+.plb figure{max-width:94vw;max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:16px;animation:plbin .34s var(--ease)}
+@keyframes plbin{from{transform:scale(.95);opacity:0}to{transform:none;opacity:1}}
+.plb img{max-width:min(1080px,94vw);max-height:80vh;border-radius:8px;box-shadow:0 30px 90px rgba(0,0,0,.6);
+  object-fit:contain;-webkit-user-drag:none;user-select:none}
+.plb figcaption{color:#fff;text-align:center;line-height:1.5}
+.plb figcaption small{display:block;color:var(--gold-lt);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:6px}
+.plb figcaption b{font-family:var(--serif);font-size:17.5px;font-weight:600}
+.plb .x{position:absolute;top:22px;right:26px;width:46px;height:46px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;font-size:24px;cursor:pointer;line-height:1;transition:.2s}
+.plb .x:hover{background:rgba(255,255,255,.28)}
+.plb .nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;font-size:28px;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;line-height:1}
+.plb .nav:hover{background:rgba(255,255,255,.26)}
+.plb .prev{left:24px}.plb .next{right:24px}
+.plb .count{position:absolute;top:26px;left:28px;color:rgba(255,255,255,.6);font-size:13px;letter-spacing:.1em}
+@media(max-width:600px){.plb .nav{width:42px;height:42px;font-size:22px}.plb .prev{left:8px}.plb .next{right:8px}}
 
 /* ===============  QA  =============== */
 .qa{padding:120px 0}
@@ -719,6 +747,18 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   </div>
 </section>
 
+<!-- 案例放大燈箱：點案例圖看細節 -->
+<div class="plb" id="plb" oncontextmenu="return false">
+  <span class="count" id="plbCount"></span>
+  <button class="x" id="plbX" aria-label="關閉">&times;</button>
+  <button class="nav prev" id="plbPrev" aria-label="上一張案例">&lsaquo;</button>
+  <button class="nav next" id="plbNext" aria-label="下一張案例">&rsaquo;</button>
+  <figure>
+    <img id="plbImg" src="" alt="" draggable="false" />
+    <figcaption><small id="plbCat"></small><b id="plbTitle"></b></figcaption>
+  </figure>
+</div>
+
 <!-- ==========  QA  ========== -->
 <section class="qa" id="qa">
   <div class="wrap qa-grid">
@@ -948,15 +988,54 @@ swatches.forEach(function(s,i){
 /* ----------  PORTFOLIO GRID  ---------- */
 var projects=(DATA.cases||[]).slice(0,24);
 var pf=document.getElementById("pfgrid");
+function pfEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
-  d.innerHTML='<div class="fill"></div><div class="ov"><small>'+(p.region||"")+'</small><b>'+(p.title||"")+'</b></div>';
+  d.innerHTML='<div class="fill"></div><div class="ov"><small>'+pfEsc(p.region||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=p.img?("url('"+p.img+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
+  d.addEventListener("click",function(){openPLB(i);});
   pf.appendChild(d);
 });
+
+/* ----------  案例燈箱：點圖放大看細節  ---------- */
+function openPLB(i){}
+(function(){
+  var plb=document.getElementById("plb");if(!plb)return;
+  var img=document.getElementById("plbImg"),cat=document.getElementById("plbCat"),
+      ttl=document.getElementById("plbTitle"),cnt=document.getElementById("plbCount");
+  var withImg=projects.map(function(p,i){return i;}).filter(function(i){return projects[i]&&projects[i].img;});
+  var cur=-1;
+  openPLB=function(i){
+    var p=projects[i];if(!p||!p.img)return;   /* 無實照則不開燈箱 */
+    cur=i;
+    img.src=p.img;img.alt=(p.title||"實績案例");
+    cat.textContent=[(p.category||""),(p.region||"")].filter(Boolean).join(" ・ ");
+    ttl.textContent=(p.title||"")+(p.year?"　"+p.year:"");
+    var pos=withImg.indexOf(i);
+    cnt.textContent=(pos>=0?(pos+1)+" / "+withImg.length:"");
+    plb.classList.add("show");document.body.style.overflow="hidden";
+  };
+  function close(){plb.classList.remove("show");document.body.style.overflow="";}
+  function step(dir){
+    if(!withImg.length)return;
+    var pos=withImg.indexOf(cur);if(pos<0)pos=0;
+    pos=(pos+dir+withImg.length)%withImg.length;
+    openPLB(withImg[pos]);
+  }
+  document.getElementById("plbX").addEventListener("click",close);
+  document.getElementById("plbPrev").addEventListener("click",function(e){e.stopPropagation();step(-1);});
+  document.getElementById("plbNext").addEventListener("click",function(e){e.stopPropagation();step(1);});
+  plb.addEventListener("click",function(e){if(e.target===plb||e.target.tagName==="FIGURE")close();});
+  document.addEventListener("keydown",function(e){
+    if(!plb.classList.contains("show"))return;
+    if(e.key==="Escape")close();
+    else if(e.key==="ArrowLeft")step(-1);
+    else if(e.key==="ArrowRight")step(1);
+  });
+})();
 
 /* ----------  NAV SCROLL STATE  ---------- */
 var header=document.getElementById("top");
