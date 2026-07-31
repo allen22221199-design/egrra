@@ -447,12 +447,12 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 .tech-wall{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 /* 舞台維持照片比例並填滿區塊，板材才能用百分比精準對位 */
 .tw-stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:1600/893;min-width:100%;min-height:100%;
+  aspect-ratio:1600/941;min-width:100%;min-height:100%;
   filter:brightness(.86) saturate(.95) contrast(1.02);  /* 盡量保留原照片的樣子 */
   transition:transform .5s cubic-bezier(.22,.61,.36,1)}
 .tw-plate{position:absolute;inset:0;background:url('img/tech/plate.webp') center/100% 100% no-repeat}
-/* 板材：left/width 對應它在原照片中的位置；整片平行位移貼合，不旋轉 */
-.tw-panel{position:absolute;left:34.69%;top:0;width:30.75%;height:100%;
+/* 板材：left/width 對應它在校正後照片中的位置；整片平行位移貼合，不旋轉 */
+.tw-panel{position:absolute;left:34.55%;top:0;width:30.19%;height:100%;
   background:url('img/tech/panel.webp') center/100% 100% no-repeat;
   will-change:transform,filter;backface-visibility:hidden;
   filter:drop-shadow(-8px 3px 14px rgba(0,0,0,.38))}
