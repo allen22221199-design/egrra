@@ -451,11 +451,11 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   filter:brightness(.56) saturate(.78) contrast(1.05);  /* 壓暗以配合深色區塊、確保文字對比 */
   transition:transform .5s cubic-bezier(.22,.61,.36,1)}
 .tw-plate{position:absolute;inset:0;background:url('img/tech/plate.webp') center/100% 100% no-repeat}
-/* 板材：left/width 對應它在原照片中的位置，轉軸設在貼牆的右緣 */
+/* 板材：left/width 對應它在原照片中的位置；整片平行位移貼合，不旋轉 */
 .tw-panel{position:absolute;left:34.69%;top:0;width:30.75%;height:100%;
   background:url('img/tech/panel.webp') center/100% 100% no-repeat;
-  transform-origin:100% 50%;will-change:transform;backface-visibility:hidden;
-  filter:drop-shadow(-16px 6px 26px rgba(0,0,0,.55))}
+  will-change:transform,filter;backface-visibility:hidden;
+  filter:drop-shadow(-8px 3px 14px rgba(0,0,0,.38))}
 /* 再壓一層暗罩，確保標題與內文對比度不被照片影響 */
 .tech-wall::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(74% 62% at 50% 42%,rgba(12,10,7,.70),rgba(12,10,7,.46) 58%,rgba(12,10,7,.30))}
@@ -1223,14 +1223,17 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
   var reduce=false;
   try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
 
-  var OPEN=54;      /* 起始張開角度（度）：板材離牆最遠時 */
-  var LIFT=7;       /* 起始時額外往外平移的比例，強化「還沒貼上」的距離感 */
+  var OUT_Z=110;    /* 起始離牆距離(px)：透視會讓它略微放大，像浮在牆前面 */
+  var OUT_X=5;      /* 起始往離牆方向平移的比例 */
   function ease(t){return 1-Math.pow(1-t,3);}  /* easeOutCubic：快進慢收，像吸附上去 */
 
   function apply(p,mx,my){
     var e=ease(p), inv=1-e;
-    /* 以貼牆那一側為軸，從張開轉到完全貼平 */
-    host.style.transform="rotateY("+(inv*OPEN)+"deg) translateX("+(-inv*LIFT)+"%)";
+    /* 整片保持與牆面平行，從浮在牆前直接壓貼上去（不做任何旋轉、不翹邊） */
+    host.style.transform="translate3d("+(-inv*OUT_X)+"%,0,"+(inv*OUT_Z)+"px)";
+    /* 陰影隨距離收合：離牆時濃而散，貼平後幾乎消失 */
+    host.style.filter="drop-shadow("+(-8-inv*26).toFixed(1)+"px "+(3+inv*12).toFixed(1)+"px "+
+      (14+inv*30).toFixed(1)+"px rgba(0,0,0,"+(0.38+inv*0.26).toFixed(2)+"))";
     /* 整個場景隨滑鼠輕微視差（幅度很小，避免干擾閱讀） */
     stage.style.transform="translate(-50%,-50%) rotateY("+(mx*2.2)+"deg) rotateX("+(-my*1.6)+"deg)";
   }
