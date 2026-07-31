@@ -173,3 +173,17 @@ window.EGRRA_DEFAULT_DATA = {
     { id:"c59", region:"", title:"長虹天馥", category:"空間美化", stone:"black", img:"img/cases/c59.jpg", year:"" },
   ]
 };
+
+/* 本機草稿版本守門：後台 admin 會把編輯內容暫存在這台瀏覽器的 localStorage('egrra_data')，
+   作為「發布上線」前的本機預覽。但舊草稿會一直蓋掉之後更新的正式內容，造成看到過期資料。
+   因此僅在草稿的 dataVersion 不比程式端(或已發布 blob)舊時才採用，邏輯與 api/published 一致。 */
+window.EGRRA_LOCAL=function(){
+  try{
+    var s=localStorage.getItem('egrra_data'); if(!s) return null;
+    var d=JSON.parse(s); if(!d||typeof d!=='object') return null;
+    var sv=String((window.EGRRA_DEFAULT_DATA||{}).dataVersion||"");
+    var lv=String(d.dataVersion||"");
+    if(sv && (!lv || lv < sv)) return null;   /* 草稿較舊或無版本 → 忽略 */
+    return d;
+  }catch(e){ return null; }
+};

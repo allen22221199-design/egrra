@@ -133,7 +133,7 @@
 <script>
 (function(){
   var T=window.EGRRA_TEX;
-  var DATA=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.products)return d;}}catch(e){}return window.EGRRA_DEFAULT_DATA||{products:[]};})();
+  var DATA=(window.EGRRA_LOCAL&&window.EGRRA_LOCAL())||window.EGRRA_DEFAULT_DATA||{products:[]};
   var PRODUCTS=DATA.products||[];
   var seriesList=["全部"].concat(uniq(PRODUCTS.map(function(p){return p.series;})));
   var tones=[{key:"全部",label:"全部"}].concat(T.TONES.map(function(t){return {key:t.key,label:t.label};}));

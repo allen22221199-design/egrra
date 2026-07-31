@@ -180,7 +180,7 @@
 <script>
 /* 套用後台的聯絡資訊（電話 / LINE） */
 (function(){
-  var i=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.info)return d.info;}}catch(e){}return (window.EGRRA_DEFAULT_DATA||{}).info||{};})();
+  var i=(((window.EGRRA_LOCAL&&window.EGRRA_LOCAL())||window.EGRRA_DEFAULT_DATA||{}).info)||{};
   if(i.line)document.querySelectorAll('.js-line').forEach(function(a){a.href=i.line;});
   if(i.phoneRaw)document.querySelectorAll('.js-phone-link').forEach(function(a){a.href='tel:'+i.phoneRaw;});
 })();

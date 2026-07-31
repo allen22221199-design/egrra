@@ -76,7 +76,7 @@
 <script>
 (function(){
   var T=window.EGRRA_TEX;
-  var DATA=(function(){try{var s=localStorage.getItem('egrra_data');if(s){var d=JSON.parse(s);if(d&&d.cases)return d;}}catch(e){}return window.EGRRA_DEFAULT_DATA||{cases:[]};})();
+  var DATA=(window.EGRRA_LOCAL&&window.EGRRA_LOCAL())||window.EGRRA_DEFAULT_DATA||{cases:[]};
   var CASES=DATA.cases||[];
   function cityOf(c){return (c.region||"").slice(0,2);}
   var cats=["全部"].concat(uniq(CASES.map(function(c){return c.category;})));
