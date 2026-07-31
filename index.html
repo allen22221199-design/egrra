@@ -341,6 +341,9 @@ header.solid .burger span{background:var(--ink)}
   display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);
   transition:.3s var(--ease);z-index:4;pointer-events:none}
 .pf:hover::after{opacity:1;transform:scale(1)}
+/* 多圖標記：告訴使用者這個案場還有其他照片 */
+.pf-n{position:absolute;top:12px;left:12px;z-index:4;background:rgba(15,12,9,.6);backdrop-filter:blur(4px);
+  color:#fff;font-size:11px;letter-spacing:.06em;padding:4px 9px;border-radius:20px;pointer-events:none}
 /* 案例放大燈箱 */
 .plb{position:fixed;inset:0;background:rgba(12,10,7,.93);backdrop-filter:blur(5px);z-index:999;
   display:none;align-items:center;justify-content:center;padding:30px}
@@ -361,7 +364,15 @@ header.solid .burger span{background:var(--ink)}
 .plb .nav:hover{background:rgba(255,255,255,.26)}
 .plb .prev{left:24px}.plb .next{right:24px}
 .plb .count{position:absolute;top:26px;left:28px;color:rgba(255,255,255,.6);font-size:13px;letter-spacing:.1em}
-@media(max-width:600px){.plb .nav{width:42px;height:42px;font-size:22px}.plb .prev{left:8px}.plb .next{right:8px}}
+/* 案例多圖：底部縮圖列 */
+.plb-thumbs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:min(1080px,94vw);max-height:15vh;overflow-y:auto;padding:2px}
+.plb-thumbs:empty{display:none}
+.plb-thumbs .t{width:58px;height:58px;border-radius:6px;background-size:cover;background-position:center;cursor:pointer;
+  opacity:.5;border:2px solid transparent;transition:.2s;flex:0 0 auto}
+.plb-thumbs .t:hover{opacity:.85}
+.plb-thumbs .t.on{opacity:1;border-color:var(--gold-lt,#c9a878)}
+@media(max-width:600px){.plb .nav{width:42px;height:42px;font-size:22px}.plb .prev{left:8px}.plb .next{right:8px}
+  .plb-thumbs .t{width:46px;height:46px}}
 
 /* ===============  QA  =============== */
 .qa{padding:120px 0}
@@ -756,6 +767,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   <figure>
     <img id="plbImg" src="" alt="" draggable="false" />
     <figcaption><small id="plbCat"></small><b id="plbTitle"></b></figcaption>
+    <div class="plb-thumbs" id="plbThumbs"></div>
   </figure>
 </div>
 
@@ -990,7 +1002,10 @@ function pfEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
-  d.innerHTML='<div class="fill"></div><div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
+  var nShot=(p.imgs&&p.imgs.length)||(p.img?1:0);
+  d.innerHTML='<div class="fill"></div>'+
+    (nShot>1?'<span class="pf-n">'+nShot+' 張</span>':'')+
+    '<div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=p.img?("url('"+p.img+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
@@ -998,34 +1013,56 @@ projects.forEach(function(p,i){
   pf.appendChild(d);
 });
 
-/* ----------  案例燈箱：點圖放大看細節  ---------- */
+/* ----------  案例燈箱：點圖放大，並可瀏覽該案場的其他照片  ---------- */
 function openPLB(i){}
 (function(){
   var plb=document.getElementById("plb");if(!plb)return;
   var img=document.getElementById("plbImg"),cat=document.getElementById("plbCat"),
-      ttl=document.getElementById("plbTitle"),cnt=document.getElementById("plbCount");
-  var withImg=projects.map(function(p,i){return i;}).filter(function(i){return projects[i]&&projects[i].img;});
-  var cur=-1;
+      ttl=document.getElementById("plbTitle"),cnt=document.getElementById("plbCount"),
+      thumbs=document.getElementById("plbThumbs"),
+      prevBtn=document.getElementById("plbPrev"),nextBtn=document.getElementById("plbNext");
+  /* 該案的照片清單：有 imgs 就用，否則只有封面一張 */
+  function shotsOf(p){
+    var a=(p&&p.imgs&&p.imgs.length)?p.imgs.slice():(p&&p.img?[p.img]:[]);
+    return a;
+  }
+  var cur=-1,shots=[],si=0;
+  function paint(){
+    var p=projects[cur];if(!p)return;
+    img.src=shots[si];img.alt=(p.title||"實績案例")+" 照片 "+(si+1);
+    cnt.textContent=shots.length>1?(si+1)+" / "+shots.length:"";
+    var many=shots.length>1;
+    prevBtn.style.display=nextBtn.style.display=many?"":"none";
+    thumbs.querySelectorAll(".t").forEach(function(t,k){t.classList.toggle("on",k===si);});
+    var on=thumbs.querySelector(".t.on");if(on&&on.scrollIntoView)on.scrollIntoView({block:"nearest",inline:"nearest"});
+  }
   openPLB=function(i){
-    var p=projects[i];if(!p||!p.img)return;   /* 無實照則不開燈箱 */
-    cur=i;
-    img.src=p.img;img.alt=(p.title||"實績案例");
+    var p=projects[i];if(!p)return;
+    shots=shotsOf(p);if(!shots.length)return;   /* 無照片則不開燈箱 */
+    cur=i;si=0;
     cat.textContent=[(p.category||""),(p.region||"")].filter(Boolean).join(" ・ ");
-    ttl.textContent=(p.title||"")+(p.year?"　"+p.year:"");
-    var pos=withImg.indexOf(i);
-    cnt.textContent=(pos>=0?(pos+1)+" / "+withImg.length:"");
+    ttl.textContent=(p.title||"")+(p.year?"　"+p.year:"")+(shots.length>1?"　（"+shots.length+" 張）":"");
+    /* 縮圖列：兩張以上才顯示 */
+    thumbs.innerHTML="";
+    if(shots.length>1){
+      shots.forEach(function(src,k){
+        var t=document.createElement("div");t.className="t";
+        t.style.backgroundImage="url('"+src+"')";
+        t.addEventListener("click",function(e){e.stopPropagation();si=k;paint();});
+        thumbs.appendChild(t);
+      });
+    }
+    paint();
     plb.classList.add("show");document.body.style.overflow="hidden";
   };
   function close(){plb.classList.remove("show");document.body.style.overflow="";}
   function step(dir){
-    if(!withImg.length)return;
-    var pos=withImg.indexOf(cur);if(pos<0)pos=0;
-    pos=(pos+dir+withImg.length)%withImg.length;
-    openPLB(withImg[pos]);
+    if(shots.length<2)return;
+    si=(si+dir+shots.length)%shots.length;paint();
   }
   document.getElementById("plbX").addEventListener("click",close);
-  document.getElementById("plbPrev").addEventListener("click",function(e){e.stopPropagation();step(-1);});
-  document.getElementById("plbNext").addEventListener("click",function(e){e.stopPropagation();step(1);});
+  prevBtn.addEventListener("click",function(e){e.stopPropagation();step(-1);});
+  nextBtn.addEventListener("click",function(e){e.stopPropagation();step(1);});
   plb.addEventListener("click",function(e){if(e.target===plb||e.target.tagName==="FIGURE")close();});
   document.addEventListener("keydown",function(e){
     if(!plb.classList.contains("show"))return;

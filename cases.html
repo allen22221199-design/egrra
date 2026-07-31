@@ -58,13 +58,18 @@
 
 <div class="ov" id="ov">
   <div class="mod">
-    <div class="mimg" id="m-img"></div>
+    <div class="mimg" id="m-img">
+      <button class="mnav mprev" id="m-prev" aria-label="上一張照片">&lsaquo;</button>
+      <button class="mnav mnext" id="m-next" aria-label="下一張照片">&rsaquo;</button>
+      <span class="mcount" id="m-count"></span>
+    </div>
     <div class="mbody">
       <button class="mclose" id="m-close">&times;</button>
       <div class="mk" id="m-cat"></div>
       <h2 id="m-title"></h2>
       <div class="mdesc" id="m-desc"></div>
       <div class="mspec" id="m-spec"></div>
+      <div class="mshots" id="m-shots"></div>
       <a class="mcta" href="index.html#contact">洽詢類似案例 →</a>
     </div>
   </div>
@@ -86,6 +91,8 @@
   function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
   function bg(c){return c.img?("url('"+c.img+"')"):T.tex(c.stone);}
+  /* 該案場的所有照片：有 imgs 用 imgs，否則只有封面 */
+  function shots(c){return (c&&c.imgs&&c.imgs.length)?c.imgs.slice():(c&&c.img?[c.img]:[]);}
 
   function chips(host,items,cur,onPick){
     host.innerHTML="";
@@ -112,7 +119,9 @@
     list.forEach(function(c){
       var card=document.createElement("div");card.className="card";
       var sub=[c.region,c.year].filter(Boolean).map(esc).join(' ・ ');
-      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span></div>'+
+      var n=shots(c).length;
+      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span>'+
+                     (n>1?'<span class="shots">'+n+' 張</span>':'')+'</div>'+
                      '<div class="cap"><h3>'+esc(c.title||"實績案例")+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
       card.querySelector(".th").style.backgroundImage=bg(c);
       card.addEventListener("click",function(){openModal(c);});
@@ -121,19 +130,54 @@
   }
 
   var ov=document.getElementById("ov");
+  var mimg=document.getElementById("m-img"),mshots=document.getElementById("m-shots"),
+      mcount=document.getElementById("m-count"),mprev=document.getElementById("m-prev"),
+      mnext=document.getElementById("m-next");
+  var gal=[],gi=0;
+  function paintShot(){
+    if(!gal.length)return;
+    mimg.style.backgroundImage="url('"+gal[gi]+"')";
+    var many=gal.length>1;
+    mcount.textContent=many?(gi+1)+" / "+gal.length:"";
+    mcount.style.display=many?"":"none";
+    mprev.style.display=mnext.style.display=many?"":"none";
+    mshots.querySelectorAll(".s").forEach(function(s,k){s.classList.toggle("on",k===gi);});
+  }
+  function stepShot(d){if(gal.length<2)return;gi=(gi+d+gal.length)%gal.length;paintShot();}
   function openModal(c){
-    document.getElementById("m-img").style.backgroundImage=bg(c);
+    gal=shots(c);gi=0;
+    if(!gal.length){mimg.style.backgroundImage=bg(c);mcount.style.display="none";
+      mprev.style.display=mnext.style.display="none";}
+    mshots.innerHTML="";
+    if(gal.length>1){
+      gal.forEach(function(src,k){
+        var s=document.createElement("div");s.className="s";
+        s.style.backgroundImage="url('"+src+"')";
+        s.addEventListener("click",function(){gi=k;paintShot();});
+        mshots.appendChild(s);
+      });
+    }
+    if(gal.length)paintShot();
     document.getElementById("m-cat").textContent=c.category||"實績案例";
     document.getElementById("m-title").textContent=(c.title||"實績案例");
     document.getElementById("m-desc").textContent=c.desc||"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。";
     document.getElementById("m-spec").innerHTML=
-      row("地區",c.region||"—")+row("類別",c.category||"—")+row("年份",c.year||"—");
+      row("地區",c.region||"—")+row("類別",c.category||"—")+row("年份",c.year||"—")+
+      (gal.length>1?row("照片",gal.length+" 張"):"");
     ov.classList.add("show");
   }
   function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';}
   document.getElementById("m-close").addEventListener("click",function(){ov.classList.remove("show");});
+  mprev.addEventListener("click",function(e){e.stopPropagation();stepShot(-1);});
+  mnext.addEventListener("click",function(e){e.stopPropagation();stepShot(1);});
+  mimg.addEventListener("click",function(e){if(e.target===mimg)stepShot(1);});
   ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("show");});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")ov.classList.remove("show");});
+  document.addEventListener("keydown",function(e){
+    if(!ov.classList.contains("show"))return;
+    if(e.key==="Escape")ov.classList.remove("show");
+    else if(e.key==="ArrowLeft")stepShot(-1);
+    else if(e.key==="ArrowRight")stepShot(1);
+  });
 
   render();
 })();

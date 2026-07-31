@@ -99,6 +99,25 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 .mcta{display:inline-flex;align-items:center;gap:9px;margin-top:24px;background:var(--gold);color:#fff;padding:13px 26px;border-radius:100px;font-size:14.5px;font-weight:500;transition:.3s}
 .mcta:hover{background:var(--gold-dk)}
 
+/* ---- 案例多圖：主圖切換箭頭 + 縮圖列 ---- */
+.mod .mimg{position:relative}
+.mnav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border:none;border-radius:50%;
+  background:rgba(15,12,9,.42);color:#fff;font-size:22px;line-height:1;cursor:pointer;transition:.2s;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.mnav:hover{background:rgba(15,12,9,.72)}
+.mprev{left:12px}.mnext{right:12px}
+.mcount{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(15,12,9,.55);
+  backdrop-filter:blur(4px);color:#fff;font-size:12px;letter-spacing:.08em;padding:4px 12px;border-radius:20px}
+.mshots{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.mshots:empty{display:none}
+.mshots .s{width:54px;height:54px;border-radius:7px;background-size:cover;background-position:center;cursor:pointer;
+  border:2px solid transparent;opacity:.55;transition:.2s}
+.mshots .s:hover{opacity:.9}
+.mshots .s.on{opacity:1;border-color:var(--gold)}
+/* 卡片多圖標記 */
+.card .th .shots{position:absolute;top:10px;right:10px;background:rgba(22,19,15,.72);color:#fff;
+  font-size:11px;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
+
 /* ---- FOOTER ---- */
 .foot{background:#0f0c09;color:rgba(255,255,255,.55);padding:40px 0;text-align:center;font-size:13px}
 .foot b{color:#fff;font-family:var(--serif);letter-spacing:.06em}
