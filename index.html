@@ -440,25 +440,28 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 .foot-bot{padding-top:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(255,255,255,.4)}
 
 /* ===============  核心技術：板材貼牆互動背景  ===============
-   只作用在「核心技術 PrinTex」這一區。捲動經過此區時，散落的板材逐片
-   貼合成一面無縫牆，滑鼠移動時有輕微視差 —— 正好演示 PrinTex 在做的事。
-   其餘區塊維持原本不透明底色，完全不受影響。 */
+   用實拍照片拆成兩層：plate = 未貼板的素牆、panel = 去背的藝格板。
+   捲動經過此區時，板材以「靠牆那一側」為軸旋轉貼合到牆面上 ——
+   正好演示 PrinTex 把石紋貼上素牆這件事。其餘區塊完全不受影響。 */
 .tech{position:relative}
-.tech-wall{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;perspective:1100px}
-.tech-wall .tw-in{position:absolute;inset:-8%;transform-style:preserve-3d;
-  transition:transform .45s cubic-bezier(.22,.61,.36,1)}
-.tech-wall .pnl{position:absolute;border-radius:2px;background-size:cover;background-position:center;
-  background-color:#241d15;box-shadow:0 20px 46px -20px rgba(0,0,0,.75);
-  will-change:transform,opacity;backface-visibility:hidden}
-/* 接縫光澤，強化「無縫對花」的質感 */
-.tech-wall .pnl::after{content:"";position:absolute;inset:0;border-radius:2px;
-  background:linear-gradient(150deg,rgba(255,255,255,.10),transparent 42%,rgba(0,0,0,.16))}
-/* 壓暗罩：讓牆面仍看得見，但文字維持原本的對比度（中央最暗、邊緣露出牆） */
+.tech-wall{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+/* 舞台維持照片比例並填滿區塊，板材才能用百分比精準對位 */
+.tw-stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  aspect-ratio:1600/893;min-width:100%;min-height:100%;perspective:1500px;
+  filter:brightness(.56) saturate(.78) contrast(1.05);  /* 壓暗以配合深色區塊、確保文字對比 */
+  transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+.tw-plate{position:absolute;inset:0;background:url('img/tech/plate.webp') center/100% 100% no-repeat}
+/* 板材：left/width 對應它在原照片中的位置，轉軸設在貼牆的右緣 */
+.tw-panel{position:absolute;left:34.69%;top:0;width:30.75%;height:100%;
+  background:url('img/tech/panel.webp') center/100% 100% no-repeat;
+  transform-origin:100% 50%;will-change:transform;backface-visibility:hidden;
+  filter:drop-shadow(-16px 6px 26px rgba(0,0,0,.55))}
+/* 再壓一層暗罩，確保標題與內文對比度不被照片影響 */
 .tech-wall::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(78% 65% at 50% 45%,rgba(12,10,7,.80),rgba(12,10,7,.62) 58%,rgba(12,10,7,.48))}
+  background:radial-gradient(74% 62% at 50% 42%,rgba(12,10,7,.70),rgba(12,10,7,.46) 58%,rgba(12,10,7,.30))}
 /* 內容壓在背景之上 */
 .tech .wrap{z-index:1}
-@media(prefers-reduced-motion:reduce){.tech-wall .tw-in{transition:none}}
+@media(prefers-reduced-motion:reduce){.tw-stage{transition:none}}
 
 /* ===============  REVEAL  =============== */
 .reveal{transition:opacity .9s var(--ease),transform .9s var(--ease)}
@@ -597,8 +600,13 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 
 <!-- ==========  TECH / PRINTEX  ========== -->
 <section class="tech" id="tech">
-  <!-- 板材貼牆互動背景，純裝飾、不參與朗讀與操作 -->
-  <div class="tech-wall" aria-hidden="true"><div class="tw-in" id="techWall"></div></div>
+  <!-- 板材貼牆互動背景（實拍照片分層），純裝飾、不參與朗讀與操作 -->
+  <div class="tech-wall" aria-hidden="true">
+    <div class="tw-stage" id="twStage">
+      <div class="tw-plate"></div>
+      <div class="tw-panel" id="twPanel"></div>
+    </div>
+  </div>
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">核心技術</span>
@@ -1204,65 +1212,27 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
 })();
 
 /* ----------  核心技術：板材貼牆互動背景  ----------
-   只作用在「核心技術 PrinTex」這一區：捲動經過此區時，散落的板材逐片貼合成無縫牆，
-   滑鼠移動再加一層輕微視差。只動 transform / opacity（GPU 合成，不觸發重排重繪），
-   單一 rAF、無變化不重畫，區塊離開畫面就完全不運算。 */
+   只作用在「核心技術 PrinTex」這一區：捲動經過此區時，實拍的藝格板以靠牆那一側為軸
+   旋轉、逐漸貼平到素牆上，滑鼠移動再加一層輕微視差。只動 transform（GPU 合成，
+   不觸發重排重繪），單一 rAF、無變化不重畫，區塊離開畫面就完全不運算。 */
 (function(){
-  var host=document.getElementById("techWall");
+  var host=document.getElementById("twPanel");
+  var stage=document.getElementById("twStage");
   var sec=document.getElementById("tech");
-  if(!host||!sec)return;
+  if(!host||!stage||!sec)return;
   var reduce=false;
   try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
 
-  /* 紋理沿用站上既有的 stoneSVG 產生器（不另外載圖檔） */
-  var TEX=[
-    stoneSVG({base:"#2a2219",mid:"#3a2f22",midOp:.5,vein:"#c9a878",veinOp:.55,freq:"0.008 0.03",oct:5,seed:7,blend:"normal"}),
-    stoneSVG({base:"#262019",mid:"#342a1f",midOp:.5,vein:"#b08d57",veinOp:.48,freq:"0.006 0.024",oct:5,seed:19,blend:"normal"}),
-    stoneSVG({base:"#2c241a",mid:"#3d3125",midOp:.5,vein:"#d8bd94",veinOp:.42,freq:"0.01 0.028",oct:4,seed:33,blend:"normal"})
-  ];
-
-  var mobile=window.matchMedia("(max-width:700px)").matches;
-  var COLS=mobile?3:5, ROWS=mobile?4:3;      /* 直式板材排列，接近實際 4×8 尺比例 */
-  var N=COLS*ROWS, panels=[];
-
-  /* 以索引產生穩定的偽亂數，讓每片板材的飛入方向不同但每次載入一致 */
-  function rnd(i,s){var x=Math.sin(i*127.1+s*311.7)*43758.5453;return x-Math.floor(x);}
-
-  var GAP=0.6;                                /* 板材間縫隙(%)，貼合後仍留細縫 */
-  for(var i=0;i<N;i++){
-    var col=i%COLS, row=Math.floor(i/COLS);
-    var d=document.createElement("div");
-    d.className="pnl";
-    d.style.backgroundImage=TEX[i%TEX.length];
-    d.style.left  =(col*(100/COLS)+GAP/2)+"%";
-    d.style.top   =(row*(100/ROWS)+GAP/2)+"%";
-    d.style.width =((100/COLS)-GAP)+"%";
-    d.style.height=((100/ROWS)-GAP)+"%";
-    panels.push({
-      el:d,
-      /* 散落狀態：從畫面外不同方向、帶旋轉與景深飛入 */
-      dx:(rnd(i,1)-.5)*150, dy:(rnd(i,2)-.5)*110, dz:120+rnd(i,3)*420,
-      rx:(rnd(i,4)-.5)*46,  ry:(rnd(i,5)-.5)*54,  rot:(rnd(i,6)-.5)*16,
-      start:(i/N)*0.62                        /* 依序貼合：越後面的板材越晚貼上 */
-    });
-    host.appendChild(d);
-  }
-
-  var DUR=0.38;                                /* 每片貼合所佔的捲動比例 */
+  var OPEN=54;      /* 起始張開角度（度）：板材離牆最遠時 */
+  var LIFT=7;       /* 起始時額外往外平移的比例，強化「還沒貼上」的距離感 */
   function ease(t){return 1-Math.pow(1-t,3);}  /* easeOutCubic：快進慢收，像吸附上去 */
 
   function apply(p,mx,my){
-    for(var i=0;i<panels.length;i++){
-      var o=panels[i];
-      var t=(p-o.start)/DUR; t=t<0?0:(t>1?1:t);
-      var e=ease(t), inv=1-e;
-      o.el.style.transform=
-        "translate3d("+(o.dx*inv)+"%,"+(o.dy*inv)+"%,"+(o.dz*inv)+"px) "+
-        "rotateX("+(o.rx*inv)+"deg) rotateY("+(o.ry*inv)+"deg) rotate("+(o.rot*inv)+"deg)";
-      o.el.style.opacity=(0.18+0.82*e).toFixed(3);
-    }
-    /* 整面牆隨滑鼠輕微傾斜（幅度很小，避免干擾閱讀） */
-    host.style.transform="rotateY("+(mx*3.2)+"deg) rotateX("+(-my*2.4)+"deg)";
+    var e=ease(p), inv=1-e;
+    /* 以貼牆那一側為軸，從張開轉到完全貼平 */
+    host.style.transform="rotateY("+(inv*OPEN)+"deg) translateX("+(-inv*LIFT)+"%)";
+    /* 整個場景隨滑鼠輕微視差（幅度很小，避免干擾閱讀） */
+    stage.style.transform="translate(-50%,-50%) rotateY("+(mx*2.2)+"deg) rotateX("+(-my*1.6)+"deg)";
   }
 
   if(reduce){ apply(1,0,0); return; }          /* 偏好減少動態：直接顯示貼合完成 */
