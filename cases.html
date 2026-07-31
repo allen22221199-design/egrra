@@ -111,8 +111,9 @@
     if(!list.length){grid.innerHTML='<div class="noresult">找不到符合的案例，換個條件看看 🙂</div>';return;}
     list.forEach(function(c){
       var card=document.createElement("div");card.className="card";
+      var sub=[c.region,c.year].filter(Boolean).map(esc).join(' ・ ');
       card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span></div>'+
-                     '<div class="cap"><h3>'+esc(c.region||"")+'</h3><p>'+esc(c.title||"")+(c.year?' ・ '+esc(c.year):'')+'</p></div>';
+                     '<div class="cap"><h3>'+esc(c.title||"實績案例")+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
       card.querySelector(".th").style.backgroundImage=bg(c);
       card.addEventListener("click",function(){openModal(c);});
       grid.appendChild(card);
@@ -123,7 +124,7 @@
   function openModal(c){
     document.getElementById("m-img").style.backgroundImage=bg(c);
     document.getElementById("m-cat").textContent=c.category||"實績案例";
-    document.getElementById("m-title").textContent=(c.region||"")+"　"+(c.title||"");
+    document.getElementById("m-title").textContent=(c.title||"實績案例");
     document.getElementById("m-desc").textContent=c.desc||"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。";
     document.getElementById("m-spec").innerHTML=
       row("地區",c.region||"—")+row("類別",c.category||"—")+row("年份",c.year||"—");

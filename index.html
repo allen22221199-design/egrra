@@ -992,7 +992,7 @@ function pfEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
-  d.innerHTML='<div class="fill"></div><div class="ov"><small>'+pfEsc(p.region||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
+  d.innerHTML='<div class="fill"></div><div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=p.img?("url('"+p.img+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
