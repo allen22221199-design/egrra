@@ -447,7 +447,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 .tech-wall{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 /* 舞台維持照片比例並填滿區塊，板材才能用百分比精準對位 */
 .tw-stage{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  aspect-ratio:1600/893;min-width:100%;min-height:100%;perspective:1500px;
+  aspect-ratio:1600/893;min-width:100%;min-height:100%;
   filter:brightness(.86) saturate(.95) contrast(1.02);  /* 盡量保留原照片的樣子 */
   transition:transform .5s cubic-bezier(.22,.61,.36,1)}
 .tw-plate{position:absolute;inset:0;background:url('img/tech/plate.webp') center/100% 100% no-repeat}
@@ -1223,14 +1223,16 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
   var reduce=false;
   try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
 
-  var OUT_Z=340;    /* 起始離牆距離(px)：透視讓板材明顯放大，像被拿在牆前面 */
-  var OUT_X=15;     /* 起始往離牆方向平移的比例 */
+  var GROW=0.18;    /* 起始放大倍率：越大看起來離牆越遠（等比例縮放，不會變形） */
+  var OUT_X=13;     /* 起始往離牆方向平移的比例 */
   function ease(t){return 1-Math.pow(1-t,3);}  /* easeOutCubic：快進慢收，像吸附上去 */
 
   function apply(p,mx,my){
     var e=ease(p), inv=1-e;
-    /* 整片保持與牆面平行，平拿、平移、平貼上去 —— 全程不做任何旋轉 */
-    host.style.transform="translate3d("+(-inv*OUT_X)+"%,0,"+(inv*OUT_Z)+"px)";
+    /* 整片平拿、平移、平貼。刻意用等比例 scale 而非 translateZ：
+       translateZ 在透視下會把偏離中心的元素投影成梯形，看起來像翹起一角。
+       scale 是等比例放大，四個角永遠保持矩形，絕不會傾斜。 */
+    host.style.transform="translate("+(-inv*OUT_X)+"%,0) scale("+(1+inv*GROW).toFixed(4)+")";
     /* 陰影隨距離收合：離牆時濃而散，貼平後幾乎消失 */
     host.style.filter="drop-shadow("+(-8-inv*34).toFixed(1)+"px "+(3+inv*16).toFixed(1)+"px "+
       (14+inv*38).toFixed(1)+"px rgba(0,0,0,"+(0.38+inv*0.3).toFixed(2)+"))";
