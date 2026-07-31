@@ -114,9 +114,6 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
   border:2px solid transparent;opacity:.55;transition:.2s}
 .mshots .s:hover{opacity:.9}
 .mshots .s.on{opacity:1;border-color:var(--gold)}
-/* 卡片多圖標記 */
-.card .th .shots{position:absolute;top:10px;right:10px;background:rgba(22,19,15,.72);color:#fff;
-  font-size:11px;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
 
 /* ---- FOOTER ---- */
 .foot{background:#0f0c09;color:rgba(255,255,255,.55);padding:40px 0;text-align:center;font-size:13px}

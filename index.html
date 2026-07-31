@@ -341,9 +341,6 @@ header.solid .burger span{background:var(--ink)}
   display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);
   transition:.3s var(--ease);z-index:4;pointer-events:none}
 .pf:hover::after{opacity:1;transform:scale(1)}
-/* 多圖標記：告訴使用者這個案場還有其他照片 */
-.pf-n{position:absolute;top:12px;left:12px;z-index:4;background:rgba(15,12,9,.6);backdrop-filter:blur(4px);
-  color:#fff;font-size:11px;letter-spacing:.06em;padding:4px 9px;border-radius:20px;pointer-events:none}
 /* 案例放大燈箱 */
 .plb{position:fixed;inset:0;background:rgba(12,10,7,.93);backdrop-filter:blur(5px);z-index:999;
   display:none;align-items:center;justify-content:center;padding:30px}
@@ -1004,9 +1001,7 @@ function pfTh(src){return src?src.replace("img/cases/","img/cases/thumbs/"):src;
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
-  var nShot=(p.imgs&&p.imgs.length)||(p.img?1:0);
   d.innerHTML='<div class="fill"></div>'+
-    (nShot>1?'<span class="pf-n">'+nShot+' 張</span>':'')+
     '<div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=p.img?("url('"+pfTh(p.img)+"')"):tex(p.stone);

@@ -122,9 +122,7 @@
     list.forEach(function(c){
       var card=document.createElement("div");card.className="card";
       var sub=[c.region,c.year].filter(Boolean).map(esc).join(' ・ ');
-      var n=shots(c).length;
-      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span>'+
-                     (n>1?'<span class="shots">'+n+' 張</span>':'')+'</div>'+
+      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span></div>'+
                      '<div class="cap"><h3>'+esc(c.title||"實績案例")+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
       card.querySelector(".th").style.backgroundImage=bgTh(c);
       card.addEventListener("click",function(){openModal(c);});
