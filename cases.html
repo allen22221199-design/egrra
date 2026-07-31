@@ -91,6 +91,9 @@
   function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
   function bg(c){return c.img?("url('"+c.img+"')"):T.tex(c.stone);}
+  /* 縮圖版路徑（400px，卡片與縮圖列用，載入量約為原圖的 1/8）*/
+  function th(src){return src?src.replace("img/cases/","img/cases/thumbs/"):src;}
+  function bgTh(c){return c.img?("url('"+th(c.img)+"')"):T.tex(c.stone);}
   /* 該案場的所有照片：有 imgs 用 imgs，否則只有封面 */
   function shots(c){return (c&&c.imgs&&c.imgs.length)?c.imgs.slice():(c&&c.img?[c.img]:[]);}
 
@@ -123,7 +126,7 @@
       card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span>'+
                      (n>1?'<span class="shots">'+n+' 張</span>':'')+'</div>'+
                      '<div class="cap"><h3>'+esc(c.title||"實績案例")+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
-      card.querySelector(".th").style.backgroundImage=bg(c);
+      card.querySelector(".th").style.backgroundImage=bgTh(c);
       card.addEventListener("click",function(){openModal(c);});
       grid.appendChild(card);
     });
@@ -152,7 +155,7 @@
     if(gal.length>1){
       gal.forEach(function(src,k){
         var s=document.createElement("div");s.className="s";
-        s.style.backgroundImage="url('"+src+"')";
+        s.style.backgroundImage="url('"+th(src)+"')";
         s.addEventListener("click",function(){gi=k;paintShot();});
         mshots.appendChild(s);
       });

@@ -999,6 +999,8 @@ swatches.forEach(function(s,i){
 var projects=(DATA.cases||[]).slice(0,24);
 var pf=document.getElementById("pfgrid");
 function pfEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+/* 縮圖版路徑（400px）：卡片與燈箱縮圖列用，主圖仍載原尺寸 */
+function pfTh(src){return src?src.replace("img/cases/","img/cases/thumbs/"):src;}
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
@@ -1007,7 +1009,7 @@ projects.forEach(function(p,i){
     (nShot>1?'<span class="pf-n">'+nShot+' 張</span>':'')+
     '<div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
-  f.style.backgroundImage=p.img?("url('"+p.img+"')"):tex(p.stone);
+  f.style.backgroundImage=p.img?("url('"+pfTh(p.img)+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
   d.addEventListener("click",function(){openPLB(i);});
   pf.appendChild(d);
@@ -1047,7 +1049,7 @@ function openPLB(i){}
     if(shots.length>1){
       shots.forEach(function(src,k){
         var t=document.createElement("div");t.className="t";
-        t.style.backgroundImage="url('"+src+"')";
+        t.style.backgroundImage="url('"+pfTh(src)+"')";
         t.addEventListener("click",function(e){e.stopPropagation();si=k;paint();});
         thumbs.appendChild(t);
       });
