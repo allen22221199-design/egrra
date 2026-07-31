@@ -439,6 +439,36 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 .foot-col a:hover{color:var(--gold-lt)}
 .foot-bot{padding-top:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(255,255,255,.4)}
 
+/* ===============  整頁互動背景：板材貼牆  ===============
+   固定在頁面最底層(z-index:-1)，隨捲動把散落的板材逐片貼合成一面無縫牆，
+   滑鼠移動時整面牆有輕微視差。各區塊底色改為半透明才看得到背景。
+   強度都收斂在下面幾個變數，要調濃淡改這裡即可。 */
+:root{
+  --wall-dark:rgba(22,19,15,.74);    /* 深色區塊：背景在這裡最好看，透得多一點 */
+  --wall-paper:rgba(239,233,225,.93);/* 淺色區塊(feats/portfolio)：維持乾淨，只透一點點 */
+  --wall-paper1:rgba(247,244,239,.93);/* 原本無底色的區塊(about/products/qa) */
+}
+#wallbg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  perspective:1100px;background:linear-gradient(165deg,#1b1610,#241d15 46%,#130f0a)}
+#wallbg .wall{position:absolute;inset:-8%;transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.22,.61,.36,1)}
+#wallbg .pnl{position:absolute;border-radius:2px;background-size:cover;background-position:center;
+  background-color:#241d15;box-shadow:0 20px 46px -20px rgba(0,0,0,.75);
+  will-change:transform,opacity;backface-visibility:hidden}
+/* 貼合後的接縫光澤，強化「無縫對花」的質感 */
+#wallbg .pnl::after{content:"";position:absolute;inset:0;border-radius:2px;
+  background:linear-gradient(150deg,rgba(255,255,255,.10),transparent 42%,rgba(0,0,0,.16))}
+
+/* 讓背景透出來：各區塊改半透明（原本都是不透明底色） */
+.hero{background:transparent}
+.hero-tex{opacity:.74}
+.tech,.gallery-wrap,.contact{background:var(--wall-dark)}
+.feats,.portfolio{background:var(--wall-paper)}
+.about,.products,.qa{background:var(--wall-paper1)}
+footer{background:rgba(15,12,9,.88)}
+/* 減少動態偏好：背景維持貼合完成的靜止狀態 */
+@media(prefers-reduced-motion:reduce){#wallbg .wall{transition:none}}
+
 /* ===============  REVEAL  =============== */
 .reveal{transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .js .reveal{opacity:0;transform:translateY(34px)}
@@ -482,6 +512,9 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 </style>
 </head>
 <body>
+
+<!-- 整頁互動背景（板材貼牆），純裝飾、不參與朗讀與操作 -->
+<div id="wallbg" aria-hidden="true"><div class="wall" id="wallInner"></div></div>
 
 <!-- ==========  NAV  ========== -->
 <header id="top">
@@ -1178,6 +1211,94 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
     });
   },{rootMargin:"-45% 0px -45% 0px",threshold:0});
   Object.keys(map).forEach(function(id){spy.observe(document.getElementById(id));});
+})();
+
+/* ----------  整頁互動背景：板材貼牆  ----------
+   捲動進度 0→1 對應「散落的板材逐片貼合成一面無縫牆」，滑鼠移動再加一層輕微視差。
+   只動 transform / opacity（GPU 合成，不觸發重排重繪），單一 rAF、無變化就不重畫。 */
+(function(){
+  var host=document.getElementById("wallInner");
+  if(!host)return;
+  var reduce=false;
+  try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
+
+  /* 紋理沿用站上既有的 stoneSVG 產生器（不另外載圖檔） */
+  var TEX=[
+    stoneSVG({base:"#2a2219",mid:"#3a2f22",midOp:.5,vein:"#c9a878",veinOp:.55,freq:"0.008 0.03",oct:5,seed:7,blend:"normal"}),
+    stoneSVG({base:"#262019",mid:"#342a1f",midOp:.5,vein:"#b08d57",veinOp:.48,freq:"0.006 0.024",oct:5,seed:19,blend:"normal"}),
+    stoneSVG({base:"#2c241a",mid:"#3d3125",midOp:.5,vein:"#d8bd94",veinOp:.42,freq:"0.01 0.028",oct:4,seed:33,blend:"normal"})
+  ];
+
+  var mobile=window.matchMedia("(max-width:700px)").matches;
+  var COLS=mobile?3:5, ROWS=mobile?4:3;      /* 直式板材排列，接近實際 4×8 尺比例 */
+  var N=COLS*ROWS, panels=[];
+
+  /* 以索引產生穩定的偽亂數，讓每片板材的飛入方向不同但每次載入一致 */
+  function rnd(i,s){var x=Math.sin(i*127.1+s*311.7)*43758.5453;return x-Math.floor(x);}
+
+  var GAP=0.6;                                /* 板材間縫隙(%)，貼合後仍留細縫 */
+  for(var i=0;i<N;i++){
+    var col=i%COLS, row=Math.floor(i/COLS);
+    var d=document.createElement("div");
+    d.className="pnl";
+    d.style.backgroundImage=TEX[i%TEX.length];
+    d.style.left  =(col*(100/COLS)+GAP/2)+"%";
+    d.style.top   =(row*(100/ROWS)+GAP/2)+"%";
+    d.style.width =((100/COLS)-GAP)+"%";
+    d.style.height=((100/ROWS)-GAP)+"%";
+    panels.push({
+      el:d,
+      /* 散落狀態：從畫面外不同方向、帶旋轉與景深飛入 */
+      dx:(rnd(i,1)-.5)*150, dy:(rnd(i,2)-.5)*110, dz:120+rnd(i,3)*420,
+      rx:(rnd(i,4)-.5)*46,  ry:(rnd(i,5)-.5)*54,  rot:(rnd(i,6)-.5)*16,
+      start:(i/N)*0.62                        /* 依序貼合：越後面的板材越晚貼上 */
+    });
+    host.appendChild(d);
+  }
+
+  var DUR=0.38;                                /* 每片貼合所佔的捲動比例 */
+  function ease(t){return 1-Math.pow(1-t,3);}  /* easeOutCubic：快進慢收，像吸附上去 */
+
+  function apply(p,mx,my){
+    for(var i=0;i<panels.length;i++){
+      var o=panels[i];
+      var t=(p-o.start)/DUR; t=t<0?0:(t>1?1:t);
+      var e=ease(t), inv=1-e;
+      o.el.style.transform=
+        "translate3d("+(o.dx*inv)+"%,"+(o.dy*inv)+"%,"+(o.dz*inv)+"px) "+
+        "rotateX("+(o.rx*inv)+"deg) rotateY("+(o.ry*inv)+"deg) rotate("+(o.rot*inv)+"deg)";
+      o.el.style.opacity=(0.18+0.82*e).toFixed(3);
+    }
+    /* 整面牆隨滑鼠輕微傾斜（幅度很小，避免干擾閱讀） */
+    host.style.transform="rotateY("+(mx*3.2)+"deg) rotateX("+(-my*2.4)+"deg)";
+  }
+
+  if(reduce){ apply(1,0,0); return; }          /* 偏好減少動態：直接顯示貼合完成 */
+
+  var mx=0,my=0,tmx=0,tmy=0,prog=0,queued=false;
+  function scrollProg(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    return h>0?Math.min(Math.max(window.scrollY/h,0),1):0;
+  }
+  function frame(){
+    queued=false;
+    mx+=(tmx-mx)*0.08; my+=(tmy-my)*0.08;      /* 滑鼠平滑跟隨，避免抖動 */
+    apply(prog,mx,my);
+    if(Math.abs(tmx-mx)>0.001||Math.abs(tmy-my)>0.001)req();
+  }
+  function req(){ if(!queued){queued=true;requestAnimationFrame(frame);} }
+
+  window.addEventListener("scroll",function(){prog=scrollProg();req();},{passive:true});
+  window.addEventListener("resize",function(){prog=scrollProg();req();},{passive:true});
+  window.addEventListener("pointermove",function(e){
+    tmx=(e.clientX/window.innerWidth-.5)*2;
+    tmy=(e.clientY/window.innerHeight-.5)*2;
+    req();
+  },{passive:true});
+  /* 分頁切到背景時不需要動 */
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)req();});
+
+  prog=scrollProg(); apply(prog,0,0);
 })();
 </script>
 <script>
