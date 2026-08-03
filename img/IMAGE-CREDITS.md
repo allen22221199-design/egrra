@@ -19,7 +19,7 @@
 
 | 檔案 | 用途 | 原始出處 |
 |---|---|---|
-| `prod-coating.jpg` | 產品卡「斷熱鍍膜」 | Pexels photo 37753214 — modern geometric facade（鍍膜玻璃帷幕特寫） |
+| `prod-coating.jpg` | 產品卡「斷熱鍍膜」 | Pexels photo 2073623 — 藍色反射鍍膜玻璃帷幕（Low-E 隔熱玻璃特徵：藍色反射） |
 | `prod-honeycomb.jpg` | 產品卡「蜂窩板 / 焊接板」 | Pexels photo 32646473 — 六角金屬板立面（蜂窩結構特寫） |
 
 > 註：這兩張為**示意用材質圖**，非本公司實際產品拍攝。
