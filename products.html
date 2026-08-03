@@ -56,6 +56,7 @@
       <a href="cases.html">實績案例</a>
       <a href="certifications.html">認證</a>
       <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
     <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
   </div>
@@ -127,9 +128,42 @@
   </div>
 </div>
 
+<!-- 紋理放大燈箱：點 modal 大圖看整張紋理細節 -->
+<div class="plx" id="plx">
+  <button class="x" id="plx-x" aria-label="關閉">&times;</button>
+  <div class="im" id="plx-im"></div>
+  <div class="cap" id="plx-cap"></div>
+</div>
+
 <script src="site-data.js"></script>
 <script src="/api/published"></script><!-- 後台發布內容（Blob）覆蓋，無/失敗沿用預設 -->
 <script src="textures.js"></script>
+<script src="i18n-sub.js"></script>
+<script>
+/* 本頁英文字典（靜態文字） */
+EGRRA_I18N.init({
+  dict:{
+    "pl.h1":"EGRRA Panel · Colour Library",
+    "pl.p":"From classic whites to deep black-gold — natural textures reproduced with PrinTex™. Filter by series and tone; click any colour for details.",
+    "pl.f1":"Series","pl.f2":"Tone",
+    "pl.meye":"One Texture · Every Substrate",
+    "pl.mh2":"One Texture, Across Substrates",
+    "pl.mp":"The PrinTex™ advantage: the same texture, produced on aluminium, glass, metal or wood. Tap to see the material change.",
+    "pl.cl1":"Walls","pl.cl2":"Substrate","pl.cl3":"Panel","pl.cl4":"Texture",
+    "pl.cta":"Enquire / Request Sample →"
+  },
+  sel:[
+    ["section.band h1","pl.h1"],["section.band p","pl.p"],
+    [".frow:nth-child(1) .lbl","pl.f1"],[".frow:nth-child(2) .lbl","pl.f2"],
+    [".matsec .mh .eye","pl.meye"],[".matsec .mh h2","pl.mh2"],[".matsec .mh p","pl.mp"],
+    ["#row-walls .cl","pl.cl1"],
+    [".matctrl .ctrl-row:nth-child(2) .cl","pl.cl2"],
+    [".matctrl .ctrl-row:nth-child(3) .cl","pl.cl3"],
+    [".matctrl .ctrl-row:nth-child(4) .cl","pl.cl4"],
+    [".mcta","pl.cta"]
+  ]
+});
+</script>
 <script>
 (function(){
   var T=window.EGRRA_TEX;
@@ -147,7 +181,7 @@
     host.innerHTML="";
     items.forEach(function(it){
       var val=it.key||it, lab=it.label||it;
-      var b=document.createElement("button");b.className="fchip"+(val===cur?" on":"");b.textContent=lab;
+      var b=document.createElement("button");b.className="fchip"+(val===cur?" on":"");b.textContent=I.t(lab);
       b.addEventListener("click",function(){onPick(val);});
       host.appendChild(b);
     });
@@ -161,36 +195,43 @@
     if(state.tone!=="全部"&&T.toneOf(p.stone)!==state.tone)return false;
     return true;
   }
+  /* 中英切換：動態字串經 I 翻譯（zh 模式原樣傳回） */
+  var I=window.EGRRA_I18N||{t:function(s){return s;},pname:function(s){return s;},en:function(){return false;}};
+
   function render(){
     renderChips();
     var grid=document.getElementById("grid");grid.innerHTML="";
     var list=PRODUCTS.filter(match);
-    document.getElementById("count").textContent="共 "+list.length+" 款";
-    if(!list.length){grid.innerHTML='<div class="noresult">找不到符合的花色，換個條件看看 🙂</div>';return;}
+    document.getElementById("count").textContent=I.en()?(list.length+" colours"):("共 "+list.length+" 款");
+    if(!list.length){grid.innerHTML='<div class="noresult">'+(I.en()?"No colours match — try different filters 🙂":"找不到符合的花色，換個條件看看 🙂")+'</div>';return;}
     list.forEach(function(p){
       var c=document.createElement("div");c.className="card";
-      c.innerHTML='<div class="th" style="background-image:'+bg(p)+'"><span class="tag">'+esc(p.series||"")+'</span></div>'+
-                  '<div class="cap"><h3>'+esc(p.name)+'</h3><p>'+esc(p.sizes||"")+'</p></div>';
+      c.innerHTML='<div class="th" style="background-image:'+bg(p)+'"><span class="tag">'+esc(I.t(p.series||""))+'</span></div>'+
+                  '<div class="cap"><h3>'+esc(I.pname(p.name))+'</h3><p>'+esc(I.t(p.sizes||""))+'</p></div>';
       c.addEventListener("click",function(){openModal(p);});
       grid.appendChild(c);
     });
   }
 
   var ov=document.getElementById("ov");
+  var curP=null;
   function openModal(p){
+    curP=p;
     document.getElementById("m-img").style.backgroundImage=bg(p);
-    document.getElementById("m-series").textContent=(p.series||"藝格板");
-    document.getElementById("m-name").textContent=p.name||"";
-    document.getElementById("m-desc").textContent=p.desc||"以 PrinTex™ 專利數位紋理技術製作，高仿真還原天然質感，可依需求客製基材與尺寸。";
+    document.getElementById("m-series").textContent=I.t(p.series||"藝格板");
+    document.getElementById("m-name").textContent=I.pname(p.name||"");
+    document.getElementById("m-desc").textContent=p.desc||(I.en()
+      ?"Produced with patented PrinTex™ digital texture — a high-fidelity reproduction of natural materials. Substrate and size can be customized."
+      :"以 PrinTex™ 專利數位紋理技術製作，高仿真還原天然質感，可依需求客製基材與尺寸。");
     document.getElementById("m-spec").innerHTML=
-      row("尺寸",p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺")+
-      row("表面處理",p.finish||"立體紋路・霧光・平光・消光")+
-      row("計價",p.priceUnit||"以才計價，依需求數量報價");
+      row(I.t("尺寸"),I.t(p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺"))+
+      row(I.t("表面處理"),I.t(p.finish||"立體紋路・霧光・平光・消光"))+
+      row(I.t("計價"),I.t(p.priceUnit||"以才計價，依需求數量報價"));
     /* 相關花色（同系列，最多 5 款）*/
     var rel=PRODUCTS.filter(function(x){return x.series===p.series&&x.name!==p.name;}).slice(0,5);
     var relHtml="";
-    if(rel.length){relHtml='<h4>同系列花色</h4><div class="mrel-items">'+rel.map(function(r){
-      return '<div class="ri" title="'+esc(r.name)+'" style="background-image:'+bg(r)+'" data-name="'+esc(r.name)+'"></div>';}).join("")+'</div>';}
+    if(rel.length){relHtml='<h4>'+esc(I.t("同系列花色"))+'</h4><div class="mrel-items">'+rel.map(function(r){
+      return '<div class="ri" title="'+esc(I.pname(r.name))+'" style="background-image:'+bg(r)+'" data-name="'+esc(r.name)+'"></div>';}).join("")+'</div>';}
     var relBox=document.getElementById("m-rel");relBox.innerHTML=relHtml;
     relBox.querySelectorAll(".ri").forEach(function(ri){ri.addEventListener("click",function(){
       var t=PRODUCTS.filter(function(x){return x.name===ri.dataset.name;})[0];if(t)openModal(t);});});
@@ -199,8 +240,25 @@
   function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';}
   document.getElementById("m-close").addEventListener("click",function(){ov.classList.remove("show");});
   ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("show");});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape")ov.classList.remove("show");});
 
+  /* ---- 紋理放大燈箱：點 modal 大圖 → 全螢幕看整張紋理 ---- */
+  var plx=document.getElementById("plx");
+  document.getElementById("m-img").addEventListener("click",function(){
+    if(!curP)return;
+    document.getElementById("plx-im").style.backgroundImage=bg(curP);
+    document.getElementById("plx-cap").textContent=I.pname(curP.name||"")+(curP.series?"　·　"+I.t(curP.series):"");
+    plx.classList.add("show");
+  });
+  function closePlx(){plx.classList.remove("show");}
+  document.getElementById("plx-x").addEventListener("click",closePlx);
+  plx.addEventListener("click",function(e){if(e.target===plx)closePlx();});
+  document.addEventListener("keydown",function(e){
+    if(e.key!=="Escape")return;
+    if(plx.classList.contains("show"))closePlx();
+    else ov.classList.remove("show");
+  });
+
+  window.__redraw=render;   /* 語言切換時由 i18n 呼叫重繪 */
   render();
 })();
 </script>

@@ -27,6 +27,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 .nav-links a:hover,.nav-links a.on{color:var(--ink)}
 .nav-links a.on::after{content:"";position:absolute;left:0;bottom:-6px;width:100%;height:1.5px;background:var(--gold)}
 .nav-cta{padding:9px 18px;border:1px solid var(--gold);border-radius:100px;color:var(--gold-dk)!important}
+.langbtn{background:none;border:1px solid var(--line);color:var(--ink-soft);padding:7px 12px;border-radius:8px;
+  font-size:12px;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:.25s;font-family:inherit}
+.langbtn:hover{border-color:var(--gold);color:var(--ink)}
 .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
 .burger span{width:24px;height:2px;background:var(--ink)}
 
@@ -114,6 +117,20 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
   border:2px solid transparent;opacity:.55;transition:.2s}
 .mshots .s:hover{opacity:.9}
 .mshots .s.on{opacity:1;border-color:var(--gold)}
+
+/* ---- 紋理放大燈箱（花色庫：點 modal 大圖看整張紋理） ---- */
+.mod .mimg{cursor:zoom-in}
+.mod .mimg::after{content:"⤢ 點擊放大";position:absolute;right:12px;bottom:12px;background:rgba(22,19,15,.62);
+  color:#fff;font-size:11.5px;letter-spacing:.06em;padding:5px 12px;border-radius:20px;pointer-events:none}
+html[data-lang="en"] .mod .mimg::after{content:"⤢ Click to enlarge"}
+.plx{position:fixed;inset:0;background:rgba(12,10,7,.94);backdrop-filter:blur(4px);z-index:300;
+  display:none;align-items:center;justify-content:center;padding:28px}
+.plx.show{display:flex}
+.plx .im{width:min(94vw,1200px);height:min(86vh,1200px);background-size:contain;background-repeat:no-repeat;background-position:center}
+.plx .x{position:absolute;top:20px;right:24px;width:44px;height:44px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;font-size:22px;cursor:pointer;line-height:1;transition:.2s}
+.plx .x:hover{background:rgba(255,255,255,.28)}
+.plx .cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font-size:13.5px;letter-spacing:.08em}
 
 /* ---- FOOTER ---- */
 .foot{background:#0f0c09;color:rgba(255,255,255,.55);padding:40px 0;text-align:center;font-size:13px}

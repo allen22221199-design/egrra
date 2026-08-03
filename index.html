@@ -985,7 +985,7 @@ var sw=document.getElementById("swatches");
 swatches.forEach(function(s,i){
   var d=document.createElement("div");d.className="sw reveal";
   d.style.transitionDelay=(i%7*0.05)+"s";
-  d.innerHTML='<div class="fill"></div><div class="nm">'+(s.name||"")+'</div>';
+  d.innerHTML='<div class="fill"></div><div class="nm" data-tr="'+pfEsc(s.name||"")+'">'+pfEsc(s.name||"")+'</div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=s.img?("url('"+s.img+"')"):tex(s.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
@@ -1032,8 +1032,9 @@ function pfTh(src){return src?src.replace("img/cases/","img/cases/thumbs/"):src;
 projects.forEach(function(p,i){
   var d=document.createElement("div");d.className="pf reveal";
   d.style.transitionDelay=(i%4*0.06)+"s";
+  var pfLbl=pfEsc(p.region||p.category||"");
   d.innerHTML='<div class="fill"></div>'+
-    '<div class="ov"><small>'+pfEsc(p.region||p.category||"")+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
+    '<div class="ov"><small data-tr="'+pfLbl+'">'+pfLbl+'</small><b>'+pfEsc(p.title||"")+'</b></div>';
   var f=d.querySelector(".fill");
   f.style.backgroundImage=p.img?("url('"+pfTh(p.img)+"')"):tex(p.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
@@ -1068,8 +1069,11 @@ function openPLB(i){}
     var p=projects[i];if(!p)return;
     shots=shotsOf(p);if(!shots.length)return;   /* 無照片則不開燈箱 */
     cur=i;si=0;
-    cat.textContent=[(p.category||""),(p.region||"")].filter(Boolean).join(" ・ ");
-    ttl.textContent=(p.title||"")+(p.year?"　"+p.year:"")+(shots.length>1?"　（"+shots.length+" 張）":"");
+    var TR=window.EGRRA_TR||function(s){return s;};
+    var isEn=document.documentElement.getAttribute("data-lang")==="en";
+    cat.textContent=[TR(p.category||""),TR(p.region||"")].filter(Boolean).join(" ・ ");
+    ttl.textContent=(p.title||"")+(p.year?"　"+p.year:"")+
+      (shots.length>1?(isEn?"　("+shots.length+" photos)":"　（"+shots.length+" 張）"):"");
     /* 縮圖列：兩張以上才顯示 */
     thumbs.innerHTML="";
     if(shots.length>1){
@@ -1277,7 +1281,7 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
 })();
 </script>
 <script>
-/* ----------  中英雙語切換（phase 1：導覽 / 首屏 / 數據 / 基材 / CTA）---------- */
+/* ----------  中英雙語切換（完整版：全頁靜態文案 + 動態標籤）---------- */
 (function(){
   var DICT={
     "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.library":"Colours","nav.certs":"Certifications","nav.portfolio":"Projects","nav.contact":"Contact",
@@ -1290,25 +1294,193 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
     "mat.eye":"One Texture · Every Substrate","mat.h":"One Texture, Across Substrates",
     "mat.p":"The PrinTex™ advantage: the same texture, produced on aluminium, glass, metal or wood. Tap to see it change.",
     "mat.substrate":"Substrate","mat.texture":"Texture",
-    "cta.line":"LINE Chat","cta.sample":"Request Sample / Catalog"
+    "cta.line":"LINE Chat","cta.sample":"Request Sample / Catalog",
+    /* 目錄 */
+    "toc.h":"On this page","toc.home":"Home","toc.about":"About","toc.tech":"Technology","toc.products":"Products","toc.gallery":"Colours","toc.portfolio":"Projects","toc.contact":"Contact",
+    /* 關於 */
+    "ab.eye":"About EGRRA",
+    "ab.h2":"Four decades of colour expertise,<br>translated into architectural warmth",
+    "ab.p2":"EGRRA is a digital-texture brand built for the architecture and design market, with over 46 years of experience in colour management and pattern making — a complete solution from texture development to finished panels.",
+    "ab.quote":"“To deliver the finest architectural finishes — honouring the past, serving the present, pioneering the future — while reducing stone quarrying to help protect nature.”",
+    "ab.sign":"EGRRA · Founder","ab.badge":"Prince Color × EGRRA",
+    /* 核心技術 */
+    "tc.eye":"Core Technology",
+    "tc.h2":"<span class=\"tm-tag\">PrinTex<sup>™</sup></span><br>Nature, Precisely Reproduced",
+    "tc.p":"The patented PrinTex™ process reproduces natural stone textures in high fidelity on metal, glass, ceramic and other substrates — restoring the depth and delicacy of real stone.",
+    "tf1.h":"High-Fidelity Texture","tf1.p":"Faithfully reproduces the colour and veining of natural stone — hard to tell from the real thing.",
+    "tf2.h":"Precision Layering","tf2.p":"Multi-layer printing with smooth, natural colour and tonal transitions.",
+    "tf3.h":"Embossed Relief","tf3.p":"Tactile, dimensional relief that restores the true depth of stone.",
+    "tf4.h":"Seamless Pattern Match","tf4.p":"Exclusive matching keeps veining continuous across large-area installs.",
+    "st1.h":"Texture Development","st1.p":"Provide a 600×600mm texture sample, or let us develop an exclusive pattern for you.",
+    "st2.h":"Substrate Selection","st2.p":"Produced on aluminium, glass, metal or wood to suit the project.","st2.spec":"Aluminium · Glass · Metal · Wood",
+    "st3.h":"Sizing & Forming","st3.p":"A wide range of standard sizes, with flexible cut-to-size options.",
+    /* 產品優勢 */
+    "ft.eye":"Product Advantages","ft.h2":"Lighter than stone, safer than you'd imagine",
+    "ft.p":"Every EGRRA panel meets the strictest demands of aesthetics, safety and durability.",
+    "fc1.h":"Class-1 Fire Rating","fc1.p":"Certified to the highest fire-resistance class in Taiwan's fire code.",
+    "fc2.h":"UV-Resistant Colour","fc2.p":"Long-lasting UV resistance indoors and out — colours stay true.",
+    "fc3.h":"SGS Antibacterial","fc3.p":"SGS-certified antibacterial surface inhibits bacterial growth.",
+    "fc4.h":"Lightweight","fc4.p":"About 1/30 the weight of natural stone — less load, easier install.",
+    "fc5.h":"Seamless Pattern Match","fc5.p":"Veining flows uninterrupted across large wall installations.",
+    "fc6.h":"Fully Customizable","fc6.p":"Texture, size, substrate and finish — all tailored to your project.",
+    /* 產品系列 */
+    "pr.eye":"Product Lines","pr.h2":"Three Product Lines",
+    "pr.p":"Built on PrinTex™ digital texture, three lines cover every substrate and application.",
+    "pc1.h":"EGRRA Panel","pc1.p":"Aluminium-based digital texture panel — stone, rust and wood finishes with a Class-1 fire rating.",
+    "pc2.h":"EGRRA Crystal","pc2.p":"Glass-based construction with luminous, mirror-like depth — for boutique facades and feature walls.",
+    "pc3.h":"EGRRA Titanium","pc3.p":"Metal-based with a composed titanium sheen — the language of high-end architecture.",
+    "ps1.h":"Thermal Coating","ps1.p":"Surface coating that improves thermal performance without compromising looks.",
+    "ps2.h":"Honeycomb / Welded Panels","ps2.p":"Lightweight, high-rigidity structural panels for long spans and heavy loads.",
+    /* 花色精選 */
+    "gl.eye":"Stone Series · Selected Colours","gl.h2":"Every wall, its own character",
+    "gl.p":"From pure classic whites to deep black-gold — a colour for every spatial story.",
+    "gl.s1":"<b>Finishes</b>Embossed · Matte · Satin · Flat",
+    "gl.s2":"<b>Standard sizes</b>4×4 · 4×8 · 4×10 · 5×10 ft",
+    "gl.s3":"<b>Pricing</b>Per unit (30×30 cm) · quoted by quantity",
+    "gl.btn":"Browse the Colour Library <span class=\"arrow\">→</span>",
+    /* 實績 */
+    "pf.eye":"Projects","pf.h2":"Projects across Taiwan",
+    "pf.p":"From residential corridors and lobbies to fire-equipment refinement — 200+ projects delivered.",
+    "pf.btn1":"Discuss your project <span class=\"arrow\">→</span>",
+    "cl.h3":"Developers & Builders We Serve",
+    "cl.p":"Long-term partner to developers, contractors and interior design teams across Taiwan",
+    "cl.note":"— In order of collaboration; some projects undisclosed at clients' request —",
+    "pf.more":"— A selection of projects —",
+    "pf.btn2":"View the full project wall <span class=\"arrow\">→</span>",
+    /* QA */
+    "qa.eye":"FAQ","qa.p":"Pricing, care and customization — answers to what designers and owners ask most.",
+    "q1":"How is the product priced?<span class=\"pm\"></span>",
+    "a1":"Pricing is per unit of 30×30 cm (Taiwanese “cai”). Since enquiries range from dozens to tens of thousands of units, we recommend providing your actual quantities so our sales team can quote precisely.",
+    "q2":"Is it easy to damage? How do I maintain it?<span class=\"pm\"></span>",
+    "a2":"The panel is coated aluminium and highly durable — the few damage cases are man-made and almost always repairable. Care is simple: regular wiping. Avoid strong acids/alkalis and resin-dissolving solvents (e.g. turpentine, adhesive removers).",
+    "q3":"Can I customize my own texture?<span class=\"pm\"></span>",
+    "a3":"Yes. With PrinTex™ you can provide a 600×600mm texture sample, or we can develop an exclusive pattern — produced on aluminium, glass, metal or wood.",
+    "q4":"How safe is it in a fire?<span class=\"pm\"></span>",
+    "a4":"EGRRA panels are certified Class-1 — the highest fire-resistance level in Taiwan's fire code — and are also used to refine fire doors, hydrant boxes and other fire equipment.",
+    "q5":"What sizes and finishes are available?<span class=\"pm\"></span>",
+    "a5":"Standard sizes include 4×4, 4×8, 4×10 and 5×10 ft (120×240, 120×300, 150×300 cm), with custom cutting available. Finishes include embossed, matte, satin and flat.",
+    /* 聯絡 */
+    "ct.eye":"Contact","ct.h2":"Let's craft your space,<br>together",
+    "ct.lead":"Interested in EGRRA panels or have a question? Reach us any way below — we'll get back to you promptly.",
+    "f1":"Name / Company","f2":"Phone","f3":"Needs / Quantity","f4":"Message",
+    "f.btn":"Send Enquiry","f.note":"* You're also welcome to call 02-2222-1199 for faster service.",
+    "f.toast":"✓ Thank you! We'll be in touch shortly.",
+    /* 頁尾 */
+    "fo.p":"A digital-texture brand for architecture and design — reproducing the beauty of natural stone with patented PrinTex™ technology.",
+    "fo.h1":"Products","fo.a1":"Stone Series","fo.a2":"Rust Series","fo.a3":"Wood Series","fo.a4":"Fire Equipment",
+    "fo.h2":"Explore","fo.b1":"About","fo.b2":"Technology","fo.b3":"Projects","fo.b4":"FAQ",
+    "fo.h3":"Contact","fo.bot":"Prince Color × EGRRA · PrinTex™ Digital Texture"
+  };
+  /* 尚未帶 data-i18n 屬性的元素：以選擇器批次指派（#html 結尾＝整段 innerHTML 置換） */
+  var SEL=[
+    [".toc .h","toc.h"],[".toc a[href='#home']","toc.home"],[".toc a[href='#about']","toc.about"],
+    [".toc a[href='#tech']","toc.tech"],[".toc a[href='#products']","toc.products"],
+    [".toc a[href='#gallery']","toc.gallery"],[".toc a[href='#portfolio']","toc.portfolio"],[".toc a[href='#contact']","toc.contact"],
+    [".about .eyebrow","ab.eye"],[".about h2","ab.h2#html"],["#aboutP2","ab.p2"],["#missionText","ab.quote"],
+    [".about-sign span","ab.sign"],[".badge span","ab.badge"],
+    [".tech .section-head .eyebrow","tc.eye"],[".tech .section-head h2","tc.h2#html"],[".tech .section-head p","tc.p"],
+    [".tech-feats .tf:nth-child(1) h4","tf1.h"],[".tech-feats .tf:nth-child(1) p","tf1.p"],
+    [".tech-feats .tf:nth-child(2) h4","tf2.h"],[".tech-feats .tf:nth-child(2) p","tf2.p"],
+    [".tech-feats .tf:nth-child(3) h4","tf3.h"],[".tech-feats .tf:nth-child(3) p","tf3.p"],
+    [".tech-feats .tf:nth-child(4) h4","tf4.h"],[".tech-feats .tf:nth-child(4) p","tf4.p"],
+    [".process .step:nth-child(1) h4","st1.h"],[".process .step:nth-child(1) p","st1.p"],
+    [".process .step:nth-child(2) h4","st2.h"],[".process .step:nth-child(2) p","st2.p"],[".process .step:nth-child(2) .spec","st2.spec"],
+    [".process .step:nth-child(3) h4","st3.h"],[".process .step:nth-child(3) p","st3.p"],
+    [".feats .section-head .eyebrow","ft.eye"],[".feats .section-head h2","ft.h2"],[".feats .section-head p","ft.p"],
+    [".feat-grid .fc:nth-child(1) h4","fc1.h"],[".feat-grid .fc:nth-child(1) p","fc1.p"],
+    [".feat-grid .fc:nth-child(2) h4","fc2.h"],[".feat-grid .fc:nth-child(2) p","fc2.p"],
+    [".feat-grid .fc:nth-child(3) h4","fc3.h"],[".feat-grid .fc:nth-child(3) p","fc3.p"],
+    [".feat-grid .fc:nth-child(4) h4","fc4.h"],[".feat-grid .fc:nth-child(4) p","fc4.p"],
+    [".feat-grid .fc:nth-child(5) h4","fc5.h"],[".feat-grid .fc:nth-child(5) p","fc5.p"],
+    [".feat-grid .fc:nth-child(6) h4","fc6.h"],[".feat-grid .fc:nth-child(6) p","fc6.p"],
+    [".products .section-head .eyebrow","pr.eye"],[".products .section-head h2","pr.h2"],[".products .section-head p","pr.p"],
+    [".prod-grid .pcard:nth-child(1) h3","pc1.h"],[".prod-grid .pcard:nth-child(1) .cap p","pc1.p"],
+    [".prod-grid .pcard:nth-child(2) h3","pc2.h"],[".prod-grid .pcard:nth-child(2) .cap p","pc2.p"],
+    [".prod-grid .pcard:nth-child(3) h3","pc3.h"],[".prod-grid .pcard:nth-child(3) .cap p","pc3.p"],
+    [".prod-sub .pcard:nth-child(1) h3","ps1.h"],[".prod-sub .pcard:nth-child(1) .cap p","ps1.p"],
+    [".prod-sub .pcard:nth-child(2) h3","ps2.h"],[".prod-sub .pcard:nth-child(2) .cap p","ps2.p"],
+    [".gallery-wrap .section-head .eyebrow","gl.eye"],[".gallery-wrap .section-head h2","gl.h2"],[".gallery-wrap .section-head p","gl.p"],
+    [".spec-bar div:nth-child(1)","gl.s1#html"],[".spec-bar div:nth-child(2)","gl.s2#html"],[".spec-bar div:nth-child(3)","gl.s3#html"],
+    [".gallery-wrap a.btn","gl.btn#html"],
+    [".pf-head .eyebrow","pf.eye"],[".pf-head h2","pf.h2"],[".pf-head .section-head p","pf.p"],[".pf-head > a.btn","pf.btn1#html"],
+    [".cl-head h3","cl.h3"],[".cl-head p","cl.p"],[".cl-note","cl.note"],[".pf-more","pf.more"],
+    [".portfolio a[href='cases.html']","pf.btn2#html"],
+    [".qa .section-head .eyebrow","qa.eye"],[".qa .section-head p","qa.p"],
+    ["#acc .acc-item:nth-child(1) .acc-q","q1#html"],["#acc .acc-item:nth-child(1) .acc-a p","a1"],
+    ["#acc .acc-item:nth-child(2) .acc-q","q2#html"],["#acc .acc-item:nth-child(2) .acc-a p","a2"],
+    ["#acc .acc-item:nth-child(3) .acc-q","q3#html"],["#acc .acc-item:nth-child(3) .acc-a p","a3"],
+    ["#acc .acc-item:nth-child(4) .acc-q","q4#html"],["#acc .acc-item:nth-child(4) .acc-a p","a4"],
+    ["#acc .acc-item:nth-child(5) .acc-q","q5#html"],["#acc .acc-item:nth-child(5) .acc-a p","a5"],
+    [".contact .eyebrow","ct.eye"],[".contact h2","ct.h2#html"],[".contact .lead","ct.lead"],
+    ["#contactForm .field:nth-child(1) label","f1"],["#contactForm .field:nth-child(2) label","f2"],
+    ["#contactForm .field:nth-child(3) label","f3"],["#contactForm .field:nth-child(4) label","f4"],
+    ["#contactForm button[type='submit']","f.btn"],[".form-note","f.note"],["#toast","f.toast"],
+    [".foot-brand p","fo.p"],
+    [".foot-links .foot-col:nth-child(1) h5","fo.h1"],
+    [".foot-links .foot-col:nth-child(1) a:nth-of-type(1)","fo.a1"],[".foot-links .foot-col:nth-child(1) a:nth-of-type(2)","fo.a2"],
+    [".foot-links .foot-col:nth-child(1) a:nth-of-type(3)","fo.a3"],[".foot-links .foot-col:nth-child(1) a:nth-of-type(4)","fo.a4"],
+    [".foot-links .foot-col:nth-child(2) h5","fo.h2"],
+    [".foot-links .foot-col:nth-child(2) a:nth-of-type(1)","fo.b1"],[".foot-links .foot-col:nth-child(2) a:nth-of-type(2)","fo.b2"],
+    [".foot-links .foot-col:nth-child(2) a:nth-of-type(3)","fo.b3"],[".foot-links .foot-col:nth-child(2) a:nth-of-type(4)","fo.b4"],
+    [".foot-links .foot-col:nth-child(3) h5","fo.h3"],
+    [".foot-bot span:nth-child(2)","fo.bot"]
+  ];
+  SEL.forEach(function(pr){
+    var el=document.querySelector(pr[0]);if(!el)return;
+    if(/#html$/.test(pr[1]))el.setAttribute("data-i18n-html",pr[1]);
+    else el.setAttribute("data-i18n",pr[1]);
+  });
+  /* 表單 placeholder */
+  var PH=[["#contactForm input[name='name']","Your name"],["#contactForm input[name='phone']","Best number to reach you"],
+          ["#contactForm input[name='need']","e.g. Stone Series, ~2000 units"],["#contactForm textarea[name='msg']","Briefly describe your needs"]];
+  /* 動態標籤翻譯（案例分類 / 地區 / 花色名稱）—— data-tr 元素在切換時重譯 */
+  var CAT={"空間美化":"Interior","防火門":"Fire Door","消防箱":"Hydrant Box","檢修門":"Access Panel",
+    "牆面美化":"Feature Wall","天花板":"Ceiling","電視牆":"TV Wall","長照空間":"Care Facility",
+    "牆面":"Wall","全棟廊道":"Corridor","防火消防美化":"Fire Equipment","豪宅客製":"Luxury Custom","其他":"Other"};
+  var CITY={"台北":"Taipei","新北":"New Taipei","台中":"Taichung","新竹":"Hsinchu","宜蘭":"Yilan","高雄":"Kaohsiung","桃園":"Taoyuan","台南":"Tainan"};
+  var PNAME={"卡拉拉":"Carrara","雅仕白":"Elegant White","白玉蘭":"White Magnolia","雪白細紋":"Snow White Fine-Vein",
+    "帝寶米黃":"Imperial Beige","加里奧金":"Galio Gold","琥珀":"Amber","聖羅蘭黑":"Laurent Black","紫丁黑":"Lilac Black",
+    "深灰石紋":"Deep Grey Stone","安格拉":"Angola Pearl","克里特灰":"Crete Grey","黑網石":"Black Web Stone","銀狐":"Silver Fox",
+    "雕刻白":"Statuario","黃金雕刻白":"Golden Statuario","帝諾":"Tino Grey","琥珀金紋":"Amber Gold-Vein","抽象紋理":"Abstract",
+    "鏽蝕 01":"Rust 01","鏽蝕 02":"Rust 02","鏽蝕 03":"Rust 03","鏽蝕 04":"Rust 04","鏽蝕 05":"Rust 05","鏽蝕 06":"Rust 06",
+    "木紋經典":"Classic Wood","木紋 EN521":"Wood EN521","木紋 GEH1215":"Wood GEH1215","木紋 UE106C":"Wood UE106C","木紋 EN628":"Wood EN628"};
+  window.EGRRA_TR=function(s){
+    if(document.documentElement.getAttribute("data-lang")!=="en"||!s)return s;
+    if(CAT[s])return CAT[s];
+    if(PNAME[s])return PNAME[s];
+    var pre=String(s).slice(0,2);
+    if(CITY[pre]&&/^[一-鿿]+$/.test(s))return CITY[pre];
+    return s;
   };
   var btn=document.getElementById("langbtn");
   function apply(lang){
     var en=lang==="en";
     document.documentElement.setAttribute("data-lang",lang);
+    document.documentElement.setAttribute("lang",en?"en":"zh-Hant");
     document.querySelectorAll("[data-i18n]").forEach(function(el){
       var k=el.getAttribute("data-i18n");
       if(en){if(!el.hasAttribute("data-zh"))el.setAttribute("data-zh",el.textContent);if(DICT[k]!=null)el.textContent=DICT[k];}
       else if(el.hasAttribute("data-zh"))el.textContent=el.getAttribute("data-zh");
     });
     document.querySelectorAll("[data-i18n-html]").forEach(function(el){
-      var k=el.getAttribute("data-i18n-html");
+      var k=el.getAttribute("data-i18n-html").replace(/#html$/,"");
       if(en){if(!el.hasAttribute("data-zh-html"))el.setAttribute("data-zh-html",el.innerHTML);if(DICT[k]!=null)el.innerHTML=DICT[k];}
       else if(el.hasAttribute("data-zh-html"))el.innerHTML=el.getAttribute("data-zh-html");
+    });
+    PH.forEach(function(p){
+      var el=document.querySelector(p[0]);if(!el)return;
+      if(en){if(!el.hasAttribute("data-zh-ph"))el.setAttribute("data-zh-ph",el.getAttribute("placeholder")||"");el.setAttribute("placeholder",p[1]);}
+      else if(el.hasAttribute("data-zh-ph"))el.setAttribute("placeholder",el.getAttribute("data-zh-ph"));
+    });
+    /* 動態標籤（案例卡片小字、花色名）：data-tr 存中文原文，依語言重譯 */
+    document.querySelectorAll("[data-tr]").forEach(function(el){
+      var zh=el.getAttribute("data-tr");
+      el.textContent=en?window.EGRRA_TR(zh):zh;
     });
     if(btn)btn.textContent=en?"中文":"EN";
     if(window.__matRender)window.__matRender();
     try{localStorage.setItem("egrra_lang",lang);}catch(e){}
+    try{window.dispatchEvent(new CustomEvent("egrra:lang",{detail:{lang:lang}}));}catch(e){}
   }
   if(btn)btn.addEventListener("click",function(){apply(document.documentElement.getAttribute("data-lang")==="en"?"zh":"en");});
   var saved="zh";try{saved=localStorage.getItem("egrra_lang")||"zh";}catch(e){}

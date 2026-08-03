@@ -29,6 +29,7 @@
   background:#f4f2ee;cursor:zoom-in;position:relative;aspect-ratio:1/1.32}
 .cert-doc img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
   -webkit-user-select:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+html[data-lang="en"] .cert-doc::after{content:"Click to enlarge"}
 .cert-doc::after{content:"點擊放大檢視";position:absolute;left:0;right:0;bottom:0;padding:8px;
   font-size:12px;letter-spacing:.05em;color:#fff;text-align:center;
   background:linear-gradient(transparent,rgba(20,17,13,.72))}
@@ -70,6 +71,7 @@
       <a href="cases.html">實績案例</a>
       <a href="certifications.html" class="on">認證</a>
       <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
     <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
   </div>
@@ -177,6 +179,48 @@
 
 <script src="site-data.js"></script>
 <script src="/api/published"></script><!-- 後台發布內容（Blob）覆蓋，無/失敗沿用預設 -->
+<script src="i18n-sub.js"></script>
+<script>
+/* 本頁英文字典（靜態文字；含 <strong> 的段落用 #html 鍵） */
+EGRRA_I18N.init({
+  dict:{
+    "ct.h1":"Certifications & Standards",
+    "ct.p":"EGRRA panels are more than beautiful — they pass rigorous fire and safety testing. Below are our certifications, patents and material properties.",
+    "ct.t1":"Fire","ct.t2":"SGS","ct.t3":"Green","ct.t4":"Weather","ct.t5":"Patent","ct.t6":"Patent","ct.t7":"Structure",
+    "ct.h31":"Class-1 Fire Rating",
+    "ct.p1":"Certified to <strong>Class-1 — the highest fire-resistance level</strong> in Taiwan's fire code. Also applied to fire doors, hydrant boxes and other fire equipment.",
+    "ct.h32":"SGS Antibacterial",
+    "ct.p2":"Passed the <strong>SGS antibacterial test</strong> (JIS Z2801) — inhibits bacterial growth for hotels, healthcare and public spaces.",
+    "ct.h33":"Formaldehyde-Free",
+    "ct.p3":"SGS-tested with <strong>formaldehyde emission “none detected”</strong> (ref. CNS 1349) — no harmful off-gassing, safe for homes, care and medical spaces.",
+    "ct.h34":"UV-Resistant Colour",
+    "ct.p4":"Long-lasting UV resistance for indoor and outdoor use — colours stay vivid over time.",
+    "ct.h35":"PrinTex™ Patented Technology",
+    "ct.p5":"Exclusive <strong>PrinTex™ digital texture technology</strong> reproduces natural stone in high fidelity on aluminium, glass, metal and wood.",
+    "ct.h36":"Patented Seamless Matching",
+    "ct.p6":"Exclusive pattern-matching keeps veining continuous across large wall installations — no broken seams.",
+    "ct.h37":"Lightweight 1/30",
+    "ct.p7":"About <strong>1/30 the weight of natural stone</strong> — less structural load, easier installation; ideal for curtain walls, columns and large facades.",
+    "ct.ch2":"Need full specs, certification documents or samples?",
+    "ct.cp":"We can provide fire-resistance and SGS test documents, catalogues, and physical samples for design and engineering evaluation.",
+    "ct.cb1":"LINE Chat","ct.cb2":"Request Sample / Catalog →","ct.cb3":"Call 02-2222-1199",
+    "ct.note":"* PDF copies of certifications can be attached once available."
+  },
+  sel:[
+    ["section.band h1","ct.h1"],["section.band p","ct.p"],
+    [".cert-grid .cert:nth-child(1) .tag","ct.t1"],[".cert-grid .cert:nth-child(1) h3","ct.h31"],[".cert-grid .cert:nth-child(1) p","ct.p1#html"],
+    [".cert-grid .cert:nth-child(2) .tag","ct.t2"],[".cert-grid .cert:nth-child(2) h3","ct.h32"],[".cert-grid .cert:nth-child(2) p","ct.p2#html"],
+    [".cert-grid .cert:nth-child(3) .tag","ct.t3"],[".cert-grid .cert:nth-child(3) h3","ct.h33"],[".cert-grid .cert:nth-child(3) p","ct.p3#html"],
+    [".cert-grid .cert:nth-child(4) .tag","ct.t4"],[".cert-grid .cert:nth-child(4) h3","ct.h34"],[".cert-grid .cert:nth-child(4) p","ct.p4"],
+    [".cert-grid .cert:nth-child(5) .tag","ct.t5"],[".cert-grid .cert:nth-child(5) h3","ct.h35"],[".cert-grid .cert:nth-child(5) p","ct.p5#html"],
+    [".cert-grid .cert:nth-child(6) .tag","ct.t6"],[".cert-grid .cert:nth-child(6) h3","ct.h36"],[".cert-grid .cert:nth-child(6) p","ct.p6"],
+    [".cert-grid .cert:nth-child(7) .tag","ct.t7"],[".cert-grid .cert:nth-child(7) h3","ct.h37"],[".cert-grid .cert:nth-child(7) p","ct.p7#html"],
+    [".cta-band h2","ct.ch2"],[".cta-band p","ct.cp"],
+    [".cta-band .cbtn.line","ct.cb1"],[".cta-band .cbtn.gold","ct.cb2"],[".cta-band .cbtn.ghost","ct.cb3"],
+    [".note","ct.note"]
+  ]
+});
+</script>
 <script>
 /* 套用後台的聯絡資訊（電話 / LINE） */
 (function(){
@@ -191,7 +235,7 @@
   function open(src,c){ img.src=src; cap.textContent=c||""; lb.classList.add("show"); }
   function close(){ lb.classList.remove("show"); img.src=""; }
   document.querySelectorAll(".cert-doc").forEach(function(d){
-    d.addEventListener("click",function(){ open(d.dataset.full, d.dataset.cap); });
+    d.addEventListener("click",function(){ open(d.dataset.full, (window.EGRRA_I18N?EGRRA_I18N.t(d.dataset.cap):d.dataset.cap)); });
   });
   document.getElementById("lbx").addEventListener("click",close);
   lb.addEventListener("click",function(e){ if(e.target===lb) close(); });

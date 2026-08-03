@@ -25,6 +25,7 @@
       <a href="cases.html" class="on">實績案例</a>
       <a href="certifications.html">認證</a>
       <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
     <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
   </div>
@@ -78,6 +79,23 @@
 <script src="site-data.js"></script>
 <script src="/api/published"></script><!-- 後台發布內容（Blob）覆蓋，無/失敗沿用預設 -->
 <script src="textures.js"></script>
+<script src="i18n-sub.js"></script>
+<script>
+/* 本頁英文字典（靜態文字） */
+EGRRA_I18N.init({
+  dict:{
+    "cs.h1":"Projects",
+    "cs.p":"Built spaces across Taiwan — residential corridors, lobby feature walls, fire doors and hydrant-box refinement. Browse by category and region.",
+    "cs.f1":"Category","cs.f2":"Region",
+    "cs.cta":"Discuss a similar project →"
+  },
+  sel:[
+    ["section.band h1","cs.h1"],["section.band p","cs.p"],
+    [".frow:nth-child(1) .lbl","cs.f1"],[".frow:nth-child(2) .lbl","cs.f2"],
+    [".mcta","cs.cta"]
+  ]
+});
+</script>
 <script>
 (function(){
   var T=window.EGRRA_TEX;
@@ -97,10 +115,13 @@
   /* 該案場的所有照片：有 imgs 用 imgs，否則只有封面 */
   function shots(c){return (c&&c.imgs&&c.imgs.length)?c.imgs.slice():(c&&c.img?[c.img]:[]);}
 
+  /* 中英切換：動態字串經 I 翻譯（zh 模式原樣傳回） */
+  var I=window.EGRRA_I18N||{t:function(s){return s;},en:function(){return false;}};
+
   function chips(host,items,cur,onPick){
     host.innerHTML="";
     items.forEach(function(it){
-      var b=document.createElement("button");b.className="fchip"+(it===cur?" on":"");b.textContent=it;
+      var b=document.createElement("button");b.className="fchip"+(it===cur?" on":"");b.textContent=I.t(it);
       b.addEventListener("click",function(){onPick(it);});host.appendChild(b);
     });
   }
@@ -117,13 +138,13 @@
     renderChips();
     var grid=document.getElementById("grid");grid.innerHTML="";
     var list=CASES.filter(match);
-    document.getElementById("count").textContent="共 "+list.length+" 件";
-    if(!list.length){grid.innerHTML='<div class="noresult">找不到符合的案例，換個條件看看 🙂</div>';return;}
+    document.getElementById("count").textContent=I.en()?(list.length+" projects"):("共 "+list.length+" 件");
+    if(!list.length){grid.innerHTML='<div class="noresult">'+(I.en()?"No projects match — try different filters 🙂":"找不到符合的案例，換個條件看看 🙂")+'</div>';return;}
     list.forEach(function(c){
       var card=document.createElement("div");card.className="card";
-      var sub=[c.region,c.year].filter(Boolean).map(esc).join(' ・ ');
-      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(c.category||"")+'</span></div>'+
-                     '<div class="cap"><h3>'+esc(c.title||"實績案例")+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
+      var sub=[I.t(c.region),c.year].filter(Boolean).map(esc).join(' ・ ');
+      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(I.t(c.category||""))+'</span></div>'+
+                     '<div class="cap"><h3>'+esc(c.title||I.t("實績案例"))+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
       card.querySelector(".th").style.backgroundImage=bgTh(c);
       card.addEventListener("click",function(){openModal(c);});
       grid.appendChild(card);
@@ -159,12 +180,14 @@
       });
     }
     if(gal.length)paintShot();
-    document.getElementById("m-cat").textContent=c.category||"實績案例";
-    document.getElementById("m-title").textContent=(c.title||"實績案例");
-    document.getElementById("m-desc").textContent=c.desc||"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。";
+    document.getElementById("m-cat").textContent=I.t(c.category||"實績案例");
+    document.getElementById("m-title").textContent=(c.title||I.t("實績案例"));
+    document.getElementById("m-desc").textContent=c.desc||(I.en()
+      ?"Finished with EGRRA panels — Class-1 fire-rated, combining fire safety with design quality. Actual materials and dimensions per site conditions."
+      :"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。");
     document.getElementById("m-spec").innerHTML=
-      row("地區",c.region||"—")+row("類別",c.category||"—")+row("年份",c.year||"—")+
-      (gal.length>1?row("照片",gal.length+" 張"):"");
+      row(I.t("地區"),I.t(c.region)||"—")+row(I.t("類別"),I.t(c.category)||"—")+row(I.t("年份"),c.year||"—")+
+      (gal.length>1?row(I.t("照片"),I.en()?String(gal.length):(gal.length+" 張")):"");
     ov.classList.add("show");
   }
   function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+esc(v)+'</span></div>';}
@@ -180,6 +203,7 @@
     else if(e.key==="ArrowRight")stepShot(1);
   });
 
+  window.__redraw=render;   /* 語言切換時由 i18n 呼叫重繪 */
   render();
 })();
 </script>

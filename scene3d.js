@@ -325,18 +325,36 @@ function init() {
     b.addEventListener("click", () => fn(b)); host.appendChild(b); return b;
   }
   function solo(host, b) { [].forEach.call(host.children, c => c.classList.remove("on")); b.classList.add("on"); }
-  [["L","左牆"],["R","右牆"],["E","端牆"]].forEach(w =>
-    chip(wallsEl, w[1], w3[w[0]], b => { w3[w[0]] = !w3[w[0]]; b.classList.toggle("on", w3[w[0]]); applyStone(); }));
-  SUBS.forEach(s =>
-    chip(subsEl, s[1], s[0]===st.sub, b => { st.sub = s[0]; st.subZh = s[1]; solo(subsEl, b); applyStone(); }));
-  PANELS.forEach((p, i) =>
-    chip(panelEl, p[0], i===st.panel, b => { st.panel = i; solo(panelEl, b); applyStone(); }));
-  PRODS.forEach(p =>
-    chip(pickEl, p.name, p.id===st.prod.id, b => { st.prod = p; solo(pickEl, b); applyStone(); },
-      'url("' + p.img + '")'));
+  /* 中英切換：標籤依語言重建（i18n-sub.js 切換時發出 egrra:lang 事件） */
+  const isEN = () => document.documentElement.getAttribute("data-lang") === "en";
+  const T3D = { "左牆":"Left", "右牆":"Right", "端牆":"End",
+    "鋁":"Aluminium", "玻璃":"Glass", "金屬":"Metal", "木質":"Wood",
+    "石紋系列":"Stone Series", "繡蝕系列":"Rust Series", "木紋系列":"Wood Series" };
+  const t3 = s => (isEN() && T3D[s]) ? T3D[s] : s;
+  const tPanel = s => isEN() ? s.replace("尺", " ft") : s;
+  const tName = s => (window.EGRRA_I18N ? EGRRA_I18N.pname(s) : s);
+  function buildControls() {
+    wallsEl.innerHTML = ""; subsEl.innerHTML = ""; panelEl.innerHTML = ""; pickEl.innerHTML = "";
+    [["L","左牆"],["R","右牆"],["E","端牆"]].forEach(w =>
+      chip(wallsEl, t3(w[1]), w3[w[0]], b => { w3[w[0]] = !w3[w[0]]; b.classList.toggle("on", w3[w[0]]); applyStone(); }));
+    SUBS.forEach(s =>
+      chip(subsEl, t3(s[1]), s[0]===st.sub, b => { st.sub = s[0]; st.subZh = s[1]; solo(subsEl, b); applyStone(); }));
+    PANELS.forEach((p, i) =>
+      chip(panelEl, tPanel(p[0]), i===st.panel, b => { st.panel = i; solo(panelEl, b); applyStone(); }));
+    PRODS.forEach(p =>
+      chip(pickEl, tName(p.name), p.id===st.prod.id, b => { st.prod = p; solo(pickEl, b); applyStone(); },
+        'url("' + p.img + '")'));
+  }
+  buildControls();
+  window.addEventListener("egrra:lang", () => { buildControls(); cap(); });
   function cap() {
-    capEl.innerHTML = "PrinTex™　<b>" + st.prod.name + "</b>（" + (st.prod.series || "") + "）　·　" +
-      st.subZh + "基材　·　板材 " + PANELS[st.panel][0] + "　·　3D 物理渲染";
+    if (isEN()) {
+      capEl.innerHTML = "PrinTex™　<b>" + tName(st.prod.name) + "</b> (" + t3(st.prod.series || "") + ")　·　" +
+        t3(st.subZh) + " substrate　·　Panel " + tPanel(PANELS[st.panel][0]) + "　·　Physically-based 3D";
+    } else {
+      capEl.innerHTML = "PrinTex™　<b>" + st.prod.name + "</b>（" + (st.prod.series || "") + "）　·　" +
+        st.subZh + "基材　·　板材 " + PANELS[st.panel][0] + "　·　3D 物理渲染";
+    }
   }
 
   /* ---------- 尺寸/渲染循環 ---------- */
