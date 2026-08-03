@@ -117,3 +117,17 @@ window.EGRRA_I18N = (function () {
   }
   return { init: init, t: t, pname: pname, en: en, apply: apply };
 })();
+
+/* 隱藏後台入口：3 秒內連點頁尾品牌字「煌盛興業 EGRRA」5 下 → admin.html
+   （與 index.html 頁尾版權行的暗門行為一致） */
+(function () {
+  var el = document.querySelector(".foot b");
+  if (!el) return;
+  var n = 0, t0 = 0;
+  el.addEventListener("click", function () {
+    var now = Date.now();
+    if (now - t0 > 3000) n = 0;
+    t0 = now;
+    if (++n >= 5) { n = 0; location.href = "admin.html"; }
+  });
+})();

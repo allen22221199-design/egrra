@@ -1147,6 +1147,19 @@ function openPLB(i){}
   });
 })();
 
+/* ----------  隱藏後台入口：3 秒內連點頁尾「© 年份」那行 5 下 → admin.html  ---------- */
+(function(){
+  var el=document.querySelector(".foot-bot span");
+  if(!el)return;
+  var n=0,t0=0;
+  el.addEventListener("click",function(){
+    var now=Date.now();
+    if(now-t0>3000)n=0;
+    t0=now;
+    if(++n>=5){n=0;location.href="admin.html";}
+  });
+})();
+
 /* ----------  NAV SCROLL STATE  ---------- */
 var header=document.getElementById("top");
 function onScroll(){header.classList.toggle("solid",window.scrollY>60);}
