@@ -118,16 +118,28 @@ EGRRA_I18N.init({
   /* 中英切換：動態字串經 I 翻譯（zh 模式原樣傳回） */
   var I=window.EGRRA_I18N||{t:function(s){return s;},en:function(){return false;}};
 
-  function chips(host,items,cur,onPick){
+  /* 標籤帶數量，且只顯示「在目前另一個條件下真的有案例」的選項，
+     避免出現點下去是空白的死標籤。 */
+  function chips(host,items,cur,onPick,countOf){
     host.innerHTML="";
     items.forEach(function(it){
-      var b=document.createElement("button");b.className="fchip"+(it===cur?" on":"");b.textContent=I.t(it);
+      var n=countOf?countOf(it):1;
+      if(n===0&&it!==cur&&it!=="全部")return;      /* 該條件下無案例 → 不顯示 */
+      var b=document.createElement("button");b.className="fchip"+(it===cur?" on":"");
+      b.textContent=I.t(it)+(it==="全部"?"":" ("+n+")");
       b.addEventListener("click",function(){onPick(it);});host.appendChild(b);
     });
   }
   function renderChips(){
-    chips(document.getElementById("f-cat"),cats,state.cat,function(v){state.cat=v;render();});
-    chips(document.getElementById("f-city"),cities,state.city,function(v){state.city=v;render();});
+    /* 各標籤的數量，以「另一個篩選的現值」為前提計算 */
+    chips(document.getElementById("f-cat"),cats,state.cat,
+      function(v){state.cat=v;render();},
+      function(v){return CASES.filter(function(c){
+        return (v==="全部"||c.category===v) && (state.city==="全部"||cityOf(c)===state.city);}).length;});
+    chips(document.getElementById("f-city"),cities,state.city,
+      function(v){state.city=v;render();},
+      function(v){return CASES.filter(function(c){
+        return (v==="全部"||cityOf(c)===v) && (state.cat==="全部"||c.category===state.cat);}).length;});
   }
   function match(c){
     if(state.cat!=="全部"&&c.category!==state.cat)return false;
