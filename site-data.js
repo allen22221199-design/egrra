@@ -10,14 +10,17 @@ window.EGRRA_DEFAULT_DATA = {
   /* dataVersion：程式端內容版本。後台「發布上線」的快照若版本較舊，
      官網會自動忽略它、沿用這裡的新內容（避免舊快照蓋掉新資料）。
      ※ 每次在程式端改內容請往上調整這個日期時間。 */
-  dataVersion: "2026-07-31T18:00:00Z",
+  dataVersion: "2026-08-03T12:00:00Z",
 
   /* ---- 網站資訊（可在後台「網站資訊」分頁修改）---- */
   info: {
     phone: "02 . 2222 . 1199",
     phoneRaw: "0222221199",
     fax: "02 . 2228 . 6799",
-    fb: "https://www.facebook.com/Egrra.Lu",
+    fb: "https://www.facebook.com/PrinTex22221199",
+    fbName: "大理石魔術師呂哥",
+    tiktok: "https://www.tiktok.com/@marblemetal",
+    tiktok2: "https://www.tiktok.com/@lulu_11995",
     line: "https://line.me/R/ti/p/@egrra",
     lineId: "@egrra",
     heroSub: "煌盛興業 — 專為建築與設計市場打造的數位紋理品牌。從紋理開發到成品，提供全方位的裝修建材解決方案。",

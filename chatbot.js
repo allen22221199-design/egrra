@@ -25,7 +25,7 @@
   }
   var DATA=loadData(), INFO=DATA.info||{}, PRODUCTS=DATA.products||[], CASES=DATA.cases||[];
   var PHONE=INFO.phone||"02 . 2222 . 1199", FAX=INFO.fax||"02 . 2228 . 6799",
-      FBURL=INFO.fb||"https://www.facebook.com/Egrra.Lu", PHONERAW=INFO.phoneRaw||"0222221199";
+      FBURL=INFO.fb||"https://www.facebook.com/PrinTex22221199", PHONERAW=INFO.phoneRaw||"0222221199";
 
   function seriesNames(sname){
     return PRODUCTS.filter(function(p){return p.series===sname;}).map(function(p){return p.name;});
@@ -98,7 +98,7 @@
       reply:function(){return {text:"煌盛興業（EGRRA）源自「王子彩色」四十餘年的彩色印刷經驗，已累積<b>超過 46 年</b>，轉型專注於數位紋理建材，是專為建築與設計市場打造的品牌，提供從紋理開發到成品的全方位解決方案。",chips:["核心技術","有哪些花色"]};} },
 
     { id:"contact", keys:["聯絡","連絡","電話","怎麼找","地址","在哪","傳真","fb","facebook","臉書","line","客服","怎麼買","購買","哪裡買","門市","據點"],
-      reply:function(){return {text:"歡迎與我們聯繫：<br>📞 電話：<a href='tel:"+PHONERAW+"'><b>"+PHONE+"</b></a><br>📠 傳真："+FAX+"<br>💬 Facebook：<a href='"+FBURL+"' target='_blank' rel='noopener'>@Egrra.Lu</a><br><br>也可以在網站下方的<b>洽詢表單</b>留下需求，我們會盡快回覆您！",chips:["怎麼計價","實績案例"]};} },
+      reply:function(){return {text:"歡迎與我們聯繫：<br>📞 電話：<a href='tel:"+PHONERAW+"'><b>"+PHONE+"</b></a><br>📠 傳真："+FAX+"<br>💬 Facebook：<a href='"+FBURL+"' target='_blank' rel='noopener'>大理石魔術師呂哥</a><br><br>也可以在網站下方的<b>洽詢表單</b>留下需求，我們會盡快回覆您！",chips:["怎麼計價","實績案例"]};} },
 
     { id:"thanks", keys:["謝謝","感謝","感恩","thank","3q","感激"],
       reply:function(){return {text:"不客氣，很高興為您服務 🙂 還有任何問題都可以再問我！",chips:MENU};} }

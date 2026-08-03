@@ -419,7 +419,7 @@ header.solid .burger span{background:var(--ink)}
 .ct-item small{color:var(--gold-lt);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
 .ct-item b{display:block;font-size:19px;font-weight:500;letter-spacing:.02em}
 .ct-item a b:hover{color:var(--gold-lt)}
-.ct-item.js-line .ic svg,.ct-item.js-tiktok .ic svg{stroke:none;fill:var(--gold-lt)}
+.ct-item.js-line .ic svg,.ct-item.js-tiktok .ic svg,.ct-item.js-tiktok2 .ic svg{stroke:none;fill:var(--gold-lt)}
 .ct-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .ccta{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:100px;font-size:14.5px;font-weight:500;text-decoration:none;transition:.3s}
 .ccta.line{background:#06C755;color:#fff}
@@ -868,18 +868,21 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
           <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M8 7V4h8v3M8 12h8M8 16h5"/></svg></div>
           <div><small>Fax</small><b class="js-fax">02 . 2228 . 6799</b></div>
         </div>
-        <a href="https://www.facebook.com/Egrra.Lu" target="_blank" rel="noopener" class="ct-item js-fb">
+        <a href="https://www.facebook.com/PrinTex22221199" target="_blank" rel="noopener" class="ct-item js-fb">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 00-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 011-1z"/></svg></div>
-          <div><small>Facebook</small><b>藝格板#Egrra</b></div>
+          <div><small>Facebook</small><b>大理石魔術師呂哥</b></div>
         </a>
         <a href="https://line.me/R/ti/p/@egrra" target="_blank" rel="noopener" class="ct-item js-line">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 5.6 2 10.1c0 4 3.6 7.4 8.4 8 .3.07.8.22.9.5.09.26.06.65.03.9l-.14.9c-.04.26-.2 1.03.9.56s5.96-3.5 8.13-6C21.5 12.6 22 11.4 22 10.1 22 5.6 17.5 2 12 2z"/></svg></div>
           <div><small>LINE</small><b>@egrra</b></div>
         </a>
-        <!-- TikTok：待用戶提供帳號後移除 hidden 並填入正確網址 -->
-        <a href="#" hidden target="_blank" rel="noopener" class="ct-item js-tiktok">
+        <a href="https://www.tiktok.com/@marblemetal" target="_blank" rel="noopener" class="ct-item js-tiktok">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8.6a6.6 6.6 0 0 1-3.9-1.3V15a6 6 0 1 1-6-6c.34 0 .67.03 1 .09v3.3a2.9 2.9 0 1 0 2 2.75V2.5h3a4.6 4.6 0 0 0 3.9 3.1z"/></svg></div>
-          <div><small>TikTok</small><b class="js-tiktok-name"></b></div>
+          <div><small>TikTok</small><b>@marblemetal</b></div>
+        </a>
+        <a href="https://www.tiktok.com/@lulu_11995" target="_blank" rel="noopener" class="ct-item js-tiktok2">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8.6a6.6 6.6 0 0 1-3.9-1.3V15a6 6 0 1 1-6-6c.34 0 .67.03 1 .09v3.3a2.9 2.9 0 1 0 2 2.75V2.5h3a4.6 4.6 0 0 0 3.9 3.1z"/></svg></div>
+          <div><small>TikTok</small><b>@lulu_11995</b></div>
         </a>
       </div>
       <div class="ct-cta">
@@ -927,7 +930,8 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
           <h5>聯絡</h5>
           <a href="tel:0222221199">Tel 02-2222-1199</a>
           <a href="#">Fax 02-2228-6799</a>
-          <a href="https://www.facebook.com/Egrra.Lu" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.facebook.com/PrinTex22221199" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.tiktok.com/@marblemetal" target="_blank" rel="noopener">TikTok</a>
         </div>
       </div>
     </div>
@@ -995,6 +999,9 @@ if(HAS_OVERRIDE && DATA.info){
     setTx('.js-phone',i.phone);setTx('.js-fax',i.fax);
     if(i.phoneRaw)document.querySelectorAll('.js-phone-link').forEach(function(el){el.setAttribute('href','tel:'+i.phoneRaw);});
     if(i.fb)document.querySelectorAll('.js-fb').forEach(function(el){el.setAttribute('href',i.fb);});
+    if(i.fbName)document.querySelectorAll('.js-fb b').forEach(function(el){el.textContent=i.fbName;});
+    if(i.tiktok)document.querySelectorAll('.js-tiktok').forEach(function(el){el.setAttribute('href',i.tiktok);});
+    if(i.tiktok2)document.querySelectorAll('.js-tiktok2').forEach(function(el){el.setAttribute('href',i.tiktok2);});
   })(DATA.info);
 }
 /* LINE 連結一律套用 site-data（改 info.line 即全站更新）*/
