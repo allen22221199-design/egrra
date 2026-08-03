@@ -318,6 +318,19 @@ header.solid .burger span{background:var(--ink)}
 .sw:hover .fill{transform:scale(1.1)}
 .sw .nm{position:absolute;inset:auto 0 0;padding:14px 12px 12px;background:linear-gradient(transparent,rgba(0,0,0,.7));
   color:#fff;font-size:13.5px;font-weight:500;z-index:2;letter-spacing:.03em}
+/* 精選花色：點擊放大燈箱（與花色庫一致的體驗） */
+.sw::after{content:"⤢";position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;
+  background:rgba(15,12,9,.55);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.8);transition:.25s var(--ease);z-index:3;pointer-events:none}
+.sw:hover::after{opacity:1;transform:scale(1)}
+.swlx{position:fixed;inset:0;background:rgba(12,10,7,.94);backdrop-filter:blur(4px);z-index:999;
+  display:none;align-items:center;justify-content:center;padding:28px}
+.swlx.show{display:flex}
+.swlx .im{width:min(94vw,1200px);height:min(86vh,1200px);background-size:contain;background-repeat:no-repeat;background-position:center}
+.swlx .x{position:absolute;top:20px;right:24px;width:44px;height:44px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.14);color:#fff;font-size:22px;cursor:pointer;line-height:1;transition:.2s}
+.swlx .x:hover{background:rgba(255,255,255,.28)}
+.swlx .cap{position:absolute;bottom:24px;left:0;right:0;text-align:center;color:rgba(255,255,255,.85);font-size:13.5px;letter-spacing:.08em}
 .spec-bar{display:flex;flex-wrap:wrap;gap:14px 40px;margin-top:44px;padding-top:34px;border-top:1px solid rgba(255,255,255,.12)}
 .spec-bar div{font-size:14.5px;color:rgba(255,255,255,.8)}
 .spec-bar b{color:var(--gold-lt);font-family:var(--serif);letter-spacing:.05em;margin-right:10px;font-weight:600}
@@ -786,6 +799,13 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   </div>
 </section>
 
+<!-- 精選花色放大燈箱：點色卡看整張紋理 -->
+<div class="swlx" id="swlx">
+  <button class="x" id="swlxX" aria-label="關閉">&times;</button>
+  <div class="im" id="swlxIm"></div>
+  <div class="cap" id="swlxCap"></div>
+</div>
+
 <!-- 案例放大燈箱：點案例圖看細節 -->
 <div class="plb" id="plb" oncontextmenu="return false">
   <span class="count" id="plbCount"></span>
@@ -989,8 +1009,26 @@ swatches.forEach(function(s,i){
   var f=d.querySelector(".fill");
   f.style.backgroundImage=s.img?("url('"+s.img+"')"):tex(s.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
+  d.addEventListener("click",function(){openSwlx(s);});
   sw.appendChild(d);
 });
+
+/* ----------  精選花色燈箱：點色卡放大看整張紋理  ---------- */
+var swlx=document.getElementById("swlx");
+function openSwlx(s){
+  if(!swlx)return;
+  var TR=window.EGRRA_TR||function(x){return x;};
+  document.getElementById("swlxIm").style.backgroundImage=s.img?("url('"+s.img+"')"):tex(s.stone);
+  document.getElementById("swlxCap").textContent=TR(s.name||"")+(s.series?"　·　"+TR(s.series):"");
+  swlx.classList.add("show");document.body.style.overflow="hidden";
+}
+(function(){
+  if(!swlx)return;
+  function close(){swlx.classList.remove("show");document.body.style.overflow="";}
+  document.getElementById("swlxX").addEventListener("click",close);
+  swlx.addEventListener("click",function(e){if(e.target===swlx)close();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&swlx.classList.contains("show"))close();});
+})();
 
 /* ----------  合作建商跑馬燈  ----------
    名單重複兩份，配合 translateX(-50%)→0 的動畫達成無縫循環 */
@@ -1436,7 +1474,8 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
   /* 動態標籤翻譯（案例分類 / 地區 / 花色名稱）—— data-tr 元素在切換時重譯 */
   var CAT={"空間美化":"Interior","防火門":"Fire Door","消防箱":"Hydrant Box","檢修門":"Access Panel",
     "牆面美化":"Feature Wall","天花板":"Ceiling","電視牆":"TV Wall","長照空間":"Care Facility",
-    "牆面":"Wall","全棟廊道":"Corridor","防火消防美化":"Fire Equipment","豪宅客製":"Luxury Custom","其他":"Other"};
+    "牆面":"Wall","全棟廊道":"Corridor","防火消防美化":"Fire Equipment","豪宅客製":"Luxury Custom","其他":"Other",
+    "石紋系列":"Stone Series","繡蝕系列":"Rust Series","木紋系列":"Wood Series"};
   var CITY={"台北":"Taipei","新北":"New Taipei","台中":"Taichung","新竹":"Hsinchu","宜蘭":"Yilan","高雄":"Kaohsiung","桃園":"Taoyuan","台南":"Tainan"};
   var PNAME={"卡拉拉":"Carrara","雅仕白":"Elegant White","白玉蘭":"White Magnolia","雪白細紋":"Snow White Fine-Vein",
     "帝寶米黃":"Imperial Beige","加里奧金":"Galio Gold","琥珀":"Amber","聖羅蘭黑":"Laurent Black","紫丁黑":"Lilac Black",
