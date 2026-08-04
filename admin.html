@@ -285,12 +285,19 @@ function loadData(){
   if(!d)d=clone(window.EGRRA_DEFAULT_DATA);
   return normalize(d);
 }
-/* 補齊缺漏結構：clients 原本只有 name、沒有 id，排序與刪除需要唯一 id */
+/* 補齊缺漏結構。
+   重點：本機草稿可能是「某個區段還不存在時」存下來的（例如 clients 是後來才加的），
+   此時必須用程式端預設值補回，不能給空陣列 —— 否則使用者開後台會看到整個區段空白，
+   誤以為資料遺失。info 內後來新增的欄位（fbName / tiktok…）同理。 */
 function normalize(d){
-  if(!d.info)d.info={};
-  if(!Array.isArray(d.products))d.products=[];
-  if(!Array.isArray(d.cases))d.cases=[];
-  if(!Array.isArray(d.clients))d.clients=[];
+  var def=window.EGRRA_DEFAULT_DATA||{};
+  if(!d.info||typeof d.info!=="object")d.info={};
+  ["products","cases","clients"].forEach(function(k){
+    if(!Array.isArray(d[k]))d[k]=clone(def[k]||[]);
+  });
+  Object.keys(def.info||{}).forEach(function(k){
+    if(d.info[k]===undefined)d.info[k]=def.info[k];
+  });
   d.clients.forEach(function(c,i){ if(!c.id)c.id="cl"+i+"_"+(c.name||"").slice(0,6); });
   d.products.forEach(function(p,i){ if(!p.id)p.id="p"+i; });
   d.cases.forEach(function(c,i){ if(!c.id)c.id="c"+i; });
