@@ -231,8 +231,20 @@ var TEX={};for(var k in STONES){TEX[k]=stoneSVG(STONES[k]);}
 function tex(key){return TEX[key]||TEX.carrara;}
 
 var STONE_OPTS=[["carrara","白 / 大理石紋"],["beige","米黃"],["gold","金"],["amber","琥珀棕"],["silver","銀 / 淺灰"],["grey","灰"],["darkgrey","深灰"],["black","黑"],["purple","紫黑"],["rust","鏽蝕"],["wood","木紋"]];
-var SERIES_OPTS=["石紋系列","繡蝕系列","木紋系列","消防箱","防火門"];
-var CAT_OPTS=["全棟廊道","防火消防美化","防火門","消防箱","牆面","天花板","豪宅客製","其他"];
+/* 系列 / 類別選項一律從「現有資料實際使用的值」動態產生，
+   避免寫死的清單與網站脫節（舊版寫死時，編輯既有項目會因下拉找不到對應值
+   而自動跳到第一項，一存檔就把分類改壞）。 */
+function optsFrom(arr,key,fallback){
+  var seen={},out=[];
+  (arr||[]).forEach(function(x){
+    var v=x&&x[key];
+    if(v&&!seen[v]){seen[v]=1;out.push(v);}
+  });
+  (fallback||[]).forEach(function(v){if(!seen[v]){seen[v]=1;out.push(v);}});
+  return out;
+}
+function seriesOpts(){return optsFrom(DATA.products,"series",["石紋系列","繡蝕系列","木紋系列"]);}
+function catOpts(){return optsFrom(DATA.cases,"category",["全棟廊道","防火門","牆面・天花","消防箱・檢修門"]);}
 
 /* ============ 狀態 ============ */
 var LS_KEY="egrra_data";
@@ -427,7 +439,7 @@ function openEditor(type,id){
   if(type==="products"){
     body.innerHTML='<div class="form-grid">'+
       '<div class="f"><label>花色名稱</label><input id="e-name" value="'+esc(it.name||"")+'"/></div>'+
-      selField("e-series","系列",SERIES_OPTS,it.series||"石紋系列")+
+      selField("e-series","系列",seriesOpts(),it.series||"石紋系列")+
       selField("e-stone","材質底色 <span>(無照片時的示意圖)</span>",STONE_OPTS,it.stone||"carrara")+
       '<div class="f"><label>尺寸</label><input id="e-sizes" value="'+esc(it.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺")+'"/></div>'+
       '<div class="f full"><label>表面處理</label><input id="e-finish" value="'+esc(it.finish||"立體紋路・霧光・平光・消光")+'"/></div>'+
@@ -438,7 +450,7 @@ function openEditor(type,id){
     body.innerHTML='<div class="form-grid">'+
       '<div class="f"><label>地區</label><input id="e-region" placeholder="例：台北大安" value="'+esc(it.region||"")+'"/></div>'+
       '<div class="f"><label>案名 / 說明</label><input id="e-title" placeholder="例：全棟廊道美化" value="'+esc(it.title||"")+'"/></div>'+
-      selField("e-cat","類別",CAT_OPTS,it.category||"全棟廊道")+
+      selField("e-cat","類別",catOpts(),it.category||catOpts()[0])+
       selField("e-stone","材質底色 <span>(無照片時的示意圖)</span>",STONE_OPTS,it.stone||"carrara")+
       '<div class="f"><label>年份 <span>(選填)</span></label><input id="e-year" placeholder="例：2025" value="'+esc(it.year||"")+'"/></div>'+
       imgField(it.img)+
@@ -448,6 +460,10 @@ function openEditor(type,id){
   document.getElementById("overlay").classList.add("show");
 }
 function selField(id,label,opts,cur){
+  /* 防呆：若目前值不在選項內，補進清單並選取它。
+     否則瀏覽器會自動顯示第一個選項，使用者一存檔就把原值改掉（無聲的資料毀損）。 */
+  var vals=opts.map(function(x){return Array.isArray(x)?x[0]:x;});
+  if(cur&&vals.indexOf(cur)<0)opts=opts.concat([cur]);
   var o=opts.map(function(x){var v=Array.isArray(x)?x[0]:x,t=Array.isArray(x)?x[1]:x;
     return '<option value="'+esc(v)+'"'+(v===cur?" selected":"")+'>'+esc(t)+'</option>';}).join("");
   return '<div class="f"><label>'+label+'</label><select id="'+id+'">'+o+'</select></div>';

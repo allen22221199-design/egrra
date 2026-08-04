@@ -35,6 +35,13 @@ export default async function handler(req, res) {
     if (!data || !data.info || !Array.isArray(data.products) || !Array.isArray(data.cases))
       return res.status(400).json({ error: "bad_data", detail: "資料格式不正確（需含 info / products / cases）" });
 
+    /* 版本戳章：一律以「發布當下時間」覆寫 dataVersion。
+       後台送來的版本是它載入時程式端的版本；若沿用，日後只要程式端
+       更新並提高 dataVersion，/api/published 的版本守門就會判定此快照
+       較舊而整份忽略，使用者發布的內容會無聲消失。蓋上當下時間即可
+       確保剛發布的內容永遠不比程式端舊。 */
+    data.dataVersion = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+
     const json = JSON.stringify(data);
 
     await put(BLOB_PATH, json, {
