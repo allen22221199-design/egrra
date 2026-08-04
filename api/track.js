@@ -39,6 +39,9 @@ export default async function handler(req, res) {
       body = JSON.parse(body || "{}");
     }
     if (!body || typeof body !== "object") return res.status(200).json({ ok: false });
+    /* Vercel 會自動把 JSON 解析成物件，字串長度檢查在那條路徑上不會執行，
+       因此這裡對已解析的物件再量一次，避免防護形同虛設。 */
+    if (JSON.stringify(body).length > MAX_BODY) return res.status(200).json({ ok: false });
 
     const sid = clean(body.sid, 40);
     if (!sid) return res.status(200).json({ ok: false });

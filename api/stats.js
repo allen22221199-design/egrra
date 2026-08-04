@@ -8,7 +8,7 @@
    用法：POST { password, days }   days = 追溯天數（預設 14，上限 90）
    ========================================================================= */
 
-import { list, put } from "@vercel/blob";
+import { list, put, del } from "@vercel/blob";
 
 function twDate(d = new Date()) {
   const tw = new Date(d.getTime() + 8 * 3600 * 1000);
@@ -38,6 +38,7 @@ function mergeInto(t, d) {
 async function aggregateDay(date) {
   const agg = emptyDay(date);
   const seen = new Set();
+  const urls = [];                 /* 壓縮後要清除的原始檔 */
   let cursor;
   do {
     const out = await list({ prefix: `stats/${date}/`, limit: 1000, cursor });
@@ -47,11 +48,13 @@ async function aggregateDay(date) {
         if (!r || !r.sid) continue;
         addTo(agg, r);
         seen.add(r.sid);
+        urls.push(b.url);
       } catch (e) { /* 單筆壞掉不影響整體 */ }
     }
     cursor = out.hasMore ? out.cursor : null;
   } while (cursor);
   agg.sessions = seen.size;
+  agg._raw = urls;
   return agg;
 }
 
@@ -94,13 +97,21 @@ export default async function handler(req, res) {
       } else {
         day = await aggregateDay(d);
         if (d !== today && day.views > 0) {    /* 過完的日子壓縮存檔，之後免重算 */
+          const raw = day._raw || [];
+          delete day._raw;
           try {
             await put(`stats/daily/${d}.json`, JSON.stringify(day), {
               access: "public", addRandomSuffix: false, allowOverwrite: true,
               contentType: "application/json; charset=utf-8", cacheControlMaxAge: 3600,
             });
+            /* 壓縮成功才刪原始 session 檔，否則資料會憑空消失。
+               不清的話每位訪客每頁都留一個小檔，長期會無限累積。 */
+            for (let j = 0; j < raw.length; j += 100) {
+              try { await del(raw.slice(j, j + 100)); } catch (e) {}
+            }
           } catch (e) {}
         }
+        delete day._raw;
       }
       series.push({ date: d, sessions: day.sessions, views: day.views });
       mergeInto(total, day);
