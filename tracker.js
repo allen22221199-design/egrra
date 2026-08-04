@@ -11,11 +11,29 @@
    ========================================================================= */
 (function () {
   "use strict";
-  if (navigator.doNotTrack === "1" || window.doNotTrack === "1") return;
-  if (/admin\.html/i.test(location.pathname)) return;          /* 後台不計入 */
-
   var ENDPOINT = "/api/track";
   var KEY = "egrra_sid";
+  var OPTOUT = "egrra_no_track";      /* 內部人員標記，存 localStorage → 永久有效 */
+
+  /* ---------- 內部人員排除 ----------
+     網址加 ?notrack=1 會在這台瀏覽器打上永久標記，之後所有瀏覽都不列入統計；
+     ?notrack=0 可解除。開過後台的瀏覽器也會自動標記（自己人不會算進數據）。 */
+  function optedOut() {
+    try { return localStorage.getItem(OPTOUT) === "1"; } catch (e) { return false; }
+  }
+  try {
+    var q = location.search;
+    if (/[?&]notrack=1/.test(q)) { localStorage.setItem(OPTOUT, "1"); }
+    else if (/[?&]notrack=0/.test(q)) { localStorage.removeItem(OPTOUT); }
+  } catch (e) {}
+
+  if (/admin\.html/i.test(location.pathname)) {
+    /* 開過後台＝自己人：直接標記，之後逛官網也不計入 */
+    try { localStorage.setItem(OPTOUT, "1"); } catch (e) {}
+    return;
+  }
+  if (optedOut()) return;
+  if (navigator.doNotTrack === "1" || window.doNotTrack === "1") return;
 
   function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);

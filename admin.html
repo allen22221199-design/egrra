@@ -803,13 +803,51 @@ function renderStats(){
       '<select id="st-days">'+[7,14,30,60,90].map(function(d){
         return '<option value="'+d+'"'+(d===statsDays?" selected":"")+'>最近 '+d+' 天</option>';}).join("")+'</select>'+
       '<button class="btn" id="st-reload">重新整理</button>'+
+      '<button class="btn danger" id="st-reset">清除所有統計</button>'+
       '<span class="stnote" id="st-range"></span>'+
     '</div>'+
+    '<div class="notice" style="margin-bottom:14px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
+      '<div><b>你這台瀏覽器'+(isOptedOut()?'<span style="color:var(--ok)">不會</span>':'<span style="color:var(--danger)">會</span>')+'被計入統計。</b> '+
+      (isOptedOut()?'開過後台的瀏覽器會自動排除，你自己逛官網不影響數據。'
+                   :'請按右邊按鈕排除自己，否則你的瀏覽會混進數據裡。')+
+      ' <button class="btn sm" id="st-optout" style="margin-left:8px">'+(isOptedOut()?'恢復計入':'排除我這台')+'</button>'+
+      '<div style="margin-top:8px;color:var(--faint);font-size:12.5px">其他同事：請他們用網址加上 '+
+      '<code style="background:var(--line2);padding:2px 6px;border-radius:5px">?notrack=1</code> 開一次官網即可永久排除。</div></div></div>'+
     '<div id="st-body"><div class="stnote">載入中…</div></div>';
   document.getElementById("st-days").addEventListener("change",function(){
     statsDays=parseInt(this.value,10);statsCache=null;loadStats();});
   document.getElementById("st-reload").addEventListener("click",function(){statsCache=null;loadStats();});
+  document.getElementById("st-optout").addEventListener("click",function(){
+    try{
+      if(isOptedOut()){localStorage.removeItem("egrra_no_track");toast("已恢復計入（不建議）","ok");}
+      else{localStorage.setItem("egrra_no_track","1");toast("已排除這台瀏覽器","ok");}
+    }catch(e){}
+    render();
+  });
+  document.getElementById("st-reset").addEventListener("click",resetStats);
   if(statsCache)paintStats(statsCache); else loadStats();
+}
+function isOptedOut(){
+  try{ return localStorage.getItem("egrra_no_track")==="1"; }catch(e){ return false; }
+}
+function resetStats(){
+  if(!confirm("確定清除全部統計資料？\n\n這會刪掉目前累積的所有瀏覽與互動紀錄（含測試數據），無法復原。\n適合在正式對外前歸零一次。"))return;
+  var pw=sessionStorage.getItem("egrra_pw")||"";
+  if(!pw){ pw=prompt("請輸入發布密碼："); if(!pw)return; }
+  var btn=document.getElementById("st-reset");
+  if(btn){btn.disabled=true;btn.textContent="清除中…";}
+  fetch("/api/stats",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({password:pw,reset:true})})
+    .then(function(r){return r.json().catch(function(){return null;});})
+    .then(function(j){
+      if(btn){btn.disabled=false;btn.textContent="清除所有統計";}
+      if(j&&j.ok){ sessionStorage.setItem("egrra_pw",pw);
+        toast("已清除 "+(j.removed||0)+" 筆紀錄，統計歸零","ok");
+        statsCache=null;loadStats();
+      } else if(j&&j.error==="bad_password"){ sessionStorage.removeItem("egrra_pw"); toast("密碼錯誤","err"); }
+      else toast("清除失敗","err");
+    })
+    .catch(function(){ if(btn){btn.disabled=false;btn.textContent="清除所有統計";} toast("連不到後端","err"); });
 }
 function loadStats(){
   var box=document.getElementById("st-body");
@@ -943,6 +981,9 @@ function downloadBlob(blob,name){
 
 /* 離開前提醒 */
 window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
+
+/* 開過後台＝自己人：標記這台瀏覽器，之後瀏覽官網一律不列入統計 */
+try{ localStorage.setItem("egrra_no_track","1"); }catch(e){}
 
 /* 啟動 */
 (function(){var h=location.hash;if(h==="#products")tab="products";else if(h==="#cases")tab="cases";

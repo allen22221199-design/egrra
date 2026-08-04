@@ -74,6 +74,20 @@ export default async function handler(req, res) {
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
     if ((body.password || "") !== ADMIN) return res.status(401).json({ error: "bad_password" });
 
+    /* ---- 清除所有統計資料（測試期間的數據不留） ---- */
+    if (body.reset === true) {
+      let removed = 0, cursor;
+      do {
+        const out = await list({ prefix: "stats/", limit: 1000, cursor });
+        const urls = out.blobs.map((b) => b.url);
+        for (let j = 0; j < urls.length; j += 100) {
+          try { await del(urls.slice(j, j + 100)); removed += urls.slice(j, j + 100).length; } catch (e) {}
+        }
+        cursor = out.hasMore ? out.cursor : null;
+      } while (cursor);
+      return res.status(200).json({ ok: true, reset: true, removed });
+    }
+
     const days = Math.max(1, Math.min(parseInt(body.days, 10) || 14, 90));
     const today = twDate();
 
