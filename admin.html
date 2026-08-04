@@ -188,6 +188,32 @@ a{color:inherit}
 .sthead select{border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:inherit;font-size:13.5px;color:var(--ink)}
 .stnote{color:var(--faint);font-size:12.5px;margin-top:14px;line-height:1.7}
 @media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.stgrid{grid-template-columns:1fr}}
+/* ---- 新手指引 ---- */
+.helpbtn{border:1px solid var(--gold);background:rgba(176,141,87,.1);color:var(--gold-dk);
+  padding:9px 14px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:7px;transition:.2s}
+.helpbtn:hover{background:var(--gold);color:#fff}
+.helpbtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+#tourMask{position:fixed;inset:0;z-index:900;display:none}
+#tourMask.on{display:block}
+/* 四塊遮罩圍出「挖空」的高亮區，中間不擋點擊 */
+#tourMask .sh{position:fixed;background:rgba(14,16,22,.62);transition:all .28s cubic-bezier(.22,.61,.36,1)}
+#tourRing{position:fixed;border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 0 4px rgba(176,141,87,.28);
+  pointer-events:none;transition:all .28s cubic-bezier(.22,.61,.36,1);z-index:902}
+#tourPop{position:fixed;z-index:903;width:340px;max-width:calc(100vw - 32px);background:#fff;border-radius:14px;
+  box-shadow:0 24px 60px -12px rgba(15,18,28,.4);padding:20px 22px;transition:all .28s cubic-bezier(.22,.61,.36,1)}
+#tourPop .step{font-size:11.5px;letter-spacing:.14em;color:var(--gold-dk);font-weight:700;margin-bottom:8px}
+#tourPop h4{font-size:16.5px;margin-bottom:8px;color:var(--ink)}
+#tourPop p{font-size:13.5px;color:var(--muted);line-height:1.75}
+#tourPop .tip{margin-top:10px;background:#fdf9f2;border-left:3px solid var(--gold-lt);
+  padding:9px 12px;border-radius:0 8px 8px 0;font-size:12.5px;color:var(--ink);line-height:1.7}
+#tourPop .row{display:flex;align-items:center;gap:8px;margin-top:16px}
+#tourPop .dots{display:flex;gap:5px;margin-right:auto}
+#tourPop .dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:.2s}
+#tourPop .dots i.on{background:var(--gold);width:18px;border-radius:20px}
+#tourPop .skip{background:none;border:none;color:var(--faint);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:4px;white-space:nowrap;flex:0 0 auto}
+#tourPop .row .btn{white-space:nowrap;flex:0 0 auto}
 .empty svg{width:44px;height:44px;stroke:currentColor;fill:none;stroke-width:1.4;margin-bottom:12px;opacity:.6}
 
 @media(max-width:820px){
@@ -230,6 +256,7 @@ a{color:inherit}
     <div class="topbar">
       <h1 id="ptitle">網站資訊</h1>
       <div class="savestate" id="savestate"><span class="dot"></span><span id="savetext">已儲存</span></div>
+      <button class="helpbtn" id="btn-help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3 2.5v1.5"/><path d="M12 17h.01"/></svg>新手指引</button>
       <button class="btn" id="btn-preview"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>預覽官網</button>
       <button class="btn" id="btn-import"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5M5 21h14"/></svg>匯入備份</button>
       <button class="btn" id="btn-export"><svg viewBox="0 0 24 24"><path d="M12 16V3M7 8l5-5 5 5M5 21h14"/></svg>匯出備份</button>
@@ -253,6 +280,25 @@ a{color:inherit}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 新手指引：四塊遮罩圍出高亮區 + 說明卡 -->
+<div id="tourMask">
+  <div class="sh" id="sh-t"></div><div class="sh" id="sh-b"></div>
+  <div class="sh" id="sh-l"></div><div class="sh" id="sh-r"></div>
+</div>
+<div id="tourRing" style="display:none"></div>
+<div id="tourPop" style="display:none">
+  <div class="step" id="tourStep"></div>
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div id="tourTip"></div>
+  <div class="row">
+    <span class="dots" id="tourDots"></span>
+    <button class="skip" id="tourSkip">略過</button>
+    <button class="btn sm" id="tourPrev">上一步</button>
+    <button class="btn sm gold" id="tourNext">下一步</button>
+  </div>
+</div>
 <input type="file" id="importFile" accept=".json,application/json" style="display:none" />
 
 <script src="site-data.js"></script>
@@ -825,7 +871,9 @@ function renderStats(){
     render();
   });
   document.getElementById("st-reset").addEventListener("click",resetStats);
-  if(statsCache)paintStats(statsCache); else loadStats();
+  /* 首次進入不主動跳密碼視窗；已存過密碼則直接載入 */
+  if(statsCache)paintStats(statsCache);
+  else loadStats(!sessionStorage.getItem("egrra_pw"));
 }
 function isOptedOut(){
   try{ return localStorage.getItem("egrra_no_track")==="1"; }catch(e){ return false; }
@@ -849,11 +897,19 @@ function resetStats(){
     })
     .catch(function(){ if(btn){btn.disabled=false;btn.textContent="清除所有統計";} toast("連不到後端","err"); });
 }
-function loadStats(){
+function loadStats(silent){
   var box=document.getElementById("st-body");
   if(!box)return;
   var pw=sessionStorage.getItem("egrra_pw")||"";
   if(!pw){
+    /* 導覽進行中不要跳密碼視窗攔住使用者，改顯示按鈕讓他自己決定何時輸入 */
+    if(silent||document.getElementById("tourMask").classList.contains("on")){
+      box.innerHTML='<div class="stnote">需要發布密碼才能讀取統計。'+
+        '<button class="btn sm" id="st-auth" style="margin-left:8px">輸入密碼查看</button></div>';
+      var a=document.getElementById("st-auth");
+      if(a)a.addEventListener("click",function(){loadStats(false);});
+      return;
+    }
     pw=prompt("請輸入發布密碼（與「發布上線」相同）：");
     if(!pw){box.innerHTML='<div class="stnote">未輸入密碼，無法讀取統計。</div>';return;}
   }
@@ -981,6 +1037,144 @@ function downloadBlob(blob,name){
 
 /* 離開前提醒 */
 window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
+
+/* ============ 新手指引 ============
+   聚光燈式導覽：自動切到對應分頁、把該操作的地方挖空高亮，一步步說明。 */
+var TOUR=[
+  { el:"#nav", tab:"info", title:"這裡是所有內容的分類",
+    text:"左邊五個項目就是你能改的全部內容。點哪一個，右邊就顯示哪一區的資料。",
+    tip:"最常用的是「產品花色」和「實績案例」。" },
+  { el:'[data-tab="info"]', tab:"info", title:"網站資訊：電話與社群",
+    text:"公司電話、傳真、Facebook、LINE、TikTok 網址都在這裡改。改了之後，官網上所有出現這些資訊的地方都會一起更新。",
+    tip:"下面還有首頁簡介與「關於煌盛」的段落文字。" },
+  { el:'[data-tab="products"]', tab:"products", title:"產品花色：新增或修改花色",
+    text:"這裡管理花色庫的 30 款花色。每一列可以「編輯」改資料、「刪除」移除，或用 ↑↓ 調整在官網上的顯示順序。",
+    tip:"右上角有搜尋框，花色多的時候直接打名字比較快。" },
+  { el:"#add", tab:"products", title:"新增一款花色",
+    text:"按這顆按鈕會跳出表單，填花色名稱、選系列、上傳照片就完成了。",
+    tip:"照片可以直接上傳，也可以填站內路徑（例如 img/tex/SCS001.jpg），填路徑比較省空間。" },
+  { el:'[data-tab="cases"]', tab:"cases", title:"實績案例：工程實績",
+    text:"59 件案例都在這裡。每件可以設定建案名稱、地區、類別、年份，還能放多張現場照片。",
+    tip:"編輯視窗裡的「相簿」可以加多張照片，訪客點案例時就能左右翻看。" },
+  { el:'[data-tab="clients"]', tab:"clients", title:"合作建商：首頁跑馬燈名單",
+    text:"這 40 家公司會顯示在首頁的跑馬燈與合作夥伴名單。直接在欄位裡打字就能改，順序就是顯示順序。",
+    tip:"新增建商後記得按下面教的「發布上線」，否則訪客看不到。" },
+  { el:'[data-tab="stats"]', tab:"stats", title:"數據統計：訪客怎麼看你的網站",
+    text:"看有多少人來、看了哪些頁、點了什麼。例如「互動事件排行」會告訴你訪客最常點開哪些花色。",
+    tip:"你自己的瀏覽不會被計入（開過後台就自動排除了）。" },
+  { el:"#savestate", tab:"info", title:"這裡會告訴你有沒有未儲存的變更",
+    text:"改了東西還沒存，這裡會變成「尚未儲存」並亮起橘燈。看到橘燈就記得存檔。",
+    tip:"沒存就關掉視窗，瀏覽器會跳出提醒攔住你。" },
+  { el:"#btn-save", tab:"info", title:"第一步：暫存(本機)",
+    text:"按這顆只會存在「你這台電腦」，官網上的訪客還看不到。適合改到一半、想先存起來的時候用。",
+    tip:"這一步不會影響線上網站，可以放心按。" },
+  { el:"#btn-preview", tab:"info", title:"第二步：預覽官網",
+    text:"按這顆會開新分頁，用你剛改的內容顯示官網，確認排版與文字都正確。",
+    tip:"這是「還沒公開」的預覽，只有你看得到。" },
+  { el:"#btn-publish", tab:"info", title:"第三步：發布上線 ★ 最重要",
+    text:"確認沒問題後按這顆、輸入密碼，約 1 分鐘後全世界的訪客都會看到新內容。沒按這顆，改再多都只有你自己看得到。",
+    tip:"順序記起來：改內容 → 暫存 → 預覽 → 發布上線。" },
+  { el:"#btn-export", tab:"info", title:"養成習慣：定期匯出備份",
+    text:"「匯出備份」會下載一個檔案，把目前所有內容存起來。萬一哪天改壞了，用「匯入備份」就能還原。",
+    tip:"建議每次大幅修改前先匯出一份，比較安心。" }
+];
+var tourI=0;
+function tourEls(){
+  return {mask:document.getElementById("tourMask"),ring:document.getElementById("tourRing"),
+          pop:document.getElementById("tourPop")};
+}
+function tourShow(i){
+  var t=TOUR[i];if(!t)return tourEnd();
+  tourI=i;
+  /* 先切到該步驟所屬分頁，元素才存在 */
+  if(t.tab&&tab!==t.tab){
+    tab=t.tab;search="";
+    document.querySelectorAll("#nav button").forEach(function(x){x.classList.toggle("on",x.dataset.tab===tab);});
+    render();
+  }
+  /* 等瀏覽器完成分頁重繪與版面計算後再量測，否則會量到切換前的舊座標，
+     高亮框會停在上一步的位置。rAF 在背景分頁會被瀏覽器暫停，因此加上
+     計時器保險，確保切回來時導覽一定會更新。 */
+  afterLayout(function(){ tourPaint(t,i); });
+}
+function afterLayout(fn){
+  var done=false;
+  function run(){ if(done)return; done=true; fn(); }
+  requestAnimationFrame(function(){ requestAnimationFrame(run); });
+  setTimeout(run,120);
+}
+function tourPaint(t,i){
+  var E=tourEls();
+  var el=document.querySelector(t.el);
+  if(!el){ /* 找不到就跳過該步，避免卡住 */ return tourShow(i+1); }
+  /* 用即時捲動而非 smooth：平滑捲動還在動的時候量到的座標是舊的，
+     高亮框會定位在錯誤位置。捲完立刻在下一影格量測最準。 */
+  try{ el.scrollIntoView({block:"center",behavior:"instant"}); }
+  catch(e){ el.scrollIntoView(true); }
+  afterLayout(function(){
+    var r=el.getBoundingClientRect(), pad=6;
+    /* 視窗尺寸取不到時(某些內嵌檢視)退回文件寬高，避免定位全部算成 0 */
+    var VW=window.innerWidth||document.documentElement.clientWidth||1280;
+    var VH=window.innerHeight||document.documentElement.clientHeight||800;
+    var x=r.left-pad, y=r.top-pad, w=r.width+pad*2, h=r.height+pad*2;
+    E.mask.classList.add("on");
+    /* 四塊遮罩圍出中間的高亮區 */
+    var s=function(id,css){var d=document.getElementById(id);for(var k in css)d.style[k]=css[k];};
+    s("sh-t",{left:"0px",top:"0px",width:"100%",height:Math.max(0,y)+"px"});
+    s("sh-b",{left:"0px",top:(y+h)+"px",width:"100%",height:Math.max(0,VH-(y+h))+"px"});
+    s("sh-l",{left:"0px",top:y+"px",width:Math.max(0,x)+"px",height:h+"px"});
+    s("sh-r",{left:(x+w)+"px",top:y+"px",width:Math.max(0,VW-(x+w))+"px",height:h+"px"});
+    E.ring.style.display="block";
+    E.ring.style.left=x+"px";E.ring.style.top=y+"px";
+    E.ring.style.width=w+"px";E.ring.style.height=h+"px";
+    /* 先填內容再量高度，否則量到的是上一步的尺寸，卡片會被推出畫面 */
+    document.getElementById("tourStep").textContent="第 "+(i+1)+" 步 / 共 "+TOUR.length+" 步";
+    document.getElementById("tourTitle").textContent=t.title;
+    document.getElementById("tourText").textContent=t.text;
+    document.getElementById("tourTip").innerHTML=t.tip?'<div class="tip">💡 '+esc(t.tip)+'</div>':"";
+    document.getElementById("tourDots").innerHTML=TOUR.map(function(_,k){
+      return '<i class="'+(k===i?"on":"")+'"></i>';}).join("");
+    document.getElementById("tourPrev").style.visibility=i===0?"hidden":"visible";
+    document.getElementById("tourNext").textContent=(i===TOUR.length-1)?"完成":"下一步";
+    /* 說明卡：優先放右側，空間不夠改左側，再不夠就上下擺 */
+    E.pop.style.display="block";
+    var pw=E.pop.offsetWidth||340, ph=E.pop.offsetHeight||220, gap=16, px, py;
+    if(x+w+gap+pw<VW-10){ px=x+w+gap; py=y+h/2-ph/2; }
+    else if(x-gap-pw>10){ px=x-gap-pw; py=y+h/2-ph/2; }
+    else {
+      px=x+w/2-pw/2;
+      py=(y+h+gap+ph<VH-10)?(y+h+gap):(y-gap-ph);   /* 下方放不下就放上方 */
+    }
+    px=Math.max(10,Math.min(px,VW-pw-10));
+    py=Math.max(10,Math.min(py,VH-ph-10));
+    E.pop.style.left=px+"px";E.pop.style.top=py+"px";
+  });
+}
+function tourEnd(){
+  var E=tourEls();
+  E.mask.classList.remove("on");E.ring.style.display="none";E.pop.style.display="none";
+  try{localStorage.setItem("egrra_tour_done","1");}catch(e){}
+}
+function tourStart(){ tourShow(0); }
+document.getElementById("btn-help").addEventListener("click",tourStart);
+document.getElementById("tourNext").addEventListener("click",function(){
+  if(tourI>=TOUR.length-1){tourEnd();toast("指引完成！隨時可再按「新手指引」重看","ok");}
+  else tourShow(tourI+1);
+});
+document.getElementById("tourPrev").addEventListener("click",function(){if(tourI>0)tourShow(tourI-1);});
+document.getElementById("tourSkip").addEventListener("click",tourEnd);
+document.addEventListener("keydown",function(e){
+  if(document.getElementById("tourMask").classList.contains("on")){
+    if(e.key==="Escape")tourEnd();
+    else if(e.key==="ArrowRight")document.getElementById("tourNext").click();
+    else if(e.key==="ArrowLeft")document.getElementById("tourPrev").click();
+  }
+});
+window.addEventListener("resize",function(){
+  if(document.getElementById("tourMask").classList.contains("on"))tourPaint(TOUR[tourI],tourI);
+});
+/* 第一次進後台自動開啟指引 */
+try{ if(localStorage.getItem("egrra_tour_done")!=="1")setTimeout(tourStart,700); }catch(e){}
 
 /* 開過後台＝自己人：標記這台瀏覽器，之後瀏覽官網一律不列入統計 */
 try{ localStorage.setItem("egrra_no_track","1"); }catch(e){}
