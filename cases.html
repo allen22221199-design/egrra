@@ -131,6 +131,21 @@ EGRRA_I18N.init({
     });
   }
   function renderChips(){
+    /* 沒有任何案例填地區時，「地區」只會剩一個「全部」，等於無作用 → 隱藏該列。
+       但「共 N 件」的計數也在這一列裡，需先搬到「類別」列，否則會一起消失。 */
+    var hasRegion=CASES.some(function(c){return !!cityOf(c);});
+    var rowCity=document.getElementById("f-city"), cnt=document.getElementById("count");
+    if(rowCity&&rowCity.parentElement){
+      var row=rowCity.parentElement;
+      if(!hasRegion){
+        var catRow=document.getElementById("f-cat").parentElement;
+        if(cnt&&cnt.parentElement!==catRow)catRow.appendChild(cnt);
+        row.style.display="none";
+      }else{
+        if(cnt&&cnt.parentElement!==row)row.appendChild(cnt);
+        row.style.display="";
+      }
+    }
     /* 各標籤的數量，以「另一個篩選的現值」為前提計算 */
     chips(document.getElementById("f-cat"),cats,state.cat,
       function(v){state.cat=v;render();},
