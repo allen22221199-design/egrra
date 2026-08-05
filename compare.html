@@ -26,47 +26,105 @@
 .cmp-legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:1px}
 .lg-win{background:#5c7f5f}.lg-limit{background:#b4635a}.lg-us{background:var(--gold)}
 
+/* ---- 優勝計分條：先給一個一眼可見的結論，再讓人看細節 ---- */
+.cmp-score{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:linear-gradient(100deg,var(--dark),#2a2118 60%,#3a2c1c);
+  border-radius:var(--r);padding:22px 28px;margin-bottom:22px;color:#fff}
+.cmp-score .big{font-family:var(--serif);font-size:44px;font-weight:900;line-height:1;
+  color:var(--gold-lt);letter-spacing:-.01em}
+.cmp-score .big small{font-size:19px;font-weight:600;color:rgba(255,255,255,.55);margin-left:2px}
+.cmp-score .txt{flex:1 1 220px;min-width:0;font-size:14.5px;color:rgba(255,255,255,.82);line-height:1.6}
+.cmp-score .txt b{color:#fff;font-weight:600}
+.cmp-score .bar{flex:1;min-width:160px;height:7px;border-radius:99px;
+  background:rgba(255,255,255,.14);overflow:hidden}
+.cmp-score .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt))}
+
 /* ---- 表格（桌機）----
    欄寬用 table-layout:fixed 固定，否則長註解會把煌盛那欄擠扁。 */
 .cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
   border-radius:var(--r);background:#fff}
-table.cmp{width:100%;min-width:860px;border-collapse:collapse;table-layout:fixed}
-table.cmp th,table.cmp td{padding:18px 20px;vertical-align:top;text-align:left;
+table.cmp{width:100%;min-width:900px;border-collapse:separate;border-spacing:0;table-layout:fixed}
+table.cmp th,table.cmp td{padding:20px 22px;vertical-align:top;text-align:left;
   border-bottom:1px solid var(--line)}
-table.cmp thead th{position:sticky;top:0;z-index:2;background:#fff;border-bottom:2px solid var(--ink);
-  padding-top:22px;padding-bottom:16px}
-table.cmp col.c-lab{width:132px}
-table.cmp col.c-us{width:30%}
+table.cmp thead th{position:sticky;top:0;z-index:2;background:#fff;
+  padding-top:24px;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+table.cmp col.c-lab{width:130px}
+table.cmp col.c-us{width:31%}
+/* 滑過整列讓視線不跑掉 */
+.cmp tbody tr:hover td:not(.us){background:#faf7f2}
 
 /* 列標題欄 */
 .cmp .lab{background:var(--paper);font-size:14px;color:var(--ink);font-weight:500;line-height:1.5}
-.cmp .lab .no{display:block;font-size:11px;letter-spacing:.12em;color:var(--faint);margin-bottom:4px}
+.cmp tbody tr:hover .lab{background:var(--paper2)}
+.cmp .lab .no{display:block;font-family:var(--serif);font-size:15px;font-weight:700;
+  color:var(--gold);margin-bottom:5px;letter-spacing:.02em}
 
 /* 欄頭 */
 .cmp .hd b{display:block;font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink)}
 .cmp .hd span{display:block;font-size:12px;letter-spacing:.06em;color:var(--faint);margin-top:3px}
-.cmp .hd.us b{color:var(--gold-dk)}
 
-/* 煌盛欄整欄底色＋左側金線，一眼看出主體 */
-.cmp .us{background:linear-gradient(90deg,rgba(176,141,87,.09),rgba(176,141,87,.04));
-  box-shadow:inset 3px 0 0 var(--gold)}
-.cmp thead .us{background:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+/* ★ 煌盛欄＝深色冠軍卡：整欄從表格裡立起來，靠對比帶出份量 */
+.cmp .us{background:linear-gradient(180deg,#1c1811,#171410);color:#fff;
+  border-bottom-color:rgba(255,255,255,.10)}
+.cmp thead .us{background:linear-gradient(180deg,#2a2118,#1c1811);
+  border-bottom:2px solid var(--gold);border-radius:12px 12px 0 0;position:relative;z-index:3}
+.cmp thead .us b{color:#fff;font-size:21px}
+.cmp thead .us span{color:var(--gold-lt)}
+/* 冠軍徽記 */
+.cmp thead .us::before{content:"★";position:absolute;top:12px;right:16px;
+  width:26px;height:26px;border-radius:50%;background:var(--gold);color:#1c1811;
+  font-size:13px;line-height:26px;text-align:center;font-weight:700}
+.cmp tbody tr:last-child .us{border-radius:0 0 12px 12px;border-bottom:none}
 
 /* 儲存格內容 */
 .cmp .v{font-size:15.5px;color:var(--ink);line-height:1.55;font-weight:500}
-.cmp .us .v{font-size:16.5px}
-.cmp .v em{font-style:normal;font-family:var(--serif);font-size:26px;font-weight:700;color:var(--gold-dk)}
-.cmp .note{font-size:13.5px;color:var(--ink-soft);line-height:1.65;margin-top:7px}
-.cmp .dim{font-size:12px;color:var(--faint);line-height:1.6;margin-top:7px}
+.cmp .us .v{font-size:18px;color:#fff;font-weight:600}
+.cmp .v em{font-style:normal;font-family:var(--serif);font-size:30px;font-weight:900;color:var(--gold-dk)}
+.cmp .us .v em{color:var(--gold-lt)}
+/* 關鍵數字：獨立一行的大字，賣點一眼看到 */
+.cmp .big{font-family:var(--serif);font-size:40px;font-weight:900;line-height:1.05;
+  color:var(--gold-lt);letter-spacing:-.01em;margin-bottom:6px}
+.cmp .big small{font-size:15px;font-weight:600;color:rgba(255,255,255,.6);margin-left:5px;
+  letter-spacing:.02em}
+.cmp .note{font-size:13.5px;color:var(--ink-soft);line-height:1.65;margin-top:8px}
+.cmp .us .note{color:rgba(255,255,255,.74)}
+.cmp .dim{font-size:12px;color:var(--faint);line-height:1.6;margin-top:8px}
+.cmp .us .dim{color:rgba(255,255,255,.42)}
 
 /* 標記 */
-.flag{display:inline-block;font-size:11px;letter-spacing:.08em;padding:3px 9px;border-radius:4px;
-  margin-bottom:9px;font-weight:500}
-.flag.win{background:#e8efe8;color:#3f6144}
-.flag.top{background:var(--gold-dk);color:#fff}
-.flag.limit{background:#f6e8e6;color:#9c4b42;border:1px solid #e7cfcb}
+.flag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;letter-spacing:.08em;
+  padding:4px 11px;border-radius:99px;margin-bottom:10px;font-weight:600}
+.flag::before{font-size:11px}
+.flag.win{background:#e4ede5;color:#356140}
+.flag.win::before{content:"✓"}
+.us .flag.win{background:rgba(176,141,87,.22);color:var(--gold-lt);
+  box-shadow:inset 0 0 0 1px rgba(201,168,120,.45)}
+.flag.top{background:linear-gradient(100deg,var(--gold-dk),var(--gold));color:#fff;
+  box-shadow:0 3px 10px -3px rgba(176,141,87,.7)}
+.flag.top::before{content:"★"}
+.flag.limit{background:#f7eae8;color:#96463d;box-shadow:inset 0 0 0 1px #e9d2ce}
+.flag.limit::before{content:"—"}
 
-.cmp-srcs{margin-top:18px;font-size:12.5px;color:var(--faint);line-height:1.8}
+/* 分組小標 */
+.cmp .grp td{background:var(--ink);color:var(--gold-lt);font-size:12px;letter-spacing:.16em;
+  padding:10px 22px;border-bottom:none}
+.cmp .grp+tr td{border-top:none}
+
+/* 出處編號 */
+.cmp .ref{font-size:10px;color:var(--gold-dk);margin-left:3px;cursor:help;font-weight:700;
+  vertical-align:super}
+.cmp .us .ref{color:var(--gold-lt)}
+.cmp-srcs{margin-top:20px;font-size:12.5px;color:var(--faint);line-height:1.8}
+.reflist{margin:0 0 12px;padding-left:20px}
+.reflist li{margin-bottom:4px}
+.srcline{display:block;padding-top:12px;border-top:1px solid var(--line)}
+
+/* 主打欄底部的行動呼籲 */
+.cmp .ctarow td{border-bottom:none;padding-top:22px;padding-bottom:26px}
+.cmp .ctarow .us{border-radius:0 0 12px 12px}
+.incta{display:block;text-align:center;background:var(--gold);color:#1c1811;text-decoration:none;
+  padding:13px 18px;border-radius:99px;font-size:14.5px;font-weight:600;transition:.25s var(--ease)}
+.incta:hover{background:var(--gold-lt);transform:translateY(-2px)}
 .cmp-cta{margin-top:40px;text-align:center}
 .cmp-cta a{display:inline-block;margin:6px;padding:14px 30px;border-radius:99px;text-decoration:none;
   font-size:14.5px;transition:.25s var(--ease)}
@@ -85,12 +143,25 @@ table.cmp col.c-us{width:30%}
     background:var(--paper);padding:12px 16px;font-weight:500}
   .ccard>h3 span{color:var(--faint);font-size:11px;margin-right:8px}
   .crow{padding:14px 16px;border-top:1px solid var(--line)}
-  .crow.us{background:linear-gradient(90deg,rgba(176,141,87,.10),rgba(176,141,87,.03));
-    box-shadow:inset 3px 0 0 var(--gold);border-top:none}
+  /* 手機同樣讓煌盛那格是深色，維持「冠軍卡」的一致印象 */
+  .crow.us{background:linear-gradient(180deg,#231c14,#1a1610);color:#fff;border-top:none;
+    box-shadow:inset 0 3px 0 var(--gold)}
+  .crow.us .v{color:#fff;font-weight:600}
+  .crow.us .note{color:rgba(255,255,255,.74)}
+  .crow.us .dim{color:rgba(255,255,255,.42)}
   .crow .who{font-size:12px;letter-spacing:.05em;color:var(--faint);margin-bottom:6px}
-  .crow.us .who{color:var(--gold-dk);font-weight:500}
+  .crow.us .who{color:var(--gold-lt);font-weight:500}
   .crow .v{font-size:15.5px}
+  /* 手機寬度放不下「大字＋單位」同一行，單位改成自己一行 */
+  .crow .big{font-size:30px;line-height:1.1}
+  .crow .big small{display:block;margin:4px 0 0;font-size:13px}
+  .crow .ref{font-size:10px;color:var(--gold-dk);vertical-align:super;font-weight:700}
+  .crow.us .ref{color:var(--gold-lt)}
+  .cgrp{background:var(--ink);color:var(--gold-lt);font-size:12px;letter-spacing:.16em;
+    padding:10px 16px;border-radius:8px;margin:18px 0 10px}
   .cmp-legend{font-size:12px}
+  .cmp-score{padding:18px 20px;gap:12px}
+  .cmp-score .big{font-size:36px}
 }
 @media(max-width:520px){
   .cmp-tab{padding:10px 15px;font-size:13.5px}
@@ -104,10 +175,10 @@ table.cmp col.c-us{width:30%}
     <nav class="nav-links">
       <a href="index.html#about">關於煌盛</a>
       <a href="index.html#tech">核心技術</a>
+      <a href="compare.html" class="on">競品比較</a>
       <a href="index.html#products">產品系列</a>
       <a href="products.html">花色庫</a>
       <a href="cases.html">實績案例</a>
-      <a href="compare.html" class="on">競品比較</a>
       <a href="certifications.html">認證</a>
       <a href="index.html#contact" class="nav-cta">聯絡我們</a>
       <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
@@ -129,10 +200,11 @@ table.cmp col.c-us{width:30%}
   <div class="wrap">
     <div class="cmp-tabs" id="tabs"></div>
     <div class="cmp-sub" id="tsub"></div>
+    <div class="cmp-score" id="score"></div>
     <div class="cmp-legend">
       <span><i class="lg-us"></i><span data-i18n="cmp.lg1">煌盛自家產品</span></span>
-      <span><i class="lg-win"></i><span data-i18n="cmp.lg2">該項優勝</span></span>
-      <span><i class="lg-limit"></i><span data-i18n="cmp.lg3">競品限制</span></span>
+      <span><i class="lg-win"></i><span data-i18n="cmp.lg2">該項表現最佳（不限本公司）</span></span>
+      <span><i class="lg-limit"></i><span data-i18n="cmp.lg3">該項有明確限制</span></span>
     </div>
 
     <div class="cmp-wrap"><table class="cmp" id="tbl"></table></div>
@@ -284,6 +356,35 @@ table.cmp col.c-us{width:30%}
     /* 其他 */
     "資料來源：煌盛興業《煌盛》簡報型錄（2026 年）":"Source: EGRRA product presentation catalogue (2026).",
     "藝格板資料來源：煌盛興業《煌盛》簡報型錄（2026 年）。競品資料來源：Formica 官方 HPL 技術資料、AICA 工業官方仕様一覧（2026 年 4 月改定）。查詢日期：2026／07／16。競品規格以各該公司公開資料為準，並可能隨其改版而異動。":"EGRRA data: EGRRA product presentation catalogue (2026). Competitor data: Formica official HPL technical literature and AICA Kogyo official specification list (revised April 2026). Retrieved 16 July 2026. Competitor specifications are taken from each company's published material and may change with their revisions.",
+    /* 放大的關鍵數字與其單位小字 */
+    "1/30":"1/30","天然石材的重量":"the weight of natural stone",
+    "省 300 萬":"NT$3M saved","國泰中正大樓實例":"Cathay Zhongzheng Building",
+    "150×300":"150×300","cm（最大板幅）":"cm — largest panel size",
+    "台灣消防規範最高等級":"highest grade in Taiwan's fire code",
+    "4尺×8尺 一片 8 kg／約 2.78 kg/㎡":"8 kg per 4×8 ft sheet / about 2.78 kg/m²",
+    "不需加強原結構或更換重型鉸鏈，可快速施工":"No structural reinforcement or heavy-duty hinges needed — installation is quick",
+    "費用省 1/2、工期省 2/3":"Half the cost, one-third the time",
+    "防火門美化 20 層樓 × 4 扇門；傳統大理石工法一扇約 NT$45,000":"Fire-door refinishing across 20 floors × 4 doors; traditional marble runs roughly NT$45,000 per door",
+    "厚度 0.1–9.5 cm":"Thickness 0.1–9.5 cm",
+    "工業鋁板，板幅與厚度範圍皆最廣":"Industrial aluminium — the widest range of both panel size and thickness",
+    "鋁板不燃基材＋耐高溫":"Non-combustible aluminium substrate, heat resistant",
+    "非燃性、無濃煙":"Non-flaming and low-smoke",
+    "可達真石材視覺 ＋ 立體觸感":"Real-stone appearance plus tactile relief",
+    /* 分組小標 */
+    "紋理表現":"Texture","設計與客製":"Design & customisation","耐用與安全":"Durability & safety",
+    "成本與總結":"Cost & summary","規格與應用":"Specs & applications","耐用性能":"Durability",
+    "結構・重量・成本":"Structure, weight & cost","安全與客製":"Safety & customisation",
+    "索取樣品 / 型錄 →":"Request samples / catalogue →",
+    /* 計分條 */
+    "項規格由 ":"rows won by "," 勝出":"",
+    "其餘項目中，競品有 ":"Competitors are equally strong in ",
+    " 處表現同樣出色，一併標示於表中":" other rows — marked in the table",
+    /* 競品優勢的補充說明 */
+    "本身即為真石材":"It is real stone","天然礦脈形成，無可複製":"Formed by natural veining — cannot be replicated",
+    "石材本身不燃":"Stone is inherently non-combustible","四者中最低":"Lowest of the four",
+    "可用於地坪與檯面，藝格板不適用":"Works for flooring and countertops, where EGRRA panels do not apply",
+    "SIAA 抗菌認證為標配，抑菌約 99%":"SIAA antibacterial certification as standard, about 99% inhibition",
+    "材料單價最低，且有公開牌價":"Lowest material unit price, and publicly listed",
     "目前沒有可顯示的比較表。":"No comparison table is available.",
     "競品比較":"Comparison",
     "同樣要做一面石紋牆，選擇不只一種。以下把常見工法與同類板材的規格逐項攤開，數據皆註明出處。":"There is more than one way to build a stone-look wall. Below is a spec-by-spec breakdown of the common methods and comparable panels — every figure cited."
@@ -302,12 +403,37 @@ table.cmp col.c-us{width:30%}
   function bigify(v){
     return /^[0-9]{1,2}H$/.test(v) ? '<em>'+esc(v)+'</em>' : tt(v);
   }
+  /* 出處與但書改成表尾編號：留在格子裡會把每一格撐得又長又雜，
+     但這些字又不能拿掉（競品數值一定要能追出處），所以移到表尾。 */
+  var notes=[];
+  function refHtml(txt){
+    if(!txt) return "";
+    var s=t(txt), i=notes.indexOf(s);
+    if(i<0){ notes.push(s); i=notes.length-1; }
+    return '<sup class="ref" title="'+esc(s)+'">'+(i+1)+'</sup>';
+  }
   function cellHtml(c){
     if(!c) return "";
-    return flagHtml(c.flag)+
-      '<div class="v">'+bigify(c.v||"")+'</div>'+
-      (c.note?'<div class="note">'+tt(c.note)+'</div>':"")+
-      (c.dim ?'<div class="dim">'+tt(c.dim)+'</div>':"");
+    /* big：資料指定要放大的關鍵數字，獨立一行當賣點；unit 是它後面的小字單位 */
+    var big=c.big?'<div class="big">'+tt(c.big)+(c.unit?'<small>'+tt(c.unit)+'</small>':"")+'</div>':"";
+    return flagHtml(c.flag)+big+
+      '<div class="v">'+bigify(c.v||"")+refHtml(c.dim)+'</div>'+
+      (c.note?'<div class="note">'+tt(c.note)+'</div>':"");
+  }
+  /* 計分：藝格板在這張表拿下幾項。先給結論，再讓人看細節 */
+  function scoreHtml(T){
+    var rows=T.rows||[];
+    if(!rows.length) return "";
+    var win=rows.filter(function(r){return r.us&&(r.us.flag==="win"||r.us.flag==="top");}).length;
+    /* 競品也會有勝出的項目，一併講出來。只報自己贏的，懂行的人一看就打折扣 */
+    var other=0;
+    rows.forEach(function(r){ (r.cells||[]).forEach(function(c){ if(c&&c.flag==="win")other++; }); });
+    var pct=Math.round(win/rows.length*100);
+    return '<div class="big">'+win+'<small>/ '+rows.length+'</small></div>'+
+      '<div class="txt">'+tt("項規格由 ")+'<b>'+tt(T.us&&T.us.name||"")+'</b>'+tt(" 勝出")+
+      (other?'<br><span style="color:rgba(255,255,255,.55);font-size:13px">'+
+        tt("其餘項目中，競品有 ")+other+tt(" 處表現同樣出色，一併標示於表中")+'</span>':"")+'</div>'+
+      '<div class="bar"><i style="width:'+pct+'%"></i></div>';
   }
   function pad(i){ return (i+1)<10 ? "0"+(i+1) : String(i+1); }
 
@@ -323,6 +449,7 @@ table.cmp col.c-us{width:30%}
       return '<button class="cmp-tab'+(i===cur?" on":"")+'" data-i="'+i+'">'+tt(x.name||"")+'</button>';
     }).join("");
     elSub.textContent=t(T.sub||"");
+    document.getElementById("score").innerHTML=scoreHtml(T);
 
     /* --- 桌機表格 --- */
     var cols='<col class="c-lab"/><col class="c-us"/>'+(T.cols||[]).map(function(){return '<col/>';}).join("");
@@ -330,24 +457,41 @@ table.cmp col.c-us{width:30%}
       '<th class="hd us"><b>'+tt(T.us&&T.us.name||"")+'</b><span>'+tt(T.us&&T.us.sub||"")+'</span></th>'+
       (T.cols||[]).map(function(c){return '<th class="hd"><b>'+tt(c.name||"")+'</b><span>'+tt(c.sub||"")+'</span></th>';}).join("")+
       '</tr></thead>';
+    notes=[];   /* 每次重畫都重新編號，切換表格才不會累加 */
+    var span=2+(T.cols||[]).length;
+    var lastG=null;
     var body='<tbody>'+(T.rows||[]).map(function(r,i){
-      return '<tr><td class="lab"><span class="no">'+pad(i)+'</span>'+tt(r.label||"")+'</td>'+
+      /* 分組小標：23 項規格一路平舖不好掃，依主題分段落 */
+      var gh="";
+      if(r.group&&r.group!==lastG){ lastG=r.group;
+        gh='<tr class="grp"><td colspan="'+span+'">'+tt(r.group)+'</td></tr>'; }
+      return gh+'<tr><td class="lab"><span class="no">'+pad(i)+'</span>'+tt(r.label||"")+'</td>'+
         '<td class="us">'+cellHtml(r.us)+'</td>'+
         (r.cells||[]).map(function(c){return '<td>'+cellHtml(c)+'</td>';}).join("")+'</tr>';
-    }).join("")+'</tbody>';
+    }).join("")+
+    /* 主打欄底部收在行動呼籲上，是比價表的通例 */
+    '<tr class="ctarow"><td class="lab"></td><td class="us">'+
+      '<a class="incta" href="index.html#contact">'+tt("索取樣品 / 型錄 →")+'</a></td>'+
+      (T.cols||[]).map(function(){return '<td></td>';}).join("")+'</tr></tbody>';
     elTbl.innerHTML='<colgroup>'+cols+'</colgroup>'+head+body;
 
     /* --- 手機卡片 --- */
+    lastG=null;
     elCards.innerHTML=(T.rows||[]).map(function(r,i){
+      var gh="";
+      if(r.group&&r.group!==lastG){ lastG=r.group; gh='<div class="cgrp">'+tt(r.group)+'</div>'; }
       var rows='<div class="crow us"><div class="who">'+tt(T.us&&T.us.name||"")+'</div>'+cellHtml(r.us)+'</div>'+
         (r.cells||[]).map(function(c,j){
           var col=(T.cols||[])[j]||{};
           return '<div class="crow"><div class="who">'+tt(col.name||"")+'</div>'+cellHtml(c)+'</div>';
         }).join("");
-      return '<div class="ccard"><h3><span>'+pad(i)+'</span>'+tt(r.label||"")+'</h3>'+rows+'</div>';
+      return gh+'<div class="ccard"><h3><span>'+pad(i)+'</span>'+tt(r.label||"")+'</h3>'+rows+'</div>';
     }).join("");
 
-    elSrcs.textContent=t(T.srcs||"");
+    elSrcs.innerHTML=(notes.length
+        ? '<ol class="reflist">'+notes.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol>'
+        : "")+
+      '<span class="srcline">'+esc(t(T.srcs||""))+'</span>';
   }
 
   elTabs.addEventListener("click",function(e){
@@ -362,7 +506,7 @@ table.cmp col.c-us{width:30%}
     /* 標題與前言不列在這裡：它們由 draw() 依資料渲染，
        若同時掛 data-i18n，切語言時會被字典蓋掉，資料就改不動了。 */
     dict:{
-      "cmp.lg1":"EGRRA product","cmp.lg2":"Wins this row","cmp.lg3":"Competitor limitation",
+      "cmp.lg1":"EGRRA product","cmp.lg2":"Best in this row (any brand)","cmp.lg3":"Has a clear limitation",
       "cmp.cta1":"Request samples / catalogue →","cmp.cta2":"View projects","cmp.cta3":"View certifications"
     },
     sel:[]

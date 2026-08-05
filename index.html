@@ -273,6 +273,51 @@ header.solid .burger span{background:var(--ink)}
 .fc h4{font-size:20px;margin-bottom:10px}
 .fc p{color:var(--ink-soft);font-size:15px}
 
+/* 精簡比較：上面六張卡是主張，這裡用最少的篇幅給對照，完整版另開一頁 */
+.mini-cmp{margin-top:56px;background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:34px 36px}
+.mc-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin-bottom:22px}
+.mc-head h3{font-size:23px}
+.mc-head a{font-size:14px;color:var(--gold-dk);text-decoration:none;font-weight:500;white-space:nowrap}
+.mc-head a:hover{color:var(--ink)}
+.mc-row{display:grid;grid-template-columns:150px 1.15fr 1fr 1fr;gap:16px;align-items:center;
+  padding:15px 0;border-top:1px solid var(--line)}
+.mc-row>span:first-child{font-size:14px;color:var(--ink);line-height:1.45}
+.mc-row b{font-size:16px;color:var(--gold-dk);font-weight:600}
+.mc-row>span:not(:first-child){font-size:14.5px;color:var(--faint)}
+/* 藝格板那欄用底色貫穿，一眼看得出在比什麼 */
+.mc-row>*:nth-child(2){background:rgba(176,141,87,.08);box-shadow:inset 3px 0 0 var(--gold);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:-10px 0}
+.mc-hd{border-top:none;padding-bottom:6px}
+.mc-hd b,.mc-hd>span:not(:first-child){font-size:13px;letter-spacing:.05em;color:var(--ink);font-weight:500}
+.mc-hd b{color:var(--gold-dk)}
+.mc-note{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--faint);line-height:1.7}
+@media(max-width:900px){
+  .mini-cmp{padding:26px 22px}
+  /* 窄螢幕改成一項一組：標題獨佔一行，三個對照併排 */
+  .mc-row{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .mc-row>span:first-child{grid-column:1/-1;font-weight:500;color:var(--gold-dk);font-size:13px;
+    letter-spacing:.04em;margin-bottom:2px}
+  .mc-hd>span:first-child{display:none}
+  .mc-row>*:nth-child(2){margin:0;border-radius:6px;box-shadow:inset 0 3px 0 var(--gold);padding:12px 10px}
+  .mc-row>span:not(:first-child){padding:12px 10px}
+  .mc-row b{font-size:15px}
+}
+@media(max-width:640px){
+  /* 手機再窄：三欄會把「約石材的 1/30」擠成兩行。
+     改成藝格板獨佔一行，兩個對照併排；欄名改由各格自己標示，
+     所以整列表頭就不需要了。 */
+  .mc-hd{display:none}
+  .mc-row{grid-template-columns:1fr 1fr;gap:8px;padding:12px 0}
+  .mc-row>*:nth-child(2){grid-column:1/-1}
+  .mc-row>span[data-who]::before{content:attr(data-who);display:block;font-size:11px;
+    letter-spacing:.04em;color:var(--faint);margin-bottom:3px}
+  html[data-lang="en"] .mc-row>span[data-who-en]::before{content:attr(data-who-en)}
+  .mc-row>span:not(:first-child){background:var(--paper);border-radius:6px;color:var(--ink-soft)}
+}
+
 /* ===============  PRODUCTS  =============== */
 .products{padding:120px 0}
 .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
@@ -527,10 +572,10 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <nav class="nav-links" id="menu">
       <a href="#about" data-i18n="nav.about">關於煌盛</a>
       <a href="#tech" data-i18n="nav.tech">核心技術</a>
+      <a href="compare.html" data-i18n="nav.compare">競品比較</a>
       <a href="#products" data-i18n="nav.products">產品系列</a>
       <a href="products.html" data-i18n="nav.library">花色庫</a>
       <a href="cases.html" data-i18n="nav.portfolio">實績案例</a>
-      <a href="compare.html" data-i18n="nav.compare">競品比較</a>
       <a href="certifications.html" data-i18n="nav.certs">認證</a>
       <a href="#contact" class="nav-cta" data-i18n="nav.contact">聯絡我們</a>
       <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
@@ -709,6 +754,47 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
         <h4>全面客製</h4>
         <p>紋理、尺寸、基材、表面處理皆可依專案自由客製，量身打造。</p>
       </div>
+    </div>
+
+    <!-- 精簡比較：上面的優勢是主張，這裡給對照。完整版在 compare.html -->
+    <div class="mini-cmp reveal">
+      <div class="mc-head">
+        <h3 data-i18n="mc.h">那，跟其他做法差在哪？</h3>
+        <a href="compare.html" data-i18n="mc.more">看完整比較 →</a>
+      </div>
+      <div class="mc-table">
+        <div class="mc-row mc-hd">
+          <span></span>
+          <b data-i18n="mc.c1">藝格板</b>
+          <span data-i18n="mc.c2">天然石材</span>
+          <span data-i18n="mc.c3">轉印膜／貼皮</span>
+        </div>
+        <div class="mc-row">
+          <span data-i18n="mc.r1">重量</span>
+          <b data-i18n="mc.r1a">約石材的 1/30</b>
+          <span data-who="天然石材" data-who-en="Natural stone" data-i18n="mc.r1b">重，需補強結構</span>
+          <span data-who="轉印膜／貼皮" data-who-en="Transfer film" data-i18n="mc.r1c">輕</span>
+        </div>
+        <div class="mc-row">
+          <span data-i18n="mc.r2">防火</span>
+          <b data-i18n="mc.r2a">耐燃一級</b>
+          <span data-who="天然石材" data-who-en="Natural stone" data-i18n="mc.r2b">佳</span>
+          <span data-who="轉印膜／貼皮" data-who-en="Transfer film" data-i18n="mc.r2c">依基材而定</span>
+        </div>
+        <div class="mc-row">
+          <span data-i18n="mc.r3">大面積拼接</span>
+          <b data-i18n="mc.r3a">專利無縫對花</b>
+          <span data-who="天然石材" data-who-en="Natural stone" data-i18n="mc.r3b">紋理不可控</span>
+          <span data-who="轉印膜／貼皮" data-who-en="Transfer film" data-i18n="mc.r3c">多固定花色</span>
+        </div>
+        <div class="mc-row">
+          <span data-i18n-html="mc.r4#html">可用於防火門<br>消防箱</span>
+          <b data-i18n="mc.r4a">可</b>
+          <span data-who="天然石材" data-who-en="Natural stone" data-i18n="mc.r4b">重量受限</span>
+          <span data-who="轉印膜／貼皮" data-who-en="Transfer film" data-i18n="mc.r4c">耐久性不足</span>
+        </div>
+      </div>
+      <p class="mc-note" data-i18n="mc.note">完整比較含富美家玻利板、AICA 愛克板等同類板材共 23 項規格，數據皆註明出處。</p>
     </div>
   </div>
 </section>
@@ -1349,6 +1435,14 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
 (function(){
   var DICT={
     "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.library":"Colours","nav.certs":"Certifications","nav.portfolio":"Projects","nav.compare":"Comparison","nav.contact":"Contact",
+    /* 首頁精簡比較 */
+    "mc.h":"So how does it compare?","mc.more":"See the full comparison →",
+    "mc.c1":"EGRRA Panel","mc.c2":"Natural stone","mc.c3":"Transfer film / vinyl",
+    "mc.r1":"Weight","mc.r1a":"About 1/30 of stone","mc.r1b":"Heavy; needs reinforcement","mc.r1c":"Light",
+    "mc.r2":"Fire","mc.r2a":"Class-1 rating","mc.r2b":"Good","mc.r2c":"Depends on substrate",
+    "mc.r3":"Large-area joins","mc.r3a":"Patented seamless match","mc.r3b":"Veining uncontrollable","mc.r3c":"Mostly fixed patterns",
+    "mc.r4":"Fire doors &amp; hydrant boxes","mc.r4a":"Yes","mc.r4b":"Limited by weight","mc.r4c":"Not durable enough",
+    "mc.note":"The full comparison covers 23 specifications against Formica and AICA CERARL panels, every figure cited.",
     "hero.eye":"PrinTex™ Digital Texture Technology",
     "hero.h1":"Digital Texture,<br>Nature <em>Reimagined</em>",
     "hero.sub":"EGRRA — a digital-texture brand built for architecture and design. From texture development to finished panels, a full-scope building-material solution.",
