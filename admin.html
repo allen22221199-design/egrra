@@ -580,6 +580,9 @@ content.addEventListener("click",function(e){
 });
 var TITLES={info:"網站資訊",products:"產品花色",cases:"實績案例",clients:"合作建商",stats:"數據統計"};
 function render(){
+  /* 整頁重繪才重算儲存空間（要 stringify 整份資料）。
+     搜尋打字走 fillList/fillClients，不經過這裡，所以不會被拖慢。 */
+  invalidateSize();
   updateCounts();
   document.getElementById("ptitle").textContent=TITLES[tab]||"網站資訊";
   if(tab==="info")renderInfo();
@@ -634,7 +637,6 @@ function setByPath(obj,path,val){
 /* ---- 合作建商 ---- */
 function renderClients(){
   if(!DATA.clients)DATA.clients=[];
-  var list=DATA.clients.filter(function(c){return matches(c.name||"",search);});
   content.innerHTML=
   storageNotice()+
   '<div class="pagehead"><h2>合作建商</h2><p>共 '+DATA.clients.length+' 家，顯示在首頁「合作建設・營造夥伴」名單與上方跑馬燈。順序即顯示順序。</p></div>'+
@@ -642,10 +644,27 @@ function renderClients(){
     '<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>'+
       '<input id="q" placeholder="搜尋公司名稱…" value="'+esc(search)+'"/></div>'+
     '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增建商</button>'+
-  '</div>'+
-  (list.length?'<div class="panel pad"><div class="cl-rows" id="clrows"></div></div>':emptyBox("沒有符合的建商"));
+  '</div><div id="listhost"></div>';
+  fillClients();
+  var q=document.getElementById("q");
+  if(q)q.addEventListener("input",function(){search=q.value;fillClients();});
+  var add=document.getElementById("add");
+  if(add)add.addEventListener("click",function(){
+    DATA.clients.push({id:"cl"+Date.now(),name:""});
+    setDirty(true);saveData(true);search="";render();
+    var rows=content.querySelectorAll("[data-cl]");
+    if(rows.length)rows[rows.length-1].focus();
+  });
+}
+/* 只重畫建商清單；列上的輸入／刪除／上下移都在這裡重綁 */
+function fillClients(){
+  var box=document.getElementById("listhost");
+  if(!box)return;
+  var list=DATA.clients.filter(function(c){return matches(c.name||"",search);});
+  if(!list.length){box.innerHTML=emptyBox("沒有符合的建商");return;}
+  box.innerHTML='<div class="panel pad"><div class="cl-rows" id="clrows"></div></div>';
   var host=document.getElementById("clrows");
-  if(host)list.forEach(function(c){
+  list.forEach(function(c){
     var idx=DATA.clients.indexOf(c);
     var row=document.createElement("div");row.className="cl-row";
     row.innerHTML='<span class="no">'+(idx+1)+'</span>'+
@@ -654,23 +673,13 @@ function renderClients(){
       '<button class="btn sm danger" data-del="'+c.id+'">刪除</button></span>';
     host.appendChild(row);
   });
-  content.querySelectorAll("[data-cl]").forEach(function(el){
+  host.querySelectorAll("[data-cl]").forEach(function(el){
     el.addEventListener("input",function(){
       var it=DATA.clients.find(function(x){return x.id===el.dataset.cl;});
       if(it){it.name=el.value;setDirty(true);}
     });
   });
-  var q=document.getElementById("q");
-  if(q)q.addEventListener("input",function(){search=q.value;var pos=q.selectionStart;render();
-    var q2=document.getElementById("q");if(q2){q2.focus();try{q2.setSelectionRange(pos,pos);}catch(e){}}});
-  var add=document.getElementById("add");
-  if(add)add.addEventListener("click",function(){
-    DATA.clients.push({id:"cl"+Date.now(),name:""});
-    setDirty(true);saveData(true);search="";render();
-    var rows=content.querySelectorAll("[data-cl]");
-    if(rows.length)rows[rows.length-1].focus();
-  });
-  content.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){
+  host.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){
     var it=DATA.clients.find(function(x){return x.id===b.dataset.del;});
     if(!it)return;
     if(!confirm("確定刪除「"+(it.name||"(未命名)")+"」？"))return;
@@ -689,12 +698,9 @@ function renderProducts(){
     '<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>'+
       '<input id="q" placeholder="搜尋花色名稱 / 系列…" value="'+esc(search)+'"/></div>'+
     '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增花色</button>'+
-  '</div><div class="cards" id="cards"></div>';
-  var list=DATA.products.filter(function(p){return matches(p.name+" "+p.series,search);});
-  var wrap=document.getElementById("cards");
-  if(!list.length){wrap.outerHTML=emptyBox("沒有符合的花色");}
-  else list.forEach(function(p){wrap.appendChild(productCard(p));});
-  bindList("products");bindMove();
+  '</div><div id="listhost"></div>';
+  fillList("products");
+  bindList("products");
 }
 function productCard(p){
   var d=document.createElement("div");d.className="item";
@@ -720,12 +726,9 @@ function renderCases(){
     '<div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>'+
       '<input id="q" placeholder="搜尋地區 / 案名 / 類別…" value="'+esc(search)+'"/></div>'+
     '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增案例</button>'+
-  '</div><div class="cards" id="cards"></div>';
-  var list=DATA.cases.filter(function(c){return matches(c.region+" "+c.title+" "+catsOf(c).join(" "),search);});
-  var wrap=document.getElementById("cards");
-  if(!list.length){wrap.outerHTML=emptyBox("沒有符合的案例");}
-  else list.forEach(function(c){wrap.appendChild(caseCard(c));});
-  bindList("cases");bindMove();
+  '</div><div id="listhost"></div>';
+  fillList("cases");
+  bindList("cases");
 }
 function caseCard(c){
   var d=document.createElement("div");d.className="item";
@@ -744,13 +747,41 @@ function caseCard(c){
   return d;
 }
 
-function bindList(type){
-  var q=document.getElementById("q");
-  if(q)q.addEventListener("input",function(){search=q.value;var pos=q.selectionStart;render();var q2=document.getElementById("q");if(q2){q2.focus();try{q2.setSelectionRange(pos,pos);}catch(e){}}});
-  var add=document.getElementById("add");
-  if(add)add.addEventListener("click",function(){openEditor(type,null);});
+/* 只重畫清單，不碰搜尋框。
+   原本每打一個字就整頁 render()，輸入框會被連根換掉再重新 focus：
+     1) 中文注音／拼音在組字途中被拆掉，等於完全打不了中文；
+     2) 整頁重畫也會重算儲存空間量表（要 JSON.stringify 整份資料），
+        照片多的時候每個按鍵都卡好幾百毫秒。
+   改成只換清單容器的內容，輸入框自始至終沒被動過。 */
+function fillList(type){
+  var host=document.getElementById("listhost");
+  if(!host)return;
+  var list,card,empty;
+  if(type==="products"){
+    list=DATA.products.filter(function(p){return matches((p.name||"")+" "+(p.series||""),search);});
+    card=productCard; empty="沒有符合的花色";
+  }else{
+    list=DATA.cases.filter(function(c){return matches((c.region||"")+" "+(c.title||"")+" "+catsOf(c).join(" "),search);});
+    card=caseCard; empty="沒有符合的案例";
+  }
+  if(!list.length){host.innerHTML=emptyBox(empty);return;}
+  host.innerHTML='<div class="cards" id="cards"></div>';
+  var wrap=document.getElementById("cards");
+  list.forEach(function(x){wrap.appendChild(card(x));});
+  bindRows(type);
+}
+/* 卡片上的編輯／刪除／上下移；每次重畫清單都要重綁 */
+function bindRows(type){
   content.querySelectorAll("[data-edit]").forEach(function(b){b.addEventListener("click",function(){openEditor(type,b.dataset.edit);});});
   content.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){delItem(type,b.dataset.del);});});
+  bindMove();
+}
+function bindList(type){
+  var q=document.getElementById("q");
+  if(q)q.addEventListener("input",function(){search=q.value;fillList(type);});
+  var add=document.getElementById("add");
+  if(add)add.addEventListener("click",function(){openEditor(type,null);});
+  bindRows(type);
 }
 function delItem(type,id){
   var arr=DATA[type];var it=arr.find(function(x){return x.id===id;});
@@ -1155,14 +1186,21 @@ function storageNotice(){
     '</div></div>'+storageBox();
 }
 
-/* ---- 儲存空間狀態：把「還有多少可用」講清楚，並提供一鍵搬到雲端 ---- */
-function localPhotos(){
-  var n=0,bytes=0;
-  JSON.stringify(DATA).replace(/"data:image\/[^"]+"/g,function(m){n++;bytes+=m.length;return m;});
-  return {n:n,bytes:bytes};
+/* ---- 儲存空間狀態：把「還有多少可用」講清楚，並提供一鍵搬到雲端 ----
+   JSON.stringify(DATA) 在照片存本機時可能是好幾 MB，不能每次重繪都算。
+   資料沒變就沿用上次結果（以 setDirty/儲存為準清掉快取）。 */
+var _sizeCache=null;
+function invalidateSize(){_sizeCache=null;}
+function sizeInfo(){
+  if(_sizeCache)return _sizeCache;
+  var s=JSON.stringify(DATA),n=0,bytes=0;
+  s.replace(/"data:image\/[^"]+"/g,function(m){n++;bytes+=m.length;return m;});
+  _sizeCache={n:n,bytes:bytes,total:s.length};
+  return _sizeCache;
 }
+function localPhotos(){return sizeInfo();}
 function storageBox(){
-  var p=localPhotos(), total=JSON.stringify(DATA).length;
+  var p=sizeInfo(), total=p.total;
   var pct=Math.min(100,Math.round(total/5000000*100));
   var warn=p.n>0;
   return '<div class="notice" style="'+(warn?'border-color:#c98a2e':'')+'">'+
