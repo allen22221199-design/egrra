@@ -75,8 +75,16 @@ export default async function handler(req, res) {
         ")，已忽略，使用程式端最新內容。要改用後台內容請重新按一次「發布上線」。 */");
     }
 
+    /* ---- 逐區合併，不整份取代 ----
+       快照裡有的區塊（info/products/cases/clients）以快照為準；
+       快照沒有的區塊（例如日後在程式端新增的 compare）沿用程式端。
+       整份取代的話，只要程式端多一個新區塊，該區塊就會憑空消失。
+       info 再往下合一層，避免程式端新增的欄位在舊快照上遺失。 */
     const safe = json.split(LS).join("\\u2028").split(PS).join("\\u2029");
-    return res.status(200).send("window.EGRRA_PUBLISHED=true;window.EGRRA_DEFAULT_DATA = " + safe + ";");
+    return res.status(200).send(
+      "window.EGRRA_PUBLISHED=true;(function(){var d=window.EGRRA_DEFAULT_DATA||{},b=" + safe + ";" +
+      "b.info=Object.assign({},d.info||{},b.info||{});" +
+      "window.EGRRA_DEFAULT_DATA=Object.assign({},d,b);})();");
   } catch (e) {
     const msg = String((e && e.message) || e).replace(/\*\//g, "* /");
     return res.status(200).send("/* EGRRA: 讀取發生例外，使用預設內容：" + msg + " */");

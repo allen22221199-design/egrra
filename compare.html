@@ -156,9 +156,12 @@ table.cmp col.c-us{width:30%}
 <script src="i18n-sub.js"></script>
 <script>
 (function(){
-  /* 資料層：已發布快照 → 本機草稿 → 程式端預設，與其他頁一致 */
-  var D = (window.EGRRA_LOCAL && window.EGRRA_LOCAL()) || window.EGRRA_DEFAULT_DATA || {};
-  var C = D.compare || {tables:[]};
+  /* 資料層：已發布快照 → 本機草稿 → 程式端預設，與其他頁一致。
+     草稿／快照是後台存的，可能還沒有 compare 這個區塊（後台目前不編輯它），
+     所以查不到時要回退到程式端，否則比較表會整個空掉。 */
+  var BASE = window.EGRRA_DEFAULT_DATA || {};
+  var D = (window.EGRRA_LOCAL && window.EGRRA_LOCAL()) || BASE;
+  var C = D.compare || BASE.compare || {tables:[]};
   var TABLES = (C.tables||[]).filter(function(t){return t.public!==false;});
 
   var elTabs=document.getElementById("tabs"), elSub=document.getElementById("tsub"),
