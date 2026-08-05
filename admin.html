@@ -350,9 +350,22 @@ function catOpts(){return optsFrom(DATA.cases,"category",["全棟廊道","防火
 var LS_KEY="egrra_data";
 function clone(o){return JSON.parse(JSON.stringify(o));}
 function loadData(){
-  var d=null;
+  var d=null,stale=false;
   try{var s=localStorage.getItem(LS_KEY);if(s){var p=JSON.parse(s);if(p&&p.products)d=p;}}catch(e){}
+  if(d){
+    /* 程式端內容若比本機草稿新（例如整批重建了實績案例），草稿就是過期的，
+       直接沿用會讓後台顯示舊資料、且一發布就把新內容蓋回去。
+       版本較舊時改用程式端資料，並保留草稿備份供必要時取回。 */
+    var dv=String(d.dataVersion||""), sv=String((window.EGRRA_DEFAULT_DATA||{}).dataVersion||"");
+    if(sv&&(!dv||dv<sv)){
+      try{localStorage.setItem(LS_KEY+"_backup",JSON.stringify(d));}catch(e){}
+      d=null;stale=true;
+    }
+  }
   if(!d)d=clone(window.EGRRA_DEFAULT_DATA);
+  if(stale)setTimeout(function(){
+    toast("已載入網站最新內容（本機舊草稿已過期，另存為備份）","ok");
+  },600);
   return normalize(d);
 }
 /* 補齊缺漏結構。
