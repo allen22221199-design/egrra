@@ -45,6 +45,14 @@ export default async function handler(req, res) {
       return res.status(200).send("/* EGRRA: 已發布內容格式異常，使用預設內容 */");
     }
 
+    /* ?raw=1：原封不動吐出快照本體，供診斷「後台與官網對不上」時比對用。
+       內容與官網本來就會輸出的相同（都是這份已發布內容），不額外洩漏任何東西。 */
+    if (req.query && req.query.raw) {
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.setHeader("Cache-Control", "no-store");
+      return res.status(200).send(json);
+    }
+
     /* ---- 版本比對：抓線上 site-data.js 的 dataVersion ---- */
     let staticVer = "";
     try {
