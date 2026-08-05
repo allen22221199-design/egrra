@@ -463,7 +463,9 @@ function saveData(silent){
     if(!silent)toast("已儲存！你在這台瀏覽器看官網即會更新","ok");
     return true;
   }catch(e){
-    toast("儲存失敗：圖片太多超過瀏覽器容量，請減少或縮小圖片","err");
+    /* 幾乎一定是 QuotaExceeded：照片以 base64 存在本機把 5MB 用光了。
+       指向真正的解法（搬到雲端），而不是叫使用者刪照片。 */
+    toast("本機容量已滿。請到「網站資訊」按【把照片搬到雲端】，搬完就不再有上限","err");
     return false;
   }
 }
@@ -473,7 +475,46 @@ function toast(msg,type){
   clearTimeout(t._t);t._t=setTimeout(function(){t.className="toast";},3200);
 }
 
-/* ============ 圖片處理（上傳自動壓縮）============ */
+/* ============ 圖片處理（上傳自動壓縮 → 傳雲端，只留網址）============
+   照片若以 base64 內嵌，一張 1400px JPEG 約 300KB、轉成文字後膨脹到 400KB，
+   而 localStorage 只有約 5MB、/api/save 只吃約 4.5MB，十來張就爆。
+   因此壓縮後一律先傳到 Blob，資料裡只存一段網址（約 90 字）。
+   若雲端不可用（例如用 file:// 開本機檔），退回 base64 以免功能整個壞掉。 */
+
+var PW_KEY="egrra_pw";
+function getPw(){
+  var pw=sessionStorage.getItem(PW_KEY)||"";
+  if(!pw){
+    pw=prompt("請輸入發布密碼（在 Vercel 設定的 ADMIN_PASSWORD）：")||"";
+    if(pw)sessionStorage.setItem(PW_KEY,pw);
+  }
+  return pw;
+}
+var cloudOff=false; /* 這次工作階段已確認雲端不可用，就不再逐張重試 */
+function uploadToCloud(dataUrl,name,cb){
+  if(cloudOff||location.protocol==="file:"||dataUrl.slice(0,5)!=="data:"){cb(null);return;}
+  var pw=getPw();
+  if(!pw){cloudOff=true;cb(null);return;}
+  fetch("/api/upload",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({password:pw,dataUrl:dataUrl,name:name})})
+    .then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}return{status:r.status,j:j};});})
+    .then(function(res){
+      if(res.j&&res.j.ok&&res.j.url){cb(res.j.url);return;}
+      if(res.j&&res.j.error==="bad_password"){sessionStorage.removeItem(PW_KEY);toast("密碼錯誤，這張暫存在本機","err");}
+      else{cloudOff=true;toast("雲端上傳失敗，照片暫存本機（容量有限）","err");}
+      cb(null);
+    })
+    .catch(function(){cloudOff=true;cb(null);});
+}
+/* 移除照片時把雲端檔案一併刪掉，避免留下沒人用的孤兒檔 */
+function deleteFromCloud(urls){
+  urls=(urls||[]).filter(function(u){return typeof u==="string"&&u.indexOf("/uploads/")>0;});
+  if(!urls.length||cloudOff||location.protocol==="file:")return;
+  var pw=sessionStorage.getItem(PW_KEY)||"";
+  if(!pw)return;
+  fetch("/api/upload",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({password:pw,action:"del",urls:urls})}).catch(function(){});
+}
 function processImage(file,cb){
   if(!file){cb("");return;}
   if(!/^image\//.test(file.type)){toast("請選擇圖片檔","err");return;}
@@ -481,11 +522,12 @@ function processImage(file,cb){
   reader.onload=function(e){
     var img=new Image();
     img.onload=function(){
-      var max=1400,w=img.width,h=img.height;
+      var max=1600,w=img.width,h=img.height;
       if(w>max||h>max){var r=Math.min(max/w,max/h);w=Math.round(w*r);h=Math.round(h*r);}
       var c=document.createElement("canvas");c.width=w;c.height=h;
       c.getContext("2d").drawImage(img,0,0,w,h);
-      cb(c.toDataURL("image/jpeg",0.82));
+      var data=c.toDataURL("image/jpeg",0.85);
+      uploadToCloud(data,file.name,function(url){cb(url||data);});
     };
     img.onerror=function(){toast("圖片讀取失敗","err");};
     img.src=e.target.result;
@@ -534,6 +576,7 @@ var content=document.getElementById("content");
 /* 「重新載入官網最新內容」按鈕會隨各分頁重繪，用事件委派綁一次就好 */
 content.addEventListener("click",function(e){
   if(e.target.closest&&e.target.closest("#btn-resync"))resyncFromSite();
+  if(e.target.closest&&e.target.closest("#btn-migrate"))migratePhotos();
 });
 var TITLES={info:"網站資訊",products:"產品花色",cases:"實績案例",clients:"合作建商",stats:"數據統計"};
 function render(){
@@ -719,8 +762,10 @@ function delItem(type,id){
 
 /* ============ 編輯 Modal ============ */
 var editing={type:null,id:null,draftImg:undefined,draftImgs:null};
+var pendingDelete=[]; /* 這次編輯移除的雲端照片；按下儲存才真的刪，取消就不動 */
 function openEditor(type,id){
   editing.type=type;editing.id=id;editing.draftImg=undefined;editing.draftImgs=null;
+  pendingDelete=[];
   var isNew=!id;
   var it=isNew?{}:clone(DATA[type].find(function(x){return x.id===id;}));
   document.getElementById("mtitle").textContent=(isNew?"新增":"編輯")+(type==="products"?"花色":"案例");
@@ -827,7 +872,9 @@ function bindGallery(){
   }
   function removeAt(idx){
     ensureCover();
-    editing.draftImgs.splice(idx,1);
+    var gone=editing.draftImgs.splice(idx,1)[0];
+    /* 只有這次編輯真的丟掉、且沒被其他地方引用的雲端檔才刪 */
+    if(gone&&editing.draftImgs.indexOf(gone)<0)pendingDelete.push(gone);
     redraw();
   }
   function redraw(){
@@ -924,6 +971,12 @@ document.getElementById("msave").onclick=function(){
     DATA[type].push(obj);
   }
   setDirty(true);var ok=saveData(true);
+  /* 儲存後才清雲端孤兒；同一張可能被別的案例引用，先掃過全部資料再刪 */
+  if(pendingDelete.length){
+    var inUse=JSON.stringify(DATA);
+    deleteFromCloud(pendingDelete.filter(function(u){return inUse.indexOf(u)<0;}));
+    pendingDelete=[];
+  }
   closeModal();render();
   if(ok)toast(editing.id?"已更新":"已新增","ok");
 };
@@ -1099,7 +1152,60 @@ function storageNotice(){
     '<div><b>提醒：</b>改完內容後，按右上 <b>發布上線</b> 並輸入密碼，約 1 分鐘後<b>所有訪客</b>都會看到新內容。（「暫存(本機)」只會更新你這台瀏覽器的預覽。）'+
     '<div style="margin-top:8px;color:var(--faint);font-size:12.5px">後台內容與官網對不上？'+
     '<button class="btn sm" id="btn-resync" style="margin-left:6px">重新載入官網最新內容</button></div>'+
+    '</div></div>'+storageBox();
+}
+
+/* ---- 儲存空間狀態：把「還有多少可用」講清楚，並提供一鍵搬到雲端 ---- */
+function localPhotos(){
+  var n=0,bytes=0;
+  JSON.stringify(DATA).replace(/"data:image\/[^"]+"/g,function(m){n++;bytes+=m.length;return m;});
+  return {n:n,bytes:bytes};
+}
+function storageBox(){
+  var p=localPhotos(), total=JSON.stringify(DATA).length;
+  var pct=Math.min(100,Math.round(total/5000000*100));
+  var warn=p.n>0;
+  return '<div class="notice" style="'+(warn?'border-color:#c98a2e':'')+'">'+
+    '<svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg><div>'+
+    '<b>照片儲存空間</b>'+
+    '<div style="margin:6px 0;height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden">'+
+      '<div style="height:100%;width:'+pct+'%;background:'+(pct>75?'#d9534f':pct>45?'#c98a2e':'#5aa469')+'"></div></div>'+
+    '<div style="font-size:12.5px;color:var(--faint)">本機資料 '+Math.round(total/1024)+' KB／上限約 5,000 KB（'+pct+'%）'+
+      (warn?'，其中 <b>'+p.n+' 張照片</b>存在本機佔了 '+Math.round(p.bytes/1024)+' KB':'') +'</div>'+
+    (warn
+      ? '<div style="margin-top:8px;font-size:12.5px">存在本機的照片會擠爆瀏覽器容量，也會讓「發布上線」超過 4.5MB 上限。'+
+        '搬到雲端後資料裡只留一段網址，容量上限就不再是問題，官網圖片也改由 CDN 直送。'+
+        '<div style="margin-top:8px"><button class="btn gold sm" id="btn-migrate">把 '+p.n+' 張照片搬到雲端</button>'+
+        '<span id="migrate-log" style="margin-left:10px;color:var(--faint)"></span></div></div>'
+      : '<div style="margin-top:8px;font-size:12.5px;color:var(--faint)">目前照片都存在雲端，沒有容量問題 ✓</div>')+
     '</div></div>';
+}
+/* 逐張把 base64 照片上傳到 Blob，成功就地換成網址；一張一張來，避免一次打爆後端 */
+function migratePhotos(){
+  var pw=getPw(); if(!pw)return;
+  cloudOff=false;
+  var btn=document.getElementById("btn-migrate"), log=document.getElementById("migrate-log");
+  var seen=[];
+  JSON.stringify(DATA).replace(/"(data:image\/[^"]+)"/g,function(m,d){if(seen.indexOf(d)<0)seen.push(d);return m;});
+  if(!seen.length){toast("沒有需要搬移的照片","ok");return;}
+  if(btn){btn.disabled=true;btn.textContent="搬移中…";}
+  var i=0,okCount=0,map={};
+  (function next(){
+    if(i>=seen.length){
+      /* 全部跑完才一次改寫資料，中途失敗也不會留下半套 */
+      var s=JSON.stringify(DATA);
+      Object.keys(map).forEach(function(d){ s=s.split(JSON.stringify(d)).join(JSON.stringify(map[d])); });
+      DATA=JSON.parse(s);
+      setDirty(true); saveData(true); render();
+      toast(okCount+" 張已搬到雲端"+(okCount<seen.length?"（"+(seen.length-okCount)+" 張失敗，可再按一次）":"，記得按「發布上線」"),okCount?"ok":"err");
+      return;
+    }
+    if(log)log.textContent=(i+1)+" / "+seen.length;
+    uploadToCloud(seen[i],"case-photo",function(url){
+      if(url){map[seen[i]]=url;okCount++;}
+      i++; next();
+    });
+  })();
 }
 /* 丟棄本機草稿、改用官網目前的內容（草稿先備份） */
 function resyncFromSite(){
@@ -1118,12 +1224,11 @@ function resyncFromSite(){
 document.getElementById("btn-save").onclick=function(){saveData(false);};
 document.getElementById("btn-publish").onclick=function(){
   if(dirty)saveData(true);
-  var pw=sessionStorage.getItem("egrra_pw")||"";
-  if(!pw){ pw=prompt("請輸入發布密碼（在 Vercel 設定的 ADMIN_PASSWORD）："); if(!pw)return; }
+  var pw=getPw(); if(!pw)return;
   var payload=JSON.stringify({password:pw,data:DATA});
   /* 預檢：Vercel 後端請求上限約 4.5MB；照片以 base64 內嵌時容易超過 */
   if(payload.length>4200000){
-    toast("照片資料量太大（超過約 4.5MB 上限），請減少照片數量或縮小尺寸，或改用圖片網址","err");
+    toast("資料超過 4.5MB 上限。請到「網站資訊」按【把照片搬到雲端】再發布","err");
     return;
   }
   var btn=this, old=btn.innerHTML; btn.disabled=true; btn.textContent="發布中…";
@@ -1133,7 +1238,7 @@ document.getElementById("btn-publish").onclick=function(){
     .then(function(res){
       btn.disabled=false; btn.innerHTML=old;
       if(res.ok&&res.j&&res.j.ok){ sessionStorage.setItem("egrra_pw",pw); toast("已發布！約 1 分鐘後全站生效 🚀","ok"); return; }
-      if(res.status===413){ toast("照片太多，資料超過約 4.5MB 上限，請減少或縮小照片","err"); return; }
+      if(res.status===413){ toast("資料超過 4.5MB 上限。請到「網站資訊」按【把照片搬到雲端】再發布","err"); return; }
       if(res.j&&res.j.error==="bad_password"){ sessionStorage.removeItem("egrra_pw"); toast("發布密碼錯誤，請再試一次","err"); return; }
       if(res.j&&res.j.error==="server_not_configured"){ toast("後端尚未設定：請先在 Vercel 建立 Blob 儲存庫並設定 ADMIN_PASSWORD","err"); return; }
       toast("發布失敗："+((res.j&&(res.j.detail||res.j.error))||("HTTP "+res.status)),"err");
