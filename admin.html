@@ -472,6 +472,10 @@ function bindMove(){
 
 /* ============ 渲染 ============ */
 var content=document.getElementById("content");
+/* 「重新載入官網最新內容」按鈕會隨各分頁重繪，用事件委派綁一次就好 */
+content.addEventListener("click",function(e){
+  if(e.target.closest&&e.target.closest("#btn-resync"))resyncFromSite();
+});
 var TITLES={info:"網站資訊",products:"產品花色",cases:"實績案例",clients:"合作建商",stats:"數據統計"};
 function render(){
   updateCounts();
@@ -992,7 +996,22 @@ function matches(hay,q){if(!q)return true;return hay.toLowerCase().indexOf(q.toL
 function emptyBox(msg){return '<div class="empty"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg><div>'+esc(msg)+'</div></div>';}
 function storageNotice(){
   return '<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
-    '<div><b>提醒：</b>改完內容後，按右上 <b>發布上線</b> 並輸入密碼，約 1 分鐘後<b>所有訪客</b>都會看到新內容。（「暫存(本機)」只會更新你這台瀏覽器的預覽。）</div></div>';
+    '<div><b>提醒：</b>改完內容後，按右上 <b>發布上線</b> 並輸入密碼，約 1 分鐘後<b>所有訪客</b>都會看到新內容。（「暫存(本機)」只會更新你這台瀏覽器的預覽。）'+
+    '<div style="margin-top:8px;color:var(--faint);font-size:12.5px">後台內容與官網對不上？'+
+    '<button class="btn sm" id="btn-resync" style="margin-left:6px">重新載入官網最新內容</button></div>'+
+    '</div></div>';
+}
+/* 丟棄本機草稿、改用官網目前的內容（草稿先備份） */
+function resyncFromSite(){
+  if(!confirm("將以官網目前的內容覆蓋後台顯示。\n\n你尚未發布的本機修改會被清除（會另存為備份）。要繼續嗎？"))return;
+  try{
+    var cur=localStorage.getItem(LS_KEY);
+    if(cur)localStorage.setItem(LS_KEY+"_backup",cur);
+    localStorage.removeItem(LS_KEY);
+  }catch(e){}
+  DATA=normalize(clone(window.EGRRA_DEFAULT_DATA));
+  setDirty(false);search="";render();
+  toast("已載入官網最新內容（原草稿已另存備份）","ok");
 }
 
 /* ============ 頂部按鈕 ============ */
