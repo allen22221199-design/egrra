@@ -12,7 +12,7 @@ window.EGRRA_I18N = (function () {
   var DICT = {
     "nav.about": "About", "nav.tech": "Technology", "nav.products": "Products",
     "nav.library": "Colours", "nav.portfolio": "Projects", "nav.certs": "Certifications",
-    "nav.contact": "Contact",
+    "nav.compare": "Comparison", "nav.contact": "Contact",
     "foot.home": "Home"
   };
   var SEL = [
@@ -21,6 +21,7 @@ window.EGRRA_I18N = (function () {
     [".nav-links a[href='index.html#products']", "nav.products"],
     [".nav-links a[href='products.html']", "nav.library"],
     [".nav-links a[href='cases.html']", "nav.portfolio"],
+    [".nav-links a[href='compare.html']", "nav.compare"],
     [".nav-links a[href='certifications.html']", "nav.certs"],
     [".nav-links a[href='index.html#contact']", "nav.contact"],
     [".foot a[href='index.html']", "foot.home"]

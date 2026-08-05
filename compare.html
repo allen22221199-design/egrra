@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://egrra.vercel.app/compare.html" />
+<script>document.documentElement.classList.add('js');</script>
+<title>競品比較｜煌盛興業 EGRRA・藝格板</title>
+<meta name="description" content="藝格板 PrinTex™ 與轉印膜、仿石漆、天然石材及同類裝飾板材的規格逐項比較：尺寸厚度、防水耐候、重量、強度、防火等級與紋理客製，數據皆註明出處。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="lib.css" />
+<style>
+/* ---- 分頁切換 ---- */
+.cmp-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.cmp-tab{border:1px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;
+  padding:11px 20px;border-radius:99px;font-family:inherit;font-size:14.5px;transition:.25s var(--ease)}
+.cmp-tab:hover{border-color:var(--gold-lt);color:var(--ink)}
+.cmp-tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.cmp-sub{color:var(--faint);font-size:14px;margin-bottom:26px}
+
+/* ---- 圖例 ---- */
+.cmp-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--faint);margin-bottom:18px}
+.cmp-legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:1px}
+.lg-win{background:#5c7f5f}.lg-limit{background:#b4635a}.lg-us{background:var(--gold)}
+
+/* ---- 表格（桌機）----
+   欄寬用 table-layout:fixed 固定，否則長註解會把煌盛那欄擠扁。 */
+.cmp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
+  border-radius:var(--r);background:#fff}
+table.cmp{width:100%;min-width:860px;border-collapse:collapse;table-layout:fixed}
+table.cmp th,table.cmp td{padding:18px 20px;vertical-align:top;text-align:left;
+  border-bottom:1px solid var(--line)}
+table.cmp thead th{position:sticky;top:0;z-index:2;background:#fff;border-bottom:2px solid var(--ink);
+  padding-top:22px;padding-bottom:16px}
+table.cmp col.c-lab{width:132px}
+table.cmp col.c-us{width:30%}
+
+/* 列標題欄 */
+.cmp .lab{background:var(--paper);font-size:14px;color:var(--ink);font-weight:500;line-height:1.5}
+.cmp .lab .no{display:block;font-size:11px;letter-spacing:.12em;color:var(--faint);margin-bottom:4px}
+
+/* 欄頭 */
+.cmp .hd b{display:block;font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink)}
+.cmp .hd span{display:block;font-size:12px;letter-spacing:.06em;color:var(--faint);margin-top:3px}
+.cmp .hd.us b{color:var(--gold-dk)}
+
+/* 煌盛欄整欄底色＋左側金線，一眼看出主體 */
+.cmp .us{background:linear-gradient(90deg,rgba(176,141,87,.09),rgba(176,141,87,.04));
+  box-shadow:inset 3px 0 0 var(--gold)}
+.cmp thead .us{background:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+
+/* 儲存格內容 */
+.cmp .v{font-size:15.5px;color:var(--ink);line-height:1.55;font-weight:500}
+.cmp .us .v{font-size:16.5px}
+.cmp .v em{font-style:normal;font-family:var(--serif);font-size:26px;font-weight:700;color:var(--gold-dk)}
+.cmp .note{font-size:13.5px;color:var(--ink-soft);line-height:1.65;margin-top:7px}
+.cmp .dim{font-size:12px;color:var(--faint);line-height:1.6;margin-top:7px}
+
+/* 標記 */
+.flag{display:inline-block;font-size:11px;letter-spacing:.08em;padding:3px 9px;border-radius:4px;
+  margin-bottom:9px;font-weight:500}
+.flag.win{background:#e8efe8;color:#3f6144}
+.flag.top{background:var(--gold-dk);color:#fff}
+.flag.limit{background:#f6e8e6;color:#9c4b42;border:1px solid #e7cfcb}
+
+.cmp-srcs{margin-top:18px;font-size:12.5px;color:var(--faint);line-height:1.8}
+.cmp-cta{margin-top:40px;text-align:center}
+.cmp-cta a{display:inline-block;margin:6px;padding:14px 30px;border-radius:99px;text-decoration:none;
+  font-size:14.5px;transition:.25s var(--ease)}
+.cmp-cta .gold{background:var(--gold-dk);color:#fff}
+.cmp-cta .gold:hover{background:var(--ink)}
+.cmp-cta .ghost{border:1px solid var(--line);color:var(--ink-soft)}
+.cmp-cta .ghost:hover{border-color:var(--gold-lt);color:var(--ink)}
+
+/* ---- 手機：每一列變成一張卡，煌盛在最上面 ---- */
+.cmp-cards{display:none}
+@media(max-width:820px){
+  .cmp-wrap{display:none}
+  .cmp-cards{display:block}
+  .ccard{border:1px solid var(--line);border-radius:var(--r);background:#fff;margin-bottom:14px;overflow:hidden}
+  .ccard>h3{font-family:var(--sans);font-size:13px;letter-spacing:.08em;color:var(--ink);
+    background:var(--paper);padding:12px 16px;font-weight:500}
+  .ccard>h3 span{color:var(--faint);font-size:11px;margin-right:8px}
+  .crow{padding:14px 16px;border-top:1px solid var(--line)}
+  .crow.us{background:linear-gradient(90deg,rgba(176,141,87,.10),rgba(176,141,87,.03));
+    box-shadow:inset 3px 0 0 var(--gold);border-top:none}
+  .crow .who{font-size:12px;letter-spacing:.05em;color:var(--faint);margin-bottom:6px}
+  .crow.us .who{color:var(--gold-dk);font-weight:500}
+  .crow .v{font-size:15.5px}
+  .cmp-legend{font-size:12px}
+}
+@media(max-width:520px){
+  .cmp-tab{padding:10px 15px;font-size:13.5px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><b>煌盛興業</b><span>EGRRA</span></a>
+    <nav class="nav-links">
+      <a href="index.html#about">關於煌盛</a>
+      <a href="index.html#tech">核心技術</a>
+      <a href="index.html#products">產品系列</a>
+      <a href="products.html">花色庫</a>
+      <a href="cases.html">實績案例</a>
+      <a href="compare.html" class="on">競品比較</a>
+      <a href="certifications.html">認證</a>
+      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
+    </nav>
+    <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="band">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Comparison</span>
+    <h1 id="cmp-h1">競品比較</h1>
+    <p id="cmp-lead">同樣要做一面石紋牆，選擇不只一種。以下把常見工法與同類板材的規格逐項攤開，數據皆註明出處。</p>
+  </div>
+</section>
+
+<section class="libsec">
+  <div class="wrap">
+    <div class="cmp-tabs" id="tabs"></div>
+    <div class="cmp-sub" id="tsub"></div>
+    <div class="cmp-legend">
+      <span><i class="lg-us"></i><span data-i18n="cmp.lg1">煌盛自家產品</span></span>
+      <span><i class="lg-win"></i><span data-i18n="cmp.lg2">該項優勝</span></span>
+      <span><i class="lg-limit"></i><span data-i18n="cmp.lg3">競品限制</span></span>
+    </div>
+
+    <div class="cmp-wrap"><table class="cmp" id="tbl"></table></div>
+    <div class="cmp-cards" id="cards"></div>
+    <p class="cmp-srcs" id="srcs"></p>
+
+    <div class="cmp-cta">
+      <a class="gold" href="index.html#contact" data-i18n="cmp.cta1">索取樣品 / 型錄 →</a>
+      <a class="ghost" href="cases.html" data-i18n="cmp.cta2">看實績案例</a>
+      <a class="ghost" href="certifications.html" data-i18n="cmp.cta3">看認證文件</a>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
+</div>
+
+<script src="site-data.js"></script>
+<script src="/api/published"></script><!-- 後台發布內容（Blob）覆蓋，無/失敗沿用預設 -->
+<script src="i18n-sub.js"></script>
+<script>
+(function(){
+  /* 資料層：已發布快照 → 本機草稿 → 程式端預設，與其他頁一致 */
+  var D = (window.EGRRA_LOCAL && window.EGRRA_LOCAL()) || window.EGRRA_DEFAULT_DATA || {};
+  var C = D.compare || {tables:[]};
+  var TABLES = (C.tables||[]).filter(function(t){return t.public!==false;});
+
+  var elTabs=document.getElementById("tabs"), elSub=document.getElementById("tsub"),
+      elTbl=document.getElementById("tbl"), elCards=document.getElementById("cards"),
+      elSrcs=document.getElementById("srcs");
+  var cur=0;
+
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+  /* 本頁專用英文對照。放這裡而不是塞進共用的 i18n-sub.js，
+     免得花色庫／案例牆／認證頁都要多載入一份用不到的字典。
+     優先於共用字典查詢；查無對照就原樣輸出。 */
+  var CMP_EN={
+    /* 表格與欄頭 */
+    "工法・材料比較":"Method & Material","同樣要一面石紋牆，四種常見做法的差異":"Four common ways to get a stone-look wall",
+    "同類板材規格比較":"Panel Specifications","與市面常見裝飾板材的規格逐項比對":"Spec-by-spec against comparable decorative panels",
+    /* 欄頭的主名與副名不能翻成同一個字，否則英文版會出現「EGRRA / EGRRA」 */
+    "藝格板 PrinTex™":"EGRRA PrinTex™","煌盛興業":"Huang Sheng Industrial",
+    "轉印膜／貼皮":"Transfer film / vinyl","手繪／仿石漆":"Hand-painted / faux stone","天然石材":"Natural stone",
+    "開採切割":"Quarried & cut","富美家玻利板":"Formica Panel","AICA 愛克板":"AICA Panel",
+    /* 標記 */
+    "優勝":"Wins","壓倒性優勝":"Clear win","限制":"Limitation",
+    /* 列標題 */
+    "技術原理":"Technology","紋理真實度":"Texture realism","紋理立體層次":"Relief & depth",
+    "圖紋檔案管理":"Pattern file management","客製設計彈性":"Design flexibility","適用基材":"Compatible substrates",
+    "耐候性／耐久性":"Weathering / durability","防火／耐燃性":"Fire performance","成本結構":"Cost structure",
+    "適用項目":"Applications","主要優勢":"Key strengths","主要侷限":"Key limitations",
+    "尺寸・厚度":"Size & thickness","使用場域":"Where it can be used","防水性":"Water resistance",
+    "耐候性":"Weathering","清潔・抗污性":"Cleaning & stain resistance","單位面積重量":"Weight per m²",
+    "強度":"Strength","成本":"Cost","表面耐磨硬度":"Surface hardness","防火等級":"Fire rating",
+    "紋理客製":"Texture customisation",
+    /* 工法比較內容 */
+    "紋理複刻技術":"Texture replication","表面貼膜":"Surface film","模板噴塗":"Stencil spray",
+    "模板噴塗／仿石噴漆":"Stencil spray / faux-stone paint","自然開採、切割加工":"Quarried, then cut and finished",
+    "極高":"Very high","可達真石材視覺 ＋ 立體觸感":"Real-stone appearance plus tactile relief",
+    "中低":"Low–medium","中":"Medium","高":"High","低":"Low","佳":"Good","良好":"Good","極佳":"Excellent",
+    "可控制浮雕高度／層次":"Relief height and layering are controllable",
+    "幾乎無":"Almost none","輕微立體感":"Slight relief","礦物層次、具光影變化":"Mineral layering that shifts with the light",
+    "數位檔案留存":"Digital files retained","可編修、可客製衍伸":"Editable and extendable for custom work",
+    "無檔案，單次貼附":"No file kept; one-off application","多依模板手工":"Mostly hand-worked from stencils",
+    "不可控、無法備份":"Not controllable, cannot be reproduced",
+    "少量多樣、任意設計":"Small runs, wide variety, any design",
+    "多固定花色":"Mostly fixed patterns","部分客製":"Partly customisable","依礦脈決定":"Dictated by the vein",
+    "金屬、玻璃、木板、複合板":"Metal, glass, wood, composite","多種基材皆可":"Works on a range of substrates",
+    "平面板材":"Flat panels","金屬、部分塑材":"Metal and some plastics","僅限天然石材本身":"Natural stone only",
+    "戶外級保護層":"Outdoor-grade protective coating","易脫落、耐候差":"Peels; poor weathering",
+    "視塗裝工藝":"Depends on the coating workmanship","易褪色、需定期保養":"Fades; needs regular maintenance",
+    "鋁板不燃基材 ＋ 耐高溫":"Non-combustible aluminium substrate, heat resistant",
+    "多依基材而定":"Depends on the substrate","搭配金屬基材":"When paired with a metal substrate",
+    "技術投入較高":"Higher technology investment","低～中":"Low–medium","中～高":"Medium–high",
+    "採礦＋加工＋運輸":"Quarrying + fabrication + freight",
+    "牆面、天花板、門板（單開／雙開）":"Walls, ceilings, door leaves (single/double)",
+    "公共空間、室內裝修、藝術專案、公設箱體等":"Public areas, interior fit-out, art projects, service cabinets",
+    "室內牆、傢俱面":"Interior walls, furniture surfaces","建築外牆、室內包柱":"Façades, interior column cladding",
+    "地坪、檯面、建築牆面":"Flooring, countertops, building walls",
+    "高仿真立體、數位化、跨材質":"High-fidelity relief, digital, cross-substrate",
+    "客製彈性最高":"The most customisation flexibility","成本低、量產快":"Low cost, fast in volume",
+    "色彩自然、施工普及":"Natural colour, widely available trade","供應穩定":"Stable supply",
+    "但紋理、色澤不可控":"but veining and colour cannot be controlled",
+    "需專業設備及技術整合":"Requires specialist equipment and integration",
+    "耐久性差、無立體感":"Poor durability, no relief",
+    "圖紋有限、立體感低、人為品質不可控":"Limited patterns, low relief, quality varies by hand",
+    "紋理不可控、重量過重、加工困難、高成本、設計受限":"Veining uncontrollable, very heavy, hard to fabricate, costly, design-limited",
+    /* 板材規格比較內容 */
+    "最大 150 × 300 cm":"Up to 150 × 300 cm",
+    "厚度 0.1–9.5 cm｜工業鋁板，板幅與厚度範圍皆最廣":"Thickness 0.1–9.5 cm | Industrial aluminium — the widest range of both panel size and thickness",
+    "彎板 0.7mm，須貼覆基材":"0.7 mm for curved work; must be bonded to a substrate",
+    "3mm 單一厚度":"3 mm, one thickness only",
+    "常備 935×1,855／935×2,455mm；訂製最大 1,235×3,070mm":"Stock 935×1,855 / 935×2,455 mm; made-to-order up to 1,235×3,070 mm",
+    "牆面・天花板・防火門・弱電箱・消防箱・公設":"Walls · ceilings · fire doors · utility cabinets · hydrant boxes · common areas",
+    "單／雙開門、辦公室隔間、會議廳、電視牆、包柱":"Single and double doors, office partitions, conference rooms, TV walls, column cladding",
+    "僅室內":"Interior only","傢俱、櫥櫃、檯面、壁面":"Furniture, cabinetry, countertops, wall panels",
+    "廚衛、店鋪、餐飲、醫院、車站":"Kitchens and baths, retail, F&B, hospitals, stations",
+    "鋁基材不吸水、不氧化":"Aluminium substrate — non-absorbent, non-oxidising",
+    "三塗三烤塗層封閉表面":"Triple-coat, triple-bake sealed surface",
+    "板材僅 1.0mm，須貼基材":"Panel is only 1.0 mm and must be bonded to a substrate",
+    "黏貼縫隙、基材受潮易脫層剝離":"Bond lines and a damp substrate lead to delamination",
+    "官方測試含耐沸水性，無獨立防水／吸水率數據":"Official testing covers boiling-water resistance; no standalone waterproofing or absorption figure",
+    "3mm 可直貼濕區牆面，耐濕":"3 mm can go directly onto wet-area walls; moisture resistant",
+    "查無吸水率數據":"No published absorption figure",
+    "耐紫外線・不褪色・不氧化":"UV resistant · non-fading · non-oxidising",
+    "三塗三烤製程；室內可長期保持色澤與質感，無需保養":"Triple-coat, triple-bake; holds its colour and finish indoors long-term with no maintenance",
+    "不建議戶外":"Not recommended outdoors","長期日曬濕氣易劣化":"Degrades under prolonged sun and humidity",
+    "定位室內":"Positioned as an interior product","查無戶外耐候數據":"No published exterior weathering data",
+    "通過 SGS 抗菌認證":"SGS antibacterial certified","中塗層含抗刮 ＋ UV":"Mid-coat adds scratch and UV resistance",
+    "型錄標示特色含防污（抗菌塗層為選配）":"Catalogue lists stain resistance; the antibacterial coating is an option",
+    "抑制 7 種細菌及 5 種黴菌":"Inhibits 7 bacteria and 5 moulds","減少表面微生物達 99%":"Reduces surface microbes by up to 99%",
+    "官方保養說明：忌研磨性及酸鹼性清潔劑，會造成不可回復的永久傷害":"Official care guidance: abrasive and acidic or alkaline cleaners cause permanent, irreversible damage",
+    "依官方使用說明定位為室內用途":"Positioned for interior use per the official usage guidance",
+    "表面無毛細孔，清水可擦":"Non-porous surface, wipes clean with water",
+    "SIAA 抗菌認證，抑菌約 99%":"SIAA antibacterial certified, about 99% inhibition",
+    "4尺×8尺 一片 8 kg":"8 kg per 4×8 ft sheet",
+    "約 2.78 kg/㎡，僅天然石材的約 1/30；不需加強原結構或更換重型鉸鏈，可快速施工":"About 2.78 kg/m² — roughly 1/30 the weight of natural stone. No structural reinforcement or heavy-duty hinges needed, so installation is quick.",
+    "屬完成面重量；富美家為面材重量，須另加基材合計":"This is the finished-surface weight; the Formica figure is facing only and needs the substrate added",
+    "面材 1.58 kg/㎡（1.1mm）":"Facing 1.58 kg/m² (1.1 mm)",
+    "1.23 kg/㎡（0.9mm）／0.88 kg/㎡（0.7mm）":"1.23 kg/m² (0.9 mm) / 0.88 kg/m² (0.7 mm)",
+    "僅面材，未含基材":"Facing only; substrate not included","約 5 kg/㎡":"About 5 kg/m²",
+    "3×8 板 11.6 kg／枚":"11.6 kg per 3×8 sheet",
+    "工業鋁板，本身即具結構剛性":"Industrial aluminium — rigid on its own",
+    "厚度可達 9.5cm，可依載重選配；無須依附基材":"Up to 9.5 cm thick, specified to the load; no substrate required",
+    "板材僅 1.0mm":"Panel is only 1.0 mm","須黏貼基材才能使用":"Must be bonded to a substrate to be usable",
+    "官方僅列「符合」，未公開數值":"Official data states “complies” without publishing figures",
+    "具耐衝擊性（SGS）":"Impact resistant (SGS)","公開數據有限":"Limited published data",
+    "國泰中正大樓省下 1/2 費用・2/3 時間":"Cathay Zhongzheng Building — half the cost, one-third the time",
+    "防火門美化 20 層樓 × 4 扇門，全棟省約 300 萬（傳統大理石工法一扇約 NT$45,000）":"Fire-door refinishing across 20 floors × 4 doors; about NT$3 M saved building-wide (traditional marble runs roughly NT$45,000 per door)",
+    "每片約 NT$1,785–2,420":"About NT$1,785–2,420 per sheet","官方 2024 未稅":"Official 2024 list, before tax",
+    "連工帶料估價":"Quoted supply-and-install","查無官方公開單價":"No official published unit price",
+    "中塗層含抗刮 ＋ UV 處理；面塗三塗三烤":"Scratch- and UV-resistant mid-coat; triple-coat, triple-bake topcoat",
+    "ANSI／NEMA LD3 耐磨轉數 ≥ 400 轉":"ANSI/NEMA LD3 wear cycles ≥ 400","未以鉛筆硬度標示":"Not stated as pencil hardness",
+    "鉛筆硬度（JIS K5600-5-4）":"Pencil hardness (JIS K5600-5-4)",
+    "耐燃一級":"Class-1 fire rating",
+    "通過台灣消防規範最高等級；鋁板不燃基材＋耐高溫，非燃性、無濃煙":"The highest grade in Taiwan's fire code. Non-combustible aluminium substrate, heat resistant, non-flaming and low-smoke.",
+    "防焰性 CNS 7614／物理性質 CNS 11367":"Flame retardancy CNS 7614 / physical properties CNS 11367",
+    "非耐燃一級，須另選「火立克＋」系列":"Not Class-1; requires the separate “Firelex+” range",
+    "台灣耐燃一級":"Class-1 in Taiwan","日本不燃認定 NM-2183":"Japanese non-combustible approval NM-2183",
+    "專利無縫對花技術":"Patented seamless pattern matching",
+    "消除拼接斷點｜數位檔案留存、可編修、可客製衍伸；立體紋理最大 1mm，可控制浮雕高度；客戶提供紋理即可複刻（600×600mm 打樣）":"No visible break at the joins. Digital files are retained, editable and extendable; relief up to 1 mm with controllable height. Supply a texture and we replicate it (600×600 mm sample).",
+    "上百種固定花色":"Hundreds of fixed patterns","石紋／木紋／金屬／單色":"Stone / wood / metal / solid colour",
+    "固定花色":"Fixed patterns",
+    /* 其他 */
+    "資料來源：煌盛興業《煌盛》簡報型錄（2026 年）":"Source: EGRRA product presentation catalogue (2026).",
+    "藝格板資料來源：煌盛興業《煌盛》簡報型錄（2026 年）。競品資料來源：Formica 官方 HPL 技術資料、AICA 工業官方仕様一覧（2026 年 4 月改定）。查詢日期：2026／07／16。競品規格以各該公司公開資料為準，並可能隨其改版而異動。":"EGRRA data: EGRRA product presentation catalogue (2026). Competitor data: Formica official HPL technical literature and AICA Kogyo official specification list (revised April 2026). Retrieved 16 July 2026. Competitor specifications are taken from each company's published material and may change with their revisions.",
+    "目前沒有可顯示的比較表。":"No comparison table is available.",
+    "競品比較":"Comparison",
+    "同樣要做一面石紋牆，選擇不只一種。以下把常見工法與同類板材的規格逐項攤開，數據皆註明出處。":"There is more than one way to build a stone-look wall. Below is a spec-by-spec breakdown of the common methods and comparable panels — every figure cited."
+  };
+  function isEn(){ return document.documentElement.getAttribute("data-lang")==="en"; }
+  /* 動態字串：先查本頁字典，再交給共用 i18n；都查不到就原樣輸出 */
+  function t(s){
+    if(isEn() && CMP_EN[s]!=null) return CMP_EN[s];
+    return (window.EGRRA_I18N && EGRRA_I18N.t) ? EGRRA_I18N.t(s) : s;
+  }
+  function tt(s){ return esc(t(s)); }
+
+  var FLAG={win:"優勝",top:"壓倒性優勝",limit:"限制"};
+  function flagHtml(f){ return f&&FLAG[f] ? '<span class="flag '+f+'">'+tt(FLAG[f])+'</span>' : ""; }
+  /* 純數字＋單位（如 3H / 9H）放大顯示，其餘照常 */
+  function bigify(v){
+    return /^[0-9]{1,2}H$/.test(v) ? '<em>'+esc(v)+'</em>' : tt(v);
+  }
+  function cellHtml(c){
+    if(!c) return "";
+    return flagHtml(c.flag)+
+      '<div class="v">'+bigify(c.v||"")+'</div>'+
+      (c.note?'<div class="note">'+tt(c.note)+'</div>':"")+
+      (c.dim ?'<div class="dim">'+tt(c.dim)+'</div>':"");
+  }
+  function pad(i){ return (i+1)<10 ? "0"+(i+1) : String(i+1); }
+
+  function draw(){
+    /* 標題與前言取自資料，中英都走同一個字典，日後改資料即可生效 */
+    if(C.title)document.getElementById("cmp-h1").textContent=t(C.title);
+    if(C.lead) document.getElementById("cmp-lead").textContent=t(C.lead);
+
+    var T=TABLES[cur];
+    if(!T){ elTbl.innerHTML=""; elCards.innerHTML='<p class="cmp-srcs">'+tt("目前沒有可顯示的比較表。")+'</p>'; elSrcs.textContent=""; return; }
+
+    elTabs.innerHTML=TABLES.map(function(x,i){
+      return '<button class="cmp-tab'+(i===cur?" on":"")+'" data-i="'+i+'">'+tt(x.name||"")+'</button>';
+    }).join("");
+    elSub.textContent=t(T.sub||"");
+
+    /* --- 桌機表格 --- */
+    var cols='<col class="c-lab"/><col class="c-us"/>'+(T.cols||[]).map(function(){return '<col/>';}).join("");
+    var head='<thead><tr><th class="lab"></th>'+
+      '<th class="hd us"><b>'+tt(T.us&&T.us.name||"")+'</b><span>'+tt(T.us&&T.us.sub||"")+'</span></th>'+
+      (T.cols||[]).map(function(c){return '<th class="hd"><b>'+tt(c.name||"")+'</b><span>'+tt(c.sub||"")+'</span></th>';}).join("")+
+      '</tr></thead>';
+    var body='<tbody>'+(T.rows||[]).map(function(r,i){
+      return '<tr><td class="lab"><span class="no">'+pad(i)+'</span>'+tt(r.label||"")+'</td>'+
+        '<td class="us">'+cellHtml(r.us)+'</td>'+
+        (r.cells||[]).map(function(c){return '<td>'+cellHtml(c)+'</td>';}).join("")+'</tr>';
+    }).join("")+'</tbody>';
+    elTbl.innerHTML='<colgroup>'+cols+'</colgroup>'+head+body;
+
+    /* --- 手機卡片 --- */
+    elCards.innerHTML=(T.rows||[]).map(function(r,i){
+      var rows='<div class="crow us"><div class="who">'+tt(T.us&&T.us.name||"")+'</div>'+cellHtml(r.us)+'</div>'+
+        (r.cells||[]).map(function(c,j){
+          var col=(T.cols||[])[j]||{};
+          return '<div class="crow"><div class="who">'+tt(col.name||"")+'</div>'+cellHtml(c)+'</div>';
+        }).join("");
+      return '<div class="ccard"><h3><span>'+pad(i)+'</span>'+tt(r.label||"")+'</h3>'+rows+'</div>';
+    }).join("");
+
+    elSrcs.textContent=t(T.srcs||"");
+  }
+
+  elTabs.addEventListener("click",function(e){
+    var b=e.target.closest("[data-i]"); if(!b)return;
+    cur=parseInt(b.dataset.i,10); draw();
+    /* 切換後把表格捲回最左，否則會停在上一個表格的橫向位置 */
+    var w=document.querySelector(".cmp-wrap"); if(w)w.scrollLeft=0;
+  });
+
+  /* 英文字典：靜態文字用 data-i18n，表格內容走 EGRRA_I18N.t 的精確對照 */
+  EGRRA_I18N.init({
+    /* 標題與前言不列在這裡：它們由 draw() 依資料渲染，
+       若同時掛 data-i18n，切語言時會被字典蓋掉，資料就改不動了。 */
+    dict:{
+      "cmp.lg1":"EGRRA product","cmp.lg2":"Wins this row","cmp.lg3":"Competitor limitation",
+      "cmp.cta1":"Request samples / catalogue →","cmp.cta2":"View projects","cmp.cta3":"View certifications"
+    },
+    sel:[]
+  });
+  window.__redraw=draw;   /* 語言切換時重繪表格 */
+  draw();
+
+  /* 手機選單 */
+  var bg=document.querySelector(".burger");
+  if(bg)bg.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("open");});
+})();
+</script>
+</body>
+</html>
