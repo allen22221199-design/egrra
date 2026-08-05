@@ -146,6 +146,13 @@ a{color:inherit}
 .pathin{border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:12.5px;
   font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--ink);min-width:260px}
 .pathin:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.13)}
+/* 類別複選 */
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.catchk{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:9px;
+  padding:9px 14px;font-size:13.5px;color:var(--ink);cursor:pointer;transition:.2s;background:#fff}
+.catchk:hover{border-color:var(--gold-lt)}
+.catchk.on{border-color:var(--gold);background:rgba(176,141,87,.08);font-weight:600}
+.catchk input{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;margin:0}
 /* 相簿 */
 .gal{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;align-items:center}
 .gal .g{width:70px;height:70px;border-radius:8px;border:1px solid var(--line);
@@ -354,7 +361,49 @@ function optsFrom(arr,key,fallback){
   return out;
 }
 function seriesOpts(){return optsFrom(DATA.products,"series",["石紋系列","繡蝕系列","木紋系列"]);}
-function catOpts(){return optsFrom(DATA.cases,"category",["全棟廊道","防火門","牆面・天花","消防箱・檢修門"]);}
+/* 一個案場可同時屬於多個類別（例如同時做防火門與消防箱）。
+   新資料存 cats 陣列；舊資料只有單一 category，讀取時一併相容。 */
+function catsOf(c){
+  if(c&&Array.isArray(c.cats)&&c.cats.length)return c.cats.slice();
+  return c&&c.category?[c.category]:[];
+}
+function catOpts(){
+  var seen={},out=[];
+  (DATA.cases||[]).forEach(function(c){
+    catsOf(c).forEach(function(v){ if(v&&!seen[v]){seen[v]=1;out.push(v);} });
+  });
+  ["防火門","消防箱・檢修門","牆面・天花","全棟廊道"].forEach(function(v){
+    if(!seen[v]){seen[v]=1;out.push(v);}
+  });
+  return out;
+}
+/* 類別：複選核取方塊 */
+function catField(it){
+  var cur=catsOf(it);
+  return '<div class="f full"><label>類別 <span>(可複選；同時做防火門與消防箱就兩個都勾)</span></label>'+
+    '<div class="cats" id="e-cats">'+catOpts().map(function(v){
+      return '<label class="catchk'+(cur.indexOf(v)>=0?" on":"")+'">'+
+        '<input type="checkbox" value="'+esc(v)+'"'+(cur.indexOf(v)>=0?" checked":"")+'/>'+esc(v)+'</label>';
+    }).join("")+'</div></div>';
+}
+function bindCatField(){
+  var host=document.getElementById("e-cats");
+  if(!host)return;
+  host.querySelectorAll("input[type=checkbox]").forEach(function(cb){
+    cb.addEventListener("change",function(){ cb.parentElement.classList.toggle("on",cb.checked); });
+  });
+}
+function readCats(){
+  var host=document.getElementById("e-cats");
+  if(!host)return [];
+  var picked=[].slice.call(host.querySelectorAll("input:checked")).map(function(x){return x.value;});
+  /* 維持原有順序：category 取 cats[0] 當主類別，若順序被選項排列打亂，
+     只是打開再存檔就會換掉主類別。原本就勾的照舊排前面，新增的接在後面。 */
+  var prev=catsOf(DATA.cases.find(function(x){return x.id===editing.id;})||{});
+  var keep=prev.filter(function(v){return picked.indexOf(v)>=0;});
+  picked.forEach(function(v){ if(keep.indexOf(v)<0)keep.push(v); });
+  return keep;
+}
 
 /* ============ 狀態 ============ */
 var LS_KEY="egrra_data";
@@ -629,7 +678,7 @@ function renderCases(){
       '<input id="q" placeholder="搜尋地區 / 案名 / 類別…" value="'+esc(search)+'"/></div>'+
     '<button class="btn gold" id="add"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>新增案例</button>'+
   '</div><div class="cards" id="cards"></div>';
-  var list=DATA.cases.filter(function(c){return matches(c.region+" "+c.title+" "+c.category,search);});
+  var list=DATA.cases.filter(function(c){return matches(c.region+" "+c.title+" "+catsOf(c).join(" "),search);});
   var wrap=document.getElementById("cards");
   if(!list.length){wrap.outerHTML=emptyBox("沒有符合的案例");}
   else list.forEach(function(c){wrap.appendChild(caseCard(c));});
@@ -640,7 +689,7 @@ function caseCard(c){
   var bg=c.img?("url('"+c.img+"')"):tex(c.stone);
   d.innerHTML=
     '<div class="thumb" style="background-image:'+bg+'">'+
-      '<span class="tag">'+esc(c.category||"")+'</span>'+
+      '<span class="tag">'+esc(catsOf(c).join(" ・ "))+'</span>'+
       (c.img?'<span class="photo">實照</span>':'<span class="nophoto">示意圖</span>')+
     '</div>'+
     '<div class="body"><h4>'+esc(c.title||c.region||"(未命名)")+'</h4><div class="meta">'+
@@ -690,7 +739,7 @@ function openEditor(type,id){
     body.innerHTML='<div class="form-grid">'+
       '<div class="f"><label>地區</label><input id="e-region" placeholder="例：台北大安" value="'+esc(it.region||"")+'"/></div>'+
       '<div class="f"><label>案名 / 說明</label><input id="e-title" placeholder="例：全棟廊道美化" value="'+esc(it.title||"")+'"/></div>'+
-      selField("e-cat","類別",catOpts(),it.category||catOpts()[0])+
+      catField(it)+
       selField("e-stone","材質底色 <span>(無照片時的示意圖)</span>",STONE_OPTS,it.stone||"carrara")+
       '<div class="f"><label>年份 <span>(選填)</span></label><input id="e-year" placeholder="例：2025" value="'+esc(it.year||"")+'"/></div>'+
       imgField(it.img)+
@@ -699,7 +748,7 @@ function openEditor(type,id){
     editing.draftImgs=(it.imgs||[]).slice();
   }
   bindImgField();
-  if(type==="cases")bindGallery();
+  if(type==="cases"){ bindCatField(); bindGallery(); }
   document.getElementById("overlay").classList.add("show");
 }
 function selField(id,label,opts,cur){
@@ -857,7 +906,11 @@ document.getElementById("msave").onclick=function(){
     obj={name:val("e-name"),series:val("e-series"),stone:val("e-stone"),sizes:val("e-sizes"),finish:val("e-finish"),desc:val("e-desc")};
   }else{
     if(!val("e-region")&&!val("e-title")){toast("請至少輸入地區或案名","err");return;}
-    obj={region:val("e-region"),title:val("e-title"),category:val("e-cat"),stone:val("e-stone"),year:val("e-year")};
+    var cs=readCats();
+    if(!cs.length){toast("請至少勾選一個類別","err");return;}
+    /* category 保留為主類別(第一個)，供只讀單值的舊程式沿用 */
+    obj={region:val("e-region"),title:val("e-title"),category:cs[0],cats:cs,
+         stone:val("e-stone"),year:val("e-year")};
   }
   if(editing.id){
     var it=DATA[type].find(function(x){return x.id===editing.id;});

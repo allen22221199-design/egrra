@@ -66,7 +66,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 .grid.sw .th{aspect-ratio:1/1}
 /* 實績照(800×1200 直式)：加高以保留更多畫面 */
 .grid.pf .th{aspect-ratio:1/1.2}
-.card .th .tag{position:absolute;top:10px;left:10px;background:rgba(22,19,15,.78);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+/* 一個案場可有多個類別標籤 → 包在 .tags 容器內並排，避免各自絕對定位而互相重疊 */
+.card .th .tags{position:absolute;top:10px;left:10px;right:10px;display:flex;flex-wrap:wrap;gap:5px;z-index:2}
+.card .th .tag{background:rgba(22,19,15,.78);color:#fff;font-size:11px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
 .card .cap{padding:14px 15px}
 .card .cap h3{font-size:16.5px;font-weight:700;color:var(--ink)}
 .card .cap p{font-size:12.5px;color:var(--faint);margin-top:3px}

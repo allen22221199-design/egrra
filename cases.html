@@ -102,7 +102,13 @@ EGRRA_I18N.init({
   var DATA=(window.EGRRA_LOCAL&&window.EGRRA_LOCAL())||window.EGRRA_DEFAULT_DATA||{cases:[]};
   var CASES=DATA.cases||[];
   function cityOf(c){return (c.region||"").slice(0,2);}
-  var cats=["全部"].concat(uniq(CASES.map(function(c){return c.category;})));
+  /* 一個案場可同時屬於多個類別（例如同時做防火門與消防箱）。
+     新資料用 cats 陣列；舊資料只有單一 category，兩者都要能讀。 */
+  function catsOf(c){
+    if(c&&Array.isArray(c.cats)&&c.cats.length)return c.cats;
+    return c&&c.category?[c.category]:[];
+  }
+  var cats=["全部"].concat(uniq([].concat.apply([],CASES.map(catsOf))));
   var cities=["全部"].concat(uniq(CASES.map(cityOf)));
   var state={cat:"全部",city:"全部"};
 
@@ -150,14 +156,14 @@ EGRRA_I18N.init({
     chips(document.getElementById("f-cat"),cats,state.cat,
       function(v){state.cat=v;render();},
       function(v){return CASES.filter(function(c){
-        return (v==="全部"||c.category===v) && (state.city==="全部"||cityOf(c)===state.city);}).length;});
+        return (v==="全部"||catsOf(c).indexOf(v)>=0) && (state.city==="全部"||cityOf(c)===state.city);}).length;});
     chips(document.getElementById("f-city"),cities,state.city,
       function(v){state.city=v;render();},
       function(v){return CASES.filter(function(c){
-        return (v==="全部"||cityOf(c)===v) && (state.cat==="全部"||c.category===state.cat);}).length;});
+        return (v==="全部"||cityOf(c)===v) && (state.cat==="全部"||catsOf(c).indexOf(state.cat)>=0);}).length;});
   }
   function match(c){
-    if(state.cat!=="全部"&&c.category!==state.cat)return false;
+    if(state.cat!=="全部"&&catsOf(c).indexOf(state.cat)<0)return false;
     if(state.city!=="全部"&&cityOf(c)!==state.city)return false;
     return true;
   }
@@ -170,7 +176,10 @@ EGRRA_I18N.init({
     list.forEach(function(c){
       var card=document.createElement("div");card.className="card";
       var sub=[I.t(c.region),c.year].filter(Boolean).map(esc).join(' ・ ');
-      card.innerHTML='<div class="th"><div class="pf-ov"></div><span class="tag">'+esc(I.t(c.category||""))+'</span></div>'+
+      /* 多類別時卡片並列顯示，讓訪客一眼看出這個案場做了哪些工程 */
+      var tags='<div class="tags">'+catsOf(c).map(function(x){
+        return '<span class="tag">'+esc(I.t(x))+'</span>';}).join("")+'</div>';
+      card.innerHTML='<div class="th"><div class="pf-ov"></div>'+tags+'</div>'+
                      '<div class="cap"><h3>'+esc(c.title||I.t("實績案例"))+'</h3>'+(sub?'<p>'+sub+'</p>':'')+'</div>';
       card.querySelector(".th").style.backgroundImage=bgTh(c);
       card.addEventListener("click",function(){openModal(c);});
@@ -207,13 +216,16 @@ EGRRA_I18N.init({
       });
     }
     if(gal.length)paintShot();
-    document.getElementById("m-cat").textContent=I.t(c.category||"實績案例");
+    document.getElementById("m-cat").textContent=
+      catsOf(c).map(function(x){return I.t(x);}).join(" ・ ")||I.t("實績案例");
     document.getElementById("m-title").textContent=(c.title||I.t("實績案例"));
     document.getElementById("m-desc").textContent=c.desc||(I.en()
       ?"Finished with EGRRA panels — Class-1 fire-rated, combining fire safety with design quality. Actual materials and dimensions per site conditions."
       :"本案以藝格板進行空間美化，通過耐燃一級測試，兼顧防火機能與設計質感。實際用料與尺寸依現場為準。");
     document.getElementById("m-spec").innerHTML=
-      row(I.t("地區"),I.t(c.region)||"—")+row(I.t("類別"),I.t(c.category)||"—")+row(I.t("年份"),c.year||"—")+
+      row(I.t("地區"),I.t(c.region)||"—")+
+      row(I.t("類別"),catsOf(c).map(function(x){return I.t(x);}).join(" ・ ")||"—")+
+      row(I.t("年份"),c.year||"—")+
       (gal.length>1?row(I.t("照片"),I.en()?String(gal.length):(gal.length+" 張")):"");
     ov.classList.add("show");
   }
