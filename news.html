@@ -31,14 +31,15 @@
 /* 本文是煌盛自己寫的短文，不是原文轉貼 */
 .nw .body p{font-size:15px;color:var(--ink-soft);line-height:1.9;margin-bottom:12px}
 .nw .body p:last-child{margin-bottom:0}
-/* 參考來源放在最下面，一則一行，點了開原文 */
-.nw .srcs{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.nw .srcs>b{display:block;font-size:11.5px;letter-spacing:.1em;color:var(--faint);
-  margin-bottom:8px;font-weight:500}
-.nw .srcs a{display:block;font-size:13.5px;color:var(--gold-dk);text-decoration:none;
-  line-height:1.6;padding:4px 0}
-.nw .srcs a:hover{color:var(--ink)}
-.nw .srcs a span{display:block;font-size:12px;color:var(--faint)}
+/* 參考來源：只列媒體名，一排排開。
+   把每則新聞標題整串攤出來會蓋過自己的文章，版面也雜；
+   要看細節點進去就有。 */
+.nw .srcs{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.nw .srcs>b{font-size:11.5px;letter-spacing:.1em;color:var(--faint);font-weight:500}
+.nw .srcs a{font-size:13px;color:var(--gold-dk);text-decoration:none;
+  border:1px solid var(--line);border-radius:99px;padding:3px 11px;transition:.2s var(--ease)}
+.nw .srcs a:hover{border-color:var(--gold-lt);color:var(--ink)}
 
 .nw-note{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);
   font-size:12.5px;color:var(--faint);line-height:1.9}
@@ -129,8 +130,9 @@
             return '<p>'+esc(p.trim())+'</p>';}).join("")+'</div>':"")+
         (srcs.length?'<div class="srcs"><b>'+L("參考來源","Sources")+'</b>'+
           srcs.map(function(s){
-            return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener nofollow">'+
-              esc(s.title)+'<span>'+esc(s.source||"")+(s.date?'　'+fmt(s.date):"")+'</span></a>';
+            /* 顯示媒體名即可；完整標題留在 title 屬性，滑過去才看得到 */
+            return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener nofollow" title="'+
+              esc(s.title||"")+'">'+esc(s.source||L("原文","Source"))+'</a>';
           }).join("")+'</div>':"")+
       '</article>';
     }).join("");
