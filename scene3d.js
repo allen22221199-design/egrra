@@ -341,9 +341,46 @@ function init() {
       chip(subsEl, t3(s[1]), s[0]===st.sub, b => { st.sub = s[0]; st.subZh = s[1]; solo(subsEl, b); applyStone(); }));
     PANELS.forEach((p, i) =>
       chip(panelEl, tPanel(p[0]), i===st.panel, b => { st.panel = i; solo(panelEl, b); applyStone(); }));
-    PRODS.forEach(p =>
-      chip(pickEl, tName(p.name), p.id===st.prod.id, b => { st.prod = p; solo(pickEl, b); applyStone(); },
-        'url("' + p.img + '")'));
+    buildTexPicker();
+  }
+
+  /* 紋理選擇：花色已有 150 款，排成圓形色卡會佔滿整個畫面且難以尋找，
+     改為依系列分組的下拉選單，旁邊留一個目前紋理的預覽方塊。 */
+  function buildTexPicker() {
+    pickEl.innerHTML = "";
+    const sw = document.createElement("span");
+    sw.className = "texsw";
+    const sel = document.createElement("select");
+    sel.className = "texsel";
+    sel.setAttribute("aria-label", isEN() ? "Choose a colour" : "選擇花色");
+
+    const bySeries = new Map();
+    PRODS.forEach(p => {
+      const k = p.series || "";
+      if (!bySeries.has(k)) bySeries.set(k, []);
+      bySeries.get(k).push(p);
+    });
+    bySeries.forEach((list, series) => {
+      const g = document.createElement("optgroup");
+      g.label = t3(series) + "（" + list.length + "）";
+      list.forEach(p => {
+        const o = document.createElement("option");
+        o.value = p.id;
+        o.textContent = tName(p.name) + (p.code ? "　" + p.code : "");
+        if (p.id === st.prod.id) o.selected = true;
+        g.appendChild(o);
+      });
+      sel.appendChild(g);
+    });
+    function paint() { sw.style.backgroundImage = st.prod.img ? 'url("' + st.prod.img + '")' : ""; }
+    sel.addEventListener("change", () => {
+      const p = PRODS.filter(x => x.id === sel.value)[0];
+      if (!p) return;
+      st.prod = p; paint(); applyStone();
+    });
+    paint();
+    pickEl.appendChild(sw);
+    pickEl.appendChild(sel);
   }
   buildControls();
   window.addEventListener("egrra:lang", () => { buildControls(); cap(); });

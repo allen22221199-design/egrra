@@ -38,10 +38,21 @@
 .subs button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.8);padding:10px 22px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;transition:.25s;font-family:inherit}
 .subs button:hover{border-color:var(--gold-lt);color:#fff}
 .subs button.on{background:var(--gold);border-color:var(--gold);color:#fff}
-.tex-picker{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:560px}
-.tex-picker button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-size:cover;background-position:center;transition:.25s;padding:0}
-.tex-picker button:hover{transform:scale(1.1)}
-.tex-picker button.on{border-color:var(--gold-lt);box-shadow:0 0 0 3px rgba(201,168,120,.25)}
+/* 紋理選擇：150 款排成圓形色卡會佔滿整個畫面，改為下拉選單＋目前紋理預覽 */
+.tex-picker{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tex-picker .texsw{width:40px;height:40px;border-radius:8px;flex:0 0 auto;
+  background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 2px 10px -4px rgba(0,0,0,.6)}
+.tex-picker .texsel{flex:1 1 240px;min-width:0;max-width:340px;font-family:inherit;font-size:14px;
+  padding:10px 34px 10px 14px;border-radius:100px;cursor:pointer;
+  color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c9a878' stroke-width='1.8'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+.tex-picker .texsel:hover{border-color:var(--gold-lt)}
+.tex-picker .texsel:focus{outline:none;border-color:var(--gold-lt);box-shadow:0 0 0 3px rgba(201,168,120,.22)}
+/* 選單展開後是系統原生樣式，深色字才看得見 */
+.tex-picker .texsel option,.tex-picker .texsel optgroup{color:#211d18;background:#fff}
 /* 花色編碼：跟在名稱後面的小字，方便客戶報型號 */
 .card .cap .code{display:inline-block;margin-left:7px;font-size:11px;letter-spacing:.06em;
   color:var(--gold-dk);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:2px}
@@ -257,7 +268,7 @@ EGRRA_I18N.init({
     document.getElementById("m-spec").innerHTML=
       (p.code?row(I.t("花色編碼"),p.code):"")+
       row(I.t("尺寸"),I.t(p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺"))+
-      row(I.t("表面處理"),I.t(p.finish||"立體紋路・霧光・平光・消光"))+
+      row(I.t("表面處理"),I.t(p.finish||"消光 / 平光 / 亮光"))+
       row(I.t("計價"),I.t(p.priceUnit||"以才計價，依需求數量報價"));
     /* 相關花色（同系列，最多 5 款）*/
     var rel=PRODUCTS.filter(function(x){return x.series===p.series&&x.name!==p.name;}).slice(0,5);

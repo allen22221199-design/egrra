@@ -39,6 +39,8 @@ window.EGRRA_I18N = (function () {
     /* 產品系列 / 色系 */
     "石紋系列": "Stone Series", "繡蝕系列": "Rust Series", "木紋系列": "Wood Series",
     "花崗石系列": "Granite Series",
+    "單色系列": "Solid Colour Series",
+    "消光 / 平光 / 亮光": "Matte / Satin / Gloss",
     "120×240 / 120×300 / 150×300 cm": "120×240 / 120×300 / 150×300 cm",
     "三塗三烤": "Triple-coat, triple-bake",
     "花色編碼": "Colour code",
@@ -187,7 +189,31 @@ window.EGRRA_I18N = (function () {
     "胡桃木": "Walnut",
     "花梨木": "Rosewood",
     "雪松": "Cedar",
-    "非洲柚": "African Teak"
+    "非洲柚": "African Teak",
+    "純白": "Pure White",
+    "象牙白": "Ivory",
+    "米白": "Off White",
+    "珍珠灰": "Pearl Grey",
+    "淺灰": "Light Grey",
+    "銀灰": "Silver Grey",
+    "中灰": "Mid Grey",
+    "鐵灰": "Iron Grey",
+    "深灰": "Charcoal Grey",
+    "香檳金": "Champagne Gold",
+    "鈦金": "Titanium Gold",
+    "古銅": "Antique Bronze",
+    "卡其": "Khaki",
+    "石墨黑": "Graphite Black",
+    "曜石黑": "Obsidian Black",
+    "碳黑": "Carbon Black",
+    "咖啡棕": "Coffee Brown",
+    "磚紅": "Brick Red",
+    "中國紅": "Chinese Red",
+    "酒紅": "Wine Red",
+    "藏青": "Navy",
+    "天空藍": "Sky Blue",
+    "墨綠": "Ink Green",
+    "橄欖綠": "Olive Green"
   };
 
   function en() { return document.documentElement.getAttribute("data-lang") === "en"; }
