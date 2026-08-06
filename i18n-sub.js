@@ -40,7 +40,6 @@ window.EGRRA_I18N = (function () {
     "石紋系列": "Stone Series", "繡蝕系列": "Rust Series", "木紋系列": "Wood Series",
     "花崗石系列": "Granite Series",
     "單色系列": "Solid Colour Series",
-    "消光 / 平光 / 亮光": "Matte / Satin / Gloss",
     "120×240 / 120×300 / 150×300 cm": "120×240 / 120×300 / 150×300 cm",
     "三塗三烤": "Triple-coat, triple-bake",
     "花色編碼": "Colour code",

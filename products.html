@@ -268,7 +268,7 @@ EGRRA_I18N.init({
     document.getElementById("m-spec").innerHTML=
       (p.code?row(I.t("花色編碼"),p.code):"")+
       row(I.t("尺寸"),I.t(p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺"))+
-      row(I.t("表面處理"),I.t(p.finish||"消光 / 平光 / 亮光"))+
+      row(I.t("表面處理"),I.t(p.finish||"立體紋路・霧光・平光・消光"))+
       row(I.t("計價"),I.t(p.priceUnit||"以才計價，依需求數量報價"));
     /* 相關花色（同系列，最多 5 款）*/
     var rel=PRODUCTS.filter(function(x){return x.series===p.series&&x.name!==p.name;}).slice(0,5);
