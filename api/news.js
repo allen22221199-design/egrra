@@ -115,9 +115,11 @@ export default async function handler(req, res) {
           .filter(x => x.status === "published")
           .sort((a, b) => String(b.publishedAt || b.addedAt || "").localeCompare(
                           String(a.publishedAt || a.addedAt || "")))
-          .map(({ id, title, body, topic, sources, publishedAt }) =>
+          .map(({ id, title, body, topic, sources, srcCount, publishedAt }) =>
                ({ id, title, body, topic, publishedAt,
-                  sources: (sources || []).map(({ title, source, url, date }) =>
+                  srcCount: srcCount || (sources || []).length,
+                  /* 舊資料可能存了二三十則，這裡再擋一次 */
+                  sources: (sources || []).slice(0, 6).map(({ title, source, url, date }) =>
                                               ({ title, source, url, date })) })),
       });
     }

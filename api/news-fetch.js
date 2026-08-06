@@ -277,10 +277,19 @@ export default async function handler(req, res) {
       const idxs = (Array.isArray(p.idx) ? p.idx : [p.idx])
         .map(Number).filter(i => fresh[i]);
       if (!idxs.length) continue;
-      const srcs = idxs.map(i => ({
-        title: fresh[i].title, source: fresh[i].source,
-        url: fresh[i].url, date: fresh[i].date,
-      }));
+      /* 同一議題常有二三十家媒體轉載，全列出來版面會被來源淹沒。
+         只留幾則有代表性的（不同媒體優先），總數另外記著。 */
+      const seenSrc = new Set();
+      const picked = [];
+      for (const i of idxs) {
+        const f = fresh[i];
+        const key = f.source || f.url;
+        if (seenSrc.has(key)) continue;
+        seenSrc.add(key);
+        picked.push({ title: f.title, source: f.source, url: f.url, date: f.date });
+        if (picked.length >= 6) break;
+      }
+      const srcs = picked;
       added.push({
         /* 一篇解讀可能對應多則報導，id 取第一則的，避免下次重複收錄 */
         id: fresh[idxs[0]].id,
@@ -289,6 +298,7 @@ export default async function handler(req, res) {
         title: String(p.title || fresh[idxs[0]].title || "").slice(0, 60),
         body: String(p.body || "").slice(0, 1600),
         sources: srcs,
+        srcCount: idxs.length,
         aiOk,
         status: "pending",
         addedAt: now,

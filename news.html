@@ -60,8 +60,8 @@
       <a href="certifications.html">認證</a>
       <a href="products.html">花色庫</a>
       <a href="cases.html">實績案例</a>
-      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
       <a href="news.html" class="on">產業快訊</a>
+      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
 <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
     <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
@@ -133,7 +133,11 @@
             /* 顯示媒體名即可；完整標題留在 title 屬性，滑過去才看得到 */
             return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener nofollow" title="'+
               esc(s.title||"")+'">'+esc(s.source||L("原文","Source"))+'</a>';
-          }).join("")+'</div>':"")+
+          }).join("")+
+          (x.srcCount&&x.srcCount>srcs.length?
+            '<span style="font-size:12px;color:var(--faint)">'+
+            L("等 "+x.srcCount+" 則報導","and "+x.srcCount+" reports in total")+'</span>':"")+
+        '</div>':"")+
       '</article>';
     }).join("");
   }
