@@ -1,14 +1,15 @@
 /* =========================================================================
    煌盛興業 EGRRA — 產業新聞蒐集（Vercel Cron / Serverless Function）
    ---------------------------------------------------------------------------
-   每天抓取與「防火門法規」「耐燃・建材安全」相關的新聞，過濾雜訊後
-   寫進 Blob 的待審佇列。★ 抓進來的一律是「待審」，不會自動上線。★
+   每天抓取與產品線相關的六類新聞（防火法規、耐燃安全、綠建材低碳、
+   室內設計、公設與都更、健康建材），過濾雜訊後寫進 Blob 的待審佇列。
+   ★ 抓進來的一律是「待審」，不會自動上線。★
 
-   關於摘要的重要限制：
-     Google News 的 RSS 只提供標題、來源、日期、連結，沒有內文片段。
-     因此這裡不產生「摘要」—— 摘要一篇沒讀過的文章就是編造。
-     AI 只做兩件事：判斷這則是否切題、以及寫一句「這對煌盛的客戶意味什麼」，
-     那是對標題的評論，不是對內文的轉述。內容本體就是標題，讀者點連結看原文。
+   關於內容的重要限制：
+     Google News 的 RSS 只提供標題、來源、日期、連結，沒有內文片段
+     （實測各家媒體自有 RSS 也多半是空的）。因此這裡不轉述任何一篇報導，
+     而是從同議題的多則標題交叉確認事實，再由煌盛的角度寫成原創短文。
+     摘要一篇沒讀過的文章就是編造，所以 prompt 明確禁止補充標題沒說的內容。
 
    需在 Vercel 設定：
      GEMINI_API_KEY（已有）、BLOB_READ_WRITE_TOKEN（已有）、ADMIN_PASSWORD（已有）
@@ -19,13 +20,26 @@ import { put, list } from "@vercel/blob";
 const BLOB_PATH = "news/queue.json";
 const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const MAX_KEEP = 300;          // 佇列上限，超過就淘汰最舊的已處理項目
-const PER_QUERY = 25;          // 每個關鍵字最多看幾則
+const PER_QUERY = 12;          // 每個關鍵字最多看幾則
+const MAX_TO_AI = 70;          // 一次最多丟給 AI 幾則 —— 太多會超出回應長度也更容易出錯
 
-/* 追蹤主題。第一版只做與產品關聯最直接的兩類 —— 泛泛的「建材」會抓回
-   一堆上市公司財報與重複的新聞稿，對建築師與建商沒有價值。 */
+/* 追蹤主題，涵蓋產品線會碰到的各個面向。
+   關鍵字刻意寫得具體 —— 只打「建材」兩個字會抓回一堆上市公司財報與
+   開幕新聞稿，對建築師與建商沒有價值；具體的詞才問得出有用的東西。
+   抓回來之後還有 AI 過濾與人工審核兩道關卡。 */
 const TOPICS = [
-  { key: "防火法規", qs: ["防火門 法規", "防火門 消防 安檢", "防火區劃 建築技術規則"] },
-  { key: "耐燃安全", qs: ["耐燃 建材", "建材 防火 認證", "耐燃一級"] },
+  { key: "防火法規", qs: [
+      "防火門 法規", "防火門 消防 安檢", "防火區劃 建築技術規則", "消防安全設備 檢修"] },
+  { key: "耐燃安全", qs: [
+      "耐燃 建材", "建材 防火 認證", "耐燃一級", "外牆 建材 火災"] },
+  { key: "綠建材低碳", qs: [
+      "綠建材標章", "低碳建材", "建材 減碳 淨零", "循環建材 再生"] },
+  { key: "室內設計", qs: [
+      "室內設計 趨勢", "空間設計 材質", "商空 裝修 設計", "飯店 翻新 設計"] },
+  { key: "公設與都更", qs: [
+      "社區 公設 修繕", "危老 都更 外牆", "老屋 翻新 公寓", "物業管理 公共空間"] },
+  { key: "健康建材", qs: [
+      "甲醛 建材 檢測", "抗菌 建材 醫療", "室內空氣品質 裝修", "長照 空間 建材"] },
 ];
 
 const RSS = q =>
@@ -131,9 +145,12 @@ const PROMPT = (list) => `你是台灣建材公司「煌盛興業」的內容編
 三、每一組寫成一篇繁體中文短文，結構固定為三段：
     第一段「發生什麼事」：只陳述這組標題共同指向的事實。
     第二段「對你的工程意味什麼」：對上述客戶群的實務影響。
-    第三段「實務上怎麼處理」：可行的處理方向。若與防火門、消防箱、
-      檢修門的表面美化有關，可以提到「表面美化」與「整扇更換」是兩種選項；
-      但不要寫成推銷文，也不要保證任何規格或效果。
+    第三段「實務上怎麼處理」：可行的處理方向。
+      只有在議題本身就與防火門、消防箱、檢修門、公設美化相關時，
+      才可以提到「表面美化」與「整扇更換」是兩種選項。
+      其他主題（設計趨勢、綠建材、健康建材等）就純粹談該主題，
+      不要硬把話題拉回自家產品 —— 硬推銷會讓整頁失去可信度。
+      任何情況下都不要保證規格或效果。
 
 ★★ 絕對禁止 ★★
   · 不可以補充標題沒有說的事實、數字、金額、日期、法條條號、機關名稱。
@@ -142,7 +159,8 @@ const PROMPT = (list) => `你是台灣建材公司「煌盛興業」的內容編
   · 不要宣稱藝格板符合任何未在上文列出的規格。
 
 輸出 JSON 陣列，每個元素：
-{"idx": [這一組的原索引數字], "topic": "防火法規" 或 "耐燃安全",
+{"idx": [這一組的原索引數字],
+ "topic": 從這幾個擇一："防火法規"、"耐燃安全"、"綠建材低碳"、"室內設計"、"公設與都更"、"健康建材",
  "title": "煌盛自己的標題，不要照抄新聞標題，20字以內",
  "body": "三段短文，段落之間用 \\n\\n 分隔，總長 250-400 字"}
 
@@ -170,7 +188,7 @@ export default async function handler(req, res) {
     try {
       const { blobs } = await list({ prefix: BLOB_PATH, limit: 1 });
       if (blobs?.[0]?.url) {
-        const r = await fetch(blobs[0].url, { cache: "no-store" });
+        const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
         if (r.ok) data = await r.json();
       }
     } catch (e) { /* 第一次執行時還沒有這個檔案，屬正常 */ }
@@ -186,24 +204,35 @@ export default async function handler(req, res) {
       if (!x.sources && x.title) { const k = keyOf(x.title); if (k) seen.add(k); }
     }
 
-    /* ---- 抓取 ---- */
-    let fresh = [];
-    for (const t of TOPICS) {
-      for (const q of t.qs) {
-        try {
-          const r = await fetch(RSS(q), {
-            headers: { "User-Agent": "Mozilla/5.0 (compatible; EGRRA-news/1.0)" },
-          });
-          if (!r.ok) continue;
-          const got = parseRss(await r.text())
-            .slice(0, PER_QUERY)
-            .filter(x => !seenIds.has(x.id))
-            .map(x => ({ ...x, topic: t.key }));
-          fresh = fresh.concat(got);
-        } catch (e) { /* 單一來源失敗不影響其他 */ }
-      }
+    /* ---- 抓取 ----
+       六類主題共二十幾組關鍵字，逐一序列抓會超過 Serverless 的執行時限，
+       因此並行發出；單一來源失敗不影響其他（allSettled）。 */
+    const jobs = [];
+    for (const t of TOPICS)
+      for (const q of t.qs)
+        jobs.push(
+          fetch(RSS(q), { headers: { "User-Agent": "Mozilla/5.0 (compatible; EGRRA-news/1.0)" } })
+            .then(r => (r.ok ? r.text() : ""))
+            .then(xml => parseRss(xml).slice(0, PER_QUERY)
+              .filter(x => !seenIds.has(x.id))
+              .map(x => ({ ...x, topic: t.key })))
+            .catch(() => []));
+    const results = await Promise.allSettled(jobs);
+    let fresh = results.flatMap(r => (r.status === "fulfilled" ? r.value : []));
+
+    /* 各主題輪流取，避免某一類新聞特別多就把其他類擠掉 */
+    const byTopic = new Map();
+    for (const x of fresh) {
+      if (!byTopic.has(x.topic)) byTopic.set(x.topic, []);
+      byTopic.get(x.topic).push(x);
     }
-    fresh = dedupe(fresh, seen);
+    const rr = [];
+    for (let i = 0; ; i++) {
+      let any = false;
+      for (const arr of byTopic.values()) if (arr[i]) { rr.push(arr[i]); any = true; }
+      if (!any) break;
+    }
+    fresh = dedupe(rr, seen).slice(0, MAX_TO_AI);
 
     if (!fresh.length) {
       return res.status(200).json({ ok: true, fetched: 0, kept: 0, note: "沒有新項目" });
@@ -264,7 +293,7 @@ export default async function handler(req, res) {
 
     await put(BLOB_PATH, JSON.stringify(data), {
       access: "public", addRandomSuffix: false, allowOverwrite: true,
-      contentType: "application/json; charset=utf-8", cacheControlMaxAge: 60,
+      contentType: "application/json; charset=utf-8", cacheControlMaxAge: 0,
     });
 
     return res.status(200).json({

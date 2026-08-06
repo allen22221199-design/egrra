@@ -1092,7 +1092,7 @@ function renderNews(){
   NEWS.items.forEach(function(x){ if(cnt[x.status]!==undefined)cnt[x.status]++; });
   var list=NEWS.items.filter(function(x){return x.status===f;});
   content.innerHTML=
-    '<div class="pagehead"><h2>產業快訊</h2><p>每天自動蒐集防火門法規、耐燃建材安全的新聞。'+
+    '<div class="pagehead"><h2>產業快訊</h2><p>每天自動蒐集六類產業新聞：防火法規、耐燃安全、綠建材低碳、室內設計、公設與都更、健康建材。'+
     '<b>抓回來的一律是待審，按「發布」才會出現在官網。</b></p></div>'+
     '<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
     '<div>這裡的文章是<b>我們自己寫的解讀</b>，不是轉貼或改寫報導 —— 改寫別人的文章屬於「改作」，'+
@@ -1153,12 +1153,34 @@ function loadNews(){
     })
     .catch(function(){ NEWS.loaded=true; renderNews(); toast("連不到後端","err"); });
 }
+/* 所有動作都會把失敗原因顯示出來。
+   先前只有 if(d&&d.ok) 沒有 else，伺服器回錯誤時畫面完全沒反應，
+   使用者只會看到「按了沒用」，連是密碼錯還是後端掛了都不知道。 */
 function newsAct(action,id,extra){
-  var pw=getPw(); if(!pw)return;
+  var pw=getPw();
+  if(!pw){ toast("需要發布密碼才能操作","err"); return Promise.resolve(null); }
   var body={password:pw,action:action,ids:[id]};
   if(extra)for(var k in extra)body[k]=extra[k];
   return fetch("/api/news",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(body)}).then(function(r){return r.json();});
+      body:JSON.stringify(body)})
+    .then(function(r){return r.text().then(function(t){
+        var j=null; try{j=JSON.parse(t);}catch(e){}
+        return {status:r.status,ok:r.ok,j:j,raw:t};
+      });})
+    .then(function(res){
+      if(res.ok&&res.j&&res.j.ok){
+        if(!res.j.changed)toast("沒有任何項目被變更（可能已被其他分頁改過，請按重新載入）","err");
+        return res.j;
+      }
+      if(res.j&&res.j.error==="bad_password"){
+        sessionStorage.removeItem(PW_KEY);
+        toast("發布密碼錯誤，請再操作一次並重新輸入","err");
+      }else{
+        toast("操作失敗："+((res.j&&(res.j.detail||res.j.error))||("HTTP "+res.status)),"err");
+      }
+      return null;
+    })
+    .catch(function(err){ toast("連不到後端："+(err&&err.message||""),"err"); return null; });
 }
 content.addEventListener("click",function(e){
   /* 只在產業快訊分頁作用 —— data-del 等屬性在案例／花色頁也有，不隔開會誤觸 */
@@ -1204,14 +1226,15 @@ content.addEventListener("click",function(e){
   var rej=e.target.closest("[data-rej]");
   if(rej){
     newsAct("reject",rej.dataset.rej).then(function(d){
-      if(d&&d.ok){ toast("已略過（不會再抓回來）","ok"); NEWS.loaded=false; renderNews(); }});
+      if(d&&d.ok){ toast(rej.textContent.indexOf("下架")>=0?"已從官網下架":"已略過（不會再抓回來）","ok");
+        NEWS.loaded=false; renderNews(); }});
     return;
   }
   var del=e.target.closest("[data-nwdel]");
   if(del){
     if(!confirm("確定刪除這則？刪除後下次蒐集可能又會抓回來。\n若只是不想要，建議按「略過」。"))return;
     newsAct("delete",del.dataset.nwdel).then(function(d){
-      if(d&&d.ok){ toast("已刪除","ok"); NEWS.loaded=false; renderNews(); }});
+      if(d&&d.ok){ toast("已刪除 "+d.changed+" 則","ok"); NEWS.loaded=false; renderNews(); }});
   }
 });
 

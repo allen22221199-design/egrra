@@ -17,7 +17,10 @@ const BLOB_PATH = "news/queue.json";
 async function load() {
   const { blobs } = await list({ prefix: BLOB_PATH, limit: 1 });
   if (!blobs?.[0]?.url) return { updated: "", items: [] };
-  const r = await fetch(blobs[0].url, { cache: "no-store" });
+  /* 加上時間戳打掉 CDN 快取。先前寫入時設了 cacheControlMaxAge 60，
+     刪除後一分鐘內重新讀取會拿到舊版本，項目又跑出來，
+     看起來就像「刪不掉」—— 其實是讀到了舊快照。 */
+  const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
   if (!r.ok) return { updated: "", items: [] };
   const d = await r.json();
   return { updated: d.updated || "", items: Array.isArray(d.items) ? d.items : [] };
@@ -26,7 +29,8 @@ async function load() {
 async function save(data) {
   await put(BLOB_PATH, JSON.stringify(data), {
     access: "public", addRandomSuffix: false, allowOverwrite: true,
-    contentType: "application/json; charset=utf-8", cacheControlMaxAge: 60,
+    /* 後台審核資料改動頻繁且只有少數人讀取，不要讓 CDN 快取 */
+    contentType: "application/json; charset=utf-8", cacheControlMaxAge: 0,
   });
 }
 
@@ -52,7 +56,7 @@ export default async function handler(req, res) {
         return res.status(200).json(data);
       }
       /* 官網：只給已發布，且不外流內部欄位 */
-      res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+      res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
       return res.status(200).json({
         updated: data.updated,
         items: data.items
