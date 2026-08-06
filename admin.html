@@ -422,11 +422,40 @@ function loadData(){
     }
   }
   if(!d)d=clone(window.EGRRA_DEFAULT_DATA);
+  else synced=syncSections(d);
   if(stale)setTimeout(function(){
     toast("已載入網站最新內容（本機舊草稿已過期，另存為備份）","ok");
   },600);
   return normalize(d);
 }
+
+/* ---- 分區同步 ----
+   程式端（site-data.js）若整批新增了實績案例或產品花色，草稿裡不會有這些內容；
+   而整份丟掉草稿又會連帶弄丟使用者其他還沒發布的修改。
+   因此改成逐區判斷：sectionVersions 宣告「這一區是程式端何時更新的」，
+   比草稿新就只換掉那一區。換完把草稿版本推上去，避免下次載入又蓋掉使用者的編輯。 */
+var synced=[];
+function syncSections(d){
+  var def=window.EGRRA_DEFAULT_DATA||{}, sv=def.sectionVersions||{};
+  var done=[], newest=String(d.dataVersion||"");
+  Object.keys(sv).forEach(function(k){
+    var v=String(sv[k]||"");
+    if(!v||def[k]===undefined)return;
+    if(v>String(d.dataVersion||"")){
+      var before=Array.isArray(d[k])?d[k].length:0;
+      d[k]=clone(def[k]);
+      done.push({sec:k, before:before, after:Array.isArray(d[k])?d[k].length:0});
+      if(v>newest)newest=v;
+    }
+  });
+  if(done.length){
+    /* 同步過就把版本推上去；否則每次開後台都會再蓋一次，使用者改的會被還原 */
+    d.dataVersion=newest;
+    try{localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}
+  }
+  return done;
+}
+var SEC_LABEL={products:"產品花色",cases:"實績案例",clients:"合作建商",info:"網站資訊",compare:"競品比較"};
 /* 補齊缺漏結構。
    重點：本機草稿可能是「某個區段還不存在時」存下來的（例如 clients 是後來才加的），
    此時必須用程式端預設值補回，不能給空陣列 —— 否則使用者開後台會看到整個區段空白，
@@ -446,6 +475,12 @@ function normalize(d){
   return d;
 }
 var DATA=loadData();
+/* 有同步進來的區塊就告知，否則使用者不會知道後台內容被更新過 */
+if(synced.length)setTimeout(function(){
+  toast("已同步網站新內容："+synced.map(function(s){
+    return (SEC_LABEL[s.sec]||s.sec)+" "+s.before+"→"+s.after+" 筆";
+  }).join("、"),"ok");
+},900);
 var dirty=false;
 var tab="info";
 var search="";

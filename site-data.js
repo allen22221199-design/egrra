@@ -21,12 +21,26 @@ window.EGRRA_DEFAULT_DATA = {
      不會把對方已經發布的東西弄不見。 */
   dataVersion: "2026-08-05T09:30:00Z",
 
-  /* sectionVersions：宣告「這一區是程式端在什麼時候更新的」。
-     若比已發布快照新，官網就以程式端的這一區為準，其餘仍以快照為準。
-     用途：使用者在後台改的是案例與照片，而產品花色是在程式端大批更新的；
-     沒有這個機制的話，兩邊只能二選一 —— 要嘛新花色被舊快照蓋掉，
-     要嘛使用者發布的案例被程式端蓋掉。 */
-  sectionVersions: { products: "2026-08-06T05:20:00Z" },
+  /* ★★ sectionVersions —— 在這個檔案裡直接新增實績案例或產品花色時，一定要更新 ★★
+
+     宣告「這一區是程式端在什麼時候更新的」。比對象新就以程式端的那一區為準，
+     其餘維持原本的優先順序。三個地方都會讀它：
+       api/published.js  已發布快照 vs 程式端 → 決定官網看到哪一份
+       admin.html        後台草稿   vs 程式端 → 把新內容同步進後台，其餘編輯保留
+       EGRRA_LOCAL()     官網預覽草稿 vs 程式端 → 同上
+
+     沒有這個機制的話，兩邊只能二選一：整份以快照為準，程式端新增的花色會被蓋掉；
+     整份以程式端為準，使用者在後台發布的案例與相簿會整批消失。
+
+     ── 在程式端新增內容後要做的事 ──
+       1. 把對應區塊的時間改成「當下的真實 UTC 時間」（cases 或 products）
+       2. 主 dataVersion 不要動 —— 調高會讓整份已發布快照被判過期，
+          使用者發布的內容會全部消失
+       3. 時間絕不可填未來，理由同上面 dataVersion 的說明 */
+  sectionVersions: {
+    products: "2026-08-06T05:20:00Z",   /* 2026-08-06 自石材圖庫新增 100 款 */
+    cases:    "2026-08-05T09:30:00Z"    /* 最後一次在程式端改案例：補地區資料 */
+  },
 
   /* ---- 網站資訊（可在後台「網站資訊」分頁修改）---- */
   info: {
@@ -402,9 +416,21 @@ window.EGRRA_LOCAL=function(){
   try{
     var s=localStorage.getItem('egrra_data'); if(!s) return null;
     var d=JSON.parse(s); if(!d||typeof d!=='object') return null;
-    var sv=String((window.EGRRA_DEFAULT_DATA||{}).dataVersion||"");
+    var def=window.EGRRA_DEFAULT_DATA||{};
+    var sv=String(def.dataVersion||"");
     var lv=String(d.dataVersion||"");
     if(sv && (!lv || lv < sv)) return null;   /* 草稿較舊或無版本 → 忽略 */
-    return d;
+    /* 分區同步：程式端若整批更新了某一區（如新增 100 款花色），
+       草稿裡不會有，直接用草稿預覽會看不到新內容。
+       只換掉那一區，草稿其餘未發布的修改照舊保留。
+       這裡不寫回 localStorage —— 官網只是預覽，寫回是後台的職責。 */
+    var secs=def.sectionVersions||{}, out=null;
+    Object.keys(secs).forEach(function(k){
+      if(String(secs[k]||"")>lv && def[k]!==undefined){
+        if(!out){ out={}; for(var q in d) out[q]=d[q]; }
+        out[k]=def[k];
+      }
+    });
+    return out||d;
   }catch(e){ return null; }
 };
