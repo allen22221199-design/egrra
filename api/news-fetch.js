@@ -22,6 +22,10 @@ const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const MAX_KEEP = 300;          // 佇列上限，超過就淘汰最舊的已處理項目
 const PER_QUERY = 12;          // 每個關鍵字最多看幾則
 const MAX_TO_AI = 70;          // 一次最多丟給 AI 幾則 —— 太多會超出回應長度也更容易出錯
+/* 一次只產出幾篇。設 1 是刻意的：一次丟十幾篇待審，人不會真的一篇篇看，
+   最後不是全發就是全放著。一天一篇才審得動。
+   要一次多抓幾篇就把網址加上 ?n=3。 */
+const DEFAULT_ARTICLES = 1;
 
 /* 預設追蹤主題。實際使用哪些、關鍵字寫什麼，都可以在後台「追蹤主題」調整，
    設定存在 Blob 的 news/config.json；沒有設定檔時就用這一份。
@@ -292,12 +296,17 @@ export default async function handler(req, res) {
     }
     /* 同一批裡若有多組共用同一則來源，只留第一組，避免重複文章 */
     const usedIds = new Set();
-    const uniq = [];
+    let uniq = [];
     for (const a of added) {
       if (a.ids.some(x => usedIds.has(x))) continue;
       a.ids.forEach(x => usedIds.add(x));
       uniq.push(a);
     }
+    /* 只留最值得看的幾篇：被越多家媒體報導的，通常就是越重要的事件 */
+    const want = Math.max(1, Math.min(10, parseInt((req.query && req.query.n) || DEFAULT_ARTICLES, 10) || DEFAULT_ARTICLES));
+    uniq.sort((a, b) => (b.sources?.length || 0) - (a.sources?.length || 0));
+    const dropped = Math.max(0, uniq.length - want);
+    uniq = uniq.slice(0, want);
     data.items = uniq.concat(data.items);
 
     /* 超量時只淘汰已處理過的舊項目，待審的一律保留 */
@@ -315,7 +324,7 @@ export default async function handler(req, res) {
     });
 
     return res.status(200).json({
-      ok: true, fetched: fresh.length, kept: added.length,
+      ok: true, fetched: fresh.length, kept: uniq.length, dropped,
       total: data.items.length,
       pending: data.items.filter(x => x.status === "pending").length,
     });
