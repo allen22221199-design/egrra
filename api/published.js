@@ -79,12 +79,20 @@ export default async function handler(req, res) {
        快照裡有的區塊（info/products/cases/clients）以快照為準；
        快照沒有的區塊（例如日後在程式端新增的 compare）沿用程式端。
        整份取代的話，只要程式端多一個新區塊，該區塊就會憑空消失。
-       info 再往下合一層，避免程式端新增的欄位在舊快照上遺失。 */
+       info 再往下合一層，避免程式端新增的欄位在舊快照上遺失。
+
+       sectionVersions：程式端可以宣告「某一區是我在什麼時候更新的」。
+       若該時間比快照新，這一區就改以程式端為準 —— 用來處理
+       「使用者只改了案例，但程式端大幅更新了產品」這種情況：
+       整份以快照為準會把新產品蓋掉，整份以程式端為準又會弄丟使用者的案例。
+       合併在瀏覽器端做，後端不必去解析 site-data.js 的 JS 結構。 */
     const safe = json.split(LS).join("\\u2028").split(PS).join("\\u2029");
     return res.status(200).send(
       "window.EGRRA_PUBLISHED=true;(function(){var d=window.EGRRA_DEFAULT_DATA||{},b=" + safe + ";" +
       "b.info=Object.assign({},d.info||{},b.info||{});" +
-      "window.EGRRA_DEFAULT_DATA=Object.assign({},d,b);})();");
+      "var m=Object.assign({},d,b),sv=d.sectionVersions||{},bv=String(b.dataVersion||'');" +
+      "Object.keys(sv).forEach(function(k){if(String(sv[k])>bv&&d[k]!==undefined)m[k]=d[k];});" +
+      "window.EGRRA_DEFAULT_DATA=m;})();");
   } catch (e) {
     const msg = String((e && e.message) || e).replace(/\*\//g, "* /");
     return res.status(200).send("/* EGRRA: 讀取發生例外，使用預設內容：" + msg + " */");
