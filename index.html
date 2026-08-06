@@ -1098,16 +1098,40 @@ if(DATA.info&&DATA.info.line)document.querySelectorAll('.js-line').forEach(funct
 document.documentElement.style.setProperty('--marble',
   stoneSVG({base:"#00000000",mid:"#00000000",midOp:0,vein:"#c9a878",veinOp:.7,freq:"0.006 0.02",oct:5,seed:2,blend:"normal"}));
 
-/* ----------  STONE SWATCH GALLERY  ---------- */
-var swatches=(DATA.products||[]);
+/* ----------  STONE SWATCH GALLERY  ----------
+   首頁只放代表性的一小批：花色庫已有 130 款，全數渲染等於首頁多載十幾 MB，
+   而且橫向色卡條會長到失去挑選的意義。改為每個系列平均取樣，
+   看完整清單走「探索完整花色庫」按鈕。 */
+var SW_MAX=24;
+var swatches=(function(all){
+  if(all.length<=SW_MAX)return all.slice();
+  var by={},order=[];
+  all.forEach(function(p){ var k=p.series||"其他";
+    if(!by[k]){by[k]=[];order.push(k);} by[k].push(p); });
+  var out=[],quota=Math.max(1,Math.round(SW_MAX/order.length));
+  order.forEach(function(k){
+    var arr=by[k],step=Math.max(1,Math.floor(arr.length/quota));
+    for(var i=0,n=0;i<arr.length&&n<quota;i+=step,n++)out.push(arr[i]);
+  });
+  /* 平均取樣後若還沒滿，依序補到 SW_MAX */
+  for(var i=0;out.length<SW_MAX&&i<all.length;i++)
+    if(out.indexOf(all[i])<0)out.push(all[i]);
+  return out.slice(0,SW_MAX);
+})(DATA.products||[]);
 var sw=document.getElementById("swatches");
+var swIO=("IntersectionObserver" in window)?new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(!e.isIntersecting)return;
+    e.target.style.backgroundImage=e.target.dataset.bg;
+    e.target.removeAttribute("data-bg"); swIO.unobserve(e.target); });
+},{rootMargin:"300px"}):null;
 swatches.forEach(function(s,i){
   var d=document.createElement("div");d.className="sw reveal";
   d.style.transitionDelay=(i%7*0.05)+"s";
   d.innerHTML='<div class="fill"></div><div class="nm" data-tr="'+pfEsc(s.name||"")+'">'+pfEsc(s.name||"")+'</div>';
   var f=d.querySelector(".fill");
-  f.style.backgroundImage=s.img?("url('"+s.img+"')"):tex(s.stone);
+  var bgv=s.img?("url('"+s.img+"')"):tex(s.stone);
   f.style.backgroundSize="cover";f.style.backgroundPosition="center";
+  if(swIO){ f.dataset.bg=bgv; swIO.observe(f); } else { f.style.backgroundImage=bgv; }
   d.addEventListener("click",function(){openSwlx(s);});
   sw.appendChild(d);
 });

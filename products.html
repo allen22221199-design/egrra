@@ -42,6 +42,11 @@
 .tex-picker button{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-size:cover;background-position:center;transition:.25s;padding:0}
 .tex-picker button:hover{transform:scale(1.1)}
 .tex-picker button.on{border-color:var(--gold-lt);box-shadow:0 0 0 3px rgba(201,168,120,.25)}
+/* 花色編碼：跟在名稱後面的小字，方便客戶報型號 */
+.card .cap .code{display:inline-block;margin-left:7px;font-size:11px;letter-spacing:.06em;
+  color:var(--gold-dk);border:1px solid var(--line);border-radius:4px;padding:1px 6px;vertical-align:2px}
+/* 圖還沒載入時先給底色，避免整頁閃白 */
+.card .th[data-bg]{background-color:var(--paper2)}
 </style>
 </head>
 <body>
@@ -207,11 +212,36 @@ EGRRA_I18N.init({
     if(!list.length){grid.innerHTML='<div class="noresult">'+(I.en()?"No colours match — try different filters 🙂":"找不到符合的花色，換個條件看看 🙂")+'</div>';return;}
     list.forEach(function(p){
       var c=document.createElement("div");c.className="card";
-      c.innerHTML='<div class="th" style="background-image:'+bg(p)+'"><span class="tag">'+esc(I.t(p.series||""))+'</span></div>'+
-                  '<div class="cap"><h3>'+esc(I.pname(p.name))+'</h3><p>'+esc(I.t(p.sizes||""))+'</p></div>';
+      /* 背景圖先不套用，交給下面的 IntersectionObserver 捲到附近才載入。
+         花色 130 款、每張約 110KB，全部一次載入要 14MB，手機開這頁會很久。 */
+      c.innerHTML='<div class="th" data-bg="'+esc(bg(p))+'"><span class="tag">'+esc(I.t(p.series||""))+'</span></div>'+
+                  '<div class="cap"><h3>'+esc(I.pname(p.name))+'</h3>'+
+                  (p.code?'<span class="code">'+esc(p.code)+'</span>':"")+
+                  '<p>'+esc(I.t(p.sizes||""))+'</p></div>';
       c.addEventListener("click",function(){openModal(p);});
       grid.appendChild(c);
     });
+    lazyBg();
+  }
+
+  /* 延遲載入：進入視窗前 400px 才把背景圖掛上去；不支援 IO 的瀏覽器直接全載 */
+  var io=null;
+  function lazyBg(){
+    var els=document.querySelectorAll(".th[data-bg]");
+    if(!("IntersectionObserver" in window)){
+      [].forEach.call(els,function(el){el.style.backgroundImage=el.dataset.bg;el.removeAttribute("data-bg");});
+      return;
+    }
+    if(!io)io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting)return;
+        var el=e.target;
+        el.style.backgroundImage=el.dataset.bg;
+        el.removeAttribute("data-bg");
+        io.unobserve(el);
+      });
+    },{rootMargin:"400px"});
+    [].forEach.call(els,function(el){io.observe(el);});
   }
 
   var ov=document.getElementById("ov");
@@ -225,6 +255,7 @@ EGRRA_I18N.init({
       ?"Produced with patented PrinTex™ digital texture — a high-fidelity reproduction of natural materials. Substrate and size can be customized."
       :"以 PrinTex™ 專利數位紋理技術製作，高仿真還原天然質感，可依需求客製基材與尺寸。");
     document.getElementById("m-spec").innerHTML=
+      (p.code?row(I.t("花色編碼"),p.code):"")+
       row(I.t("尺寸"),I.t(p.sizes||"4×4 / 4×8 / 4×10 / 5×10 尺"))+
       row(I.t("表面處理"),I.t(p.finish||"立體紋路・霧光・平光・消光"))+
       row(I.t("計價"),I.t(p.priceUnit||"以才計價，依需求數量報價"));
