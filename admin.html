@@ -260,6 +260,7 @@ a{color:inherit}
       <button data-tab="products"><span class="i"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>產品花色 <span class="cnt" id="cnt-p">0</span></button>
       <button data-tab="cases"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 7h18v13H3z"/><path d="M8 7V4h8v3"/></svg></span>實績案例 <span class="cnt" id="cnt-c">0</span></button>
       <button data-tab="clients"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 21V9l6-4 6 4v12"/><path d="M15 21V13h6v8"/><path d="M7 12h2M7 16h2"/></svg></span>合作建商 <span class="cnt" id="cnt-cl">0</span></button>
+      <button data-tab="news"><span class="i"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>產業快訊 <span class="cnt" id="cnt-n">0</span></button>
       <button data-tab="stats"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><rect x="5" y="11" width="3.5" height="7"/><rect x="10.5" y="6" width="3.5" height="12"/><rect x="16" y="14" width="3.5" height="4"/></svg></span>數據統計</button>
     </nav>
     <div class="foot">
@@ -613,7 +614,7 @@ content.addEventListener("click",function(e){
   if(e.target.closest&&e.target.closest("#btn-resync"))resyncFromSite();
   if(e.target.closest&&e.target.closest("#btn-migrate"))migratePhotos();
 });
-var TITLES={info:"網站資訊",products:"產品花色",cases:"實績案例",clients:"合作建商",stats:"數據統計"};
+var TITLES={info:"網站資訊",products:"產品花色",cases:"實績案例",clients:"合作建商",news:"產業快訊",stats:"數據統計"};
 function render(){
   /* 整頁重繪才重算儲存空間（要 stringify 整份資料）。
      搜尋打字走 fillList/fillClients，不經過這裡，所以不會被拖慢。 */
@@ -623,6 +624,7 @@ function render(){
   if(tab==="info")renderInfo();
   else if(tab==="products")renderProducts();
   else if(tab==="clients")renderClients();
+  else if(tab==="news")renderNews();
   else if(tab==="stats")renderStats();
   else renderCases();
 }
@@ -1078,6 +1080,120 @@ function bars(list,labelMap){
       '<span class="vl">'+x.count+'</span></div>';
   }).join("")+'</div>';
 }
+/* ---- 產業快訊：審核佇列 ----
+   排程每天抓回來的東西一律是「待審」，按了發布才會出現在官網。
+   這是刻意的：公司的賣點是耐燃一級、SGS 這種技術可信度，
+   讓未經確認的內容自動上線，省下的時間遠不及寫錯一句的代價。 */
+var NEWS={items:[],updated:"",loaded:false,filter:"pending"};
+function newsPw(){ return sessionStorage.getItem(PW_KEY)||""; }
+function renderNews(){
+  var f=NEWS.filter;
+  var cnt={pending:0,published:0,rejected:0};
+  NEWS.items.forEach(function(x){ if(cnt[x.status]!==undefined)cnt[x.status]++; });
+  var list=NEWS.items.filter(function(x){return x.status===f;});
+  content.innerHTML=
+    '<div class="pagehead"><h2>產業快訊</h2><p>每天自動蒐集防火門法規、耐燃建材安全的新聞。'+
+    '<b>抓回來的一律是待審，按「發布」才會出現在官網。</b></p></div>'+
+    '<div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>'+
+    '<div>官網只顯示<b>標題、來源、你寫的觀察與原文連結</b>，不轉貼內文 —— 轉貼是侵權。'+
+    '<br>「煌盛觀察」是 AI 依<b>標題</b>草擬的，它沒有讀過內文，'+
+    '所以只寫得出合理推論；<b>牽涉法規、等級、數字的敘述請務必自己確認過再發布</b>。</div></div>'+
+    '<div class="listbar">'+
+      '<div class="fchips" id="nw-f">'+
+        [["pending","待審",cnt.pending],["published","已發布",cnt.published],["rejected","已略過",cnt.rejected]]
+          .map(function(t){return '<button class="fchip'+(f===t[0]?" on":"")+'" data-f="'+t[0]+'">'+t[1]+' ('+t[2]+')</button>';}).join("")+
+      '</div>'+
+      '<button class="btn" id="nw-reload">重新載入</button>'+
+      '<button class="btn gold" id="nw-fetch">立即抓取</button>'+
+    '</div><div id="nw-list"></div>'+
+    '<div style="margin-top:14px;color:var(--faint);font-size:12.5px">'+
+      (NEWS.updated?"上次蒐集："+NEWS.updated.replace("T"," ").slice(0,16):"尚未蒐集過")+
+      '　·　排程每天自動執行一次</div>';
+  var host=document.getElementById("nw-list");
+  if(!NEWS.loaded){ host.innerHTML='<div class="empty"><div>載入中…</div></div>'; loadNews(); return; }
+  if(!list.length){ host.innerHTML=emptyBox(f==="pending"?"目前沒有待審的快訊":"這個分類沒有項目"); return; }
+  host.innerHTML='<div class="panel pad" style="display:grid;gap:14px">'+list.map(function(x){
+    return '<div class="cl-row" style="display:block;padding:16px 0;border-bottom:1px solid var(--line)">'+
+      '<div style="font-size:12px;color:var(--faint);margin-bottom:6px">'+
+        esc(x.topic||"")+'　·　'+esc(x.source||"")+'　·　'+esc((x.date||"").slice(0,16))+'</div>'+
+      '<div style="font-size:16px;font-weight:600;line-height:1.5;margin-bottom:8px">'+esc(x.title)+'</div>'+
+      '<textarea data-angle="'+esc(x.id)+'" rows="2" placeholder="煌盛觀察（可自行改寫；空白就不顯示這一段）" '+
+        'style="width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;'+
+        'font-family:inherit;font-size:14px;resize:vertical">'+esc(x.angle||"")+'</textarea>'+
+      '<div style="margin-top:9px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
+        '<a class="btn sm" href="'+esc(x.url)+'" target="_blank" rel="noopener">看原文</a>'+
+        (x.status!=="published"?'<button class="btn sm gold" data-pub="'+esc(x.id)+'">發布到官網</button>':
+                                 '<button class="btn sm" data-rej="'+esc(x.id)+'">從官網下架</button>')+
+        (x.status!=="rejected"?'<button class="btn sm" data-rej="'+esc(x.id)+'">略過</button>':"")+
+        '<button class="btn sm danger" data-nwdel="'+esc(x.id)+'">刪除</button>'+
+        '<span style="color:var(--faint);font-size:12px">'+esc(x.why||"")+'</span>'+
+      '</div></div>';
+  }).join("")+'</div>';
+}
+function loadNews(){
+  var pw=newsPw(); if(!pw){ pw=getPw(); if(!pw)return; }
+  fetch("/api/news?all=1&key="+encodeURIComponent(pw))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d&&d.error){ toast(d.error==="bad_password"?"密碼錯誤":"讀取失敗："+d.error,"err");
+        sessionStorage.removeItem(PW_KEY); NEWS.loaded=true; renderNews(); return; }
+      NEWS.items=(d&&d.items)||[]; NEWS.updated=(d&&d.updated)||""; NEWS.loaded=true;
+      var n=NEWS.items.filter(function(x){return x.status==="pending";}).length;
+      var el=document.getElementById("cnt-n"); if(el)el.textContent=n;
+      renderNews();
+    })
+    .catch(function(){ NEWS.loaded=true; renderNews(); toast("連不到後端","err"); });
+}
+function newsAct(action,id,extra){
+  var pw=getPw(); if(!pw)return;
+  var body={password:pw,action:action,ids:[id]};
+  if(extra)for(var k in extra)body[k]=extra[k];
+  return fetch("/api/news",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)}).then(function(r){return r.json();});
+}
+content.addEventListener("click",function(e){
+  /* 只在產業快訊分頁作用 —— data-del 等屬性在案例／花色頁也有，不隔開會誤觸 */
+  if(tab!=="news")return;
+  var t=e.target.closest("[data-f]");
+  if(t&&t.closest("#nw-f")){ NEWS.filter=t.dataset.f; renderNews(); return; }
+  if(e.target.closest("#nw-reload")){ NEWS.loaded=false; renderNews(); return; }
+  if(e.target.closest("#nw-fetch")){
+    var pw=getPw(); if(!pw)return;
+    var b=e.target.closest("#nw-fetch"); b.disabled=true; b.textContent="抓取中…";
+    fetch("/api/news-fetch?key="+encodeURIComponent(pw))
+      .then(function(r){return r.json();}).then(function(d){
+        b.disabled=false; b.textContent="立即抓取";
+        if(d&&d.ok){ toast("新增 "+d.kept+" 則待審（共掃描 "+d.fetched+" 則）","ok");
+          NEWS.loaded=false; renderNews(); }
+        else toast("抓取失敗："+((d&&(d.detail||d.error))||"未知"),"err");
+      }).catch(function(){ b.disabled=false; b.textContent="立即抓取"; toast("連不到後端","err"); });
+    return;
+  }
+  var pub=e.target.closest("[data-pub]");
+  if(pub){
+    var id=pub.dataset.pub;
+    var ta=content.querySelector('[data-angle="'+id+'"]');
+    /* 先存下編輯過的觀察，再發布，否則使用者改的字會遺失 */
+    newsAct("update",id,{angle:ta?ta.value:""})
+      .then(function(){ return newsAct("publish",id); })
+      .then(function(d){ if(d&&d.ok){ toast("已發布到官網","ok"); NEWS.loaded=false; renderNews(); }
+                         else toast("發布失敗","err"); });
+    return;
+  }
+  var rej=e.target.closest("[data-rej]");
+  if(rej){
+    newsAct("reject",rej.dataset.rej).then(function(d){
+      if(d&&d.ok){ toast("已略過（不會再抓回來）","ok"); NEWS.loaded=false; renderNews(); }});
+    return;
+  }
+  var del=e.target.closest("[data-nwdel]");
+  if(del){
+    if(!confirm("確定刪除這則？刪除後下次蒐集可能又會抓回來。\n若只是不想要，建議按「略過」。"))return;
+    newsAct("delete",del.dataset.nwdel).then(function(d){
+      if(d&&d.ok){ toast("已刪除","ok"); NEWS.loaded=false; renderNews(); }});
+  }
+});
+
 function renderStats(){
   content.innerHTML=
     '<div class="pagehead"><h2>數據統計</h2><p>訪客進站後看了哪些頁面、停留多久、以及實際做了哪些互動。不使用 cookie、不蒐集個資。</p></div>'+

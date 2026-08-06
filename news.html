@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://egrra.vercel.app/news.html" />
+<script>document.documentElement.classList.add('js');</script>
+<title>產業快訊｜煌盛興業 EGRRA・藝格板</title>
+<meta name="description" content="煌盛興業整理防火門法規、耐燃建材安全等與建材相關的產業新聞，附上我們的觀察與原文連結。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="lib.css" />
+<style>
+.nw-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.nw-tab{border:1px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;
+  padding:10px 20px;border-radius:99px;font-family:inherit;font-size:14.5px;transition:.25s var(--ease)}
+.nw-tab:hover{border-color:var(--gold-lt);color:var(--ink)}
+.nw-tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.nw-list{display:grid;gap:16px}
+.nw{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;
+  transition:.3s var(--ease)}
+.nw:hover{box-shadow:var(--sh);border-color:transparent}
+.nw .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.nw .tp{font-size:11.5px;letter-spacing:.06em;padding:3px 10px;border-radius:99px;
+  background:var(--paper2);color:var(--gold-dk)}
+.nw .src{font-size:12.5px;color:var(--faint)}
+.nw h3{font-family:var(--serif);font-size:19px;line-height:1.5;color:var(--ink);margin-bottom:10px}
+/* 觀察是我們自己寫的，用金色左線和內文區隔，不會被誤讀成原文摘要 */
+.nw .angle{font-size:14.5px;color:var(--ink-soft);line-height:1.75;
+  border-left:3px solid var(--gold);padding-left:14px;margin-bottom:14px}
+.nw .angle b{color:var(--gold-dk);font-weight:600;font-size:12.5px;letter-spacing:.06em;
+  display:block;margin-bottom:4px}
+.nw a.go{font-size:14px;color:var(--gold-dk);text-decoration:none;font-weight:500}
+.nw a.go:hover{color:var(--ink)}
+
+.nw-note{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--faint);line-height:1.9}
+.nw-empty{background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  padding:60px 30px;text-align:center;color:var(--faint)}
+@media(max-width:640px){ .nw{padding:20px} .nw h3{font-size:17px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand"><b>煌盛興業</b><span>EGRRA</span></a>
+    <nav class="nav-links">
+      <a href="index.html#about">關於煌盛</a>
+      <a href="index.html#tech">核心技術</a>
+      <a href="compare.html">競品比較</a>
+      <a href="index.html#products">產品系列</a>
+      <a href="products.html">花色庫</a>
+      <a href="cases.html">實績案例</a>
+      <a href="news.html" class="on">產業快訊</a>
+      <a href="certifications.html">認證</a>
+      <a href="index.html#contact" class="nav-cta">聯絡我們</a>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
+    </nav>
+    <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="band">
+  <div class="glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Industry News</span>
+    <h1 id="nw-h1">產業快訊</h1>
+    <p id="nw-lead">防火門法規、耐燃建材安全等與空間裝修相關的產業動態。每則附上我們的觀察與原文連結。</p>
+  </div>
+</section>
+
+<section class="libsec">
+  <div class="wrap">
+    <div class="nw-tabs" id="tabs"></div>
+    <div class="nw-list" id="list"></div>
+    <p class="nw-note" id="note"></p>
+  </div>
+</section>
+
+<div class="foot">
+  <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
+</div>
+
+<script src="site-data.js"></script>
+<script src="/api/published"></script>
+<script src="i18n-sub.js"></script>
+<script>
+(function(){
+  var ITEMS=[], cur="全部";
+  var elTabs=document.getElementById("tabs"), elList=document.getElementById("list"),
+      elNote=document.getElementById("note");
+  function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function en(){return document.documentElement.getAttribute("data-lang")==="en";}
+  function L(zh,e){return en()?e:zh;}
+  function fmt(d){
+    var t=Date.parse(d); if(isNaN(t))return "";
+    var x=new Date(t);
+    return x.getFullYear()+"/"+("0"+(x.getMonth()+1)).slice(-2)+"/"+("0"+x.getDate()).slice(-2);
+  }
+  function draw(){
+    var topics=["全部"].concat(ITEMS.map(function(x){return x.topic;})
+      .filter(function(v,i,a){return v&&a.indexOf(v)===i;}));
+    elTabs.innerHTML=topics.map(function(t){
+      var n=t==="全部"?ITEMS.length:ITEMS.filter(function(x){return x.topic===t;}).length;
+      return '<button class="nw-tab'+(t===cur?" on":"")+'" data-t="'+esc(t)+'">'+
+             esc(t==="全部"?L("全部","All"):t)+' ('+n+')</button>';
+    }).join("");
+    var list=ITEMS.filter(function(x){return cur==="全部"||x.topic===cur;});
+    if(!list.length){
+      elList.innerHTML='<div class="nw-empty">'+
+        L("目前還沒有發布的快訊，敬請期待。","No news published yet.")+'</div>';
+      return;
+    }
+    elList.innerHTML=list.map(function(x){
+      return '<article class="nw">'+
+        '<div class="top">'+(x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
+          '<span class="src">'+esc(x.source||"")+(x.date?'　'+fmt(x.date):"")+'</span></div>'+
+        '<h3>'+esc(x.title)+'</h3>'+
+        (x.angle?'<div class="angle"><b>'+L("煌盛觀察","EGRRA’s take")+'</b>'+esc(x.angle)+'</div>':"")+
+        '<a class="go" href="'+esc(x.url)+'" target="_blank" rel="noopener nofollow">'+
+          L("閱讀原文 →","Read the original →")+'</a>'+
+      '</article>';
+    }).join("");
+  }
+  elTabs.addEventListener("click",function(e){
+    var b=e.target.closest("[data-t]"); if(!b)return;
+    cur=b.dataset.t; draw();
+  });
+
+  fetch("/api/news").then(function(r){return r.json();}).then(function(d){
+    ITEMS=(d&&d.items)||[];
+    elNote.textContent=L(
+      "＊ 本頁僅整理標題與原文連結，著作權屬各原始媒體所有；「煌盛觀察」為本公司自行撰寫的看法，非原文摘要。",
+      "* This page lists headlines and links only; copyright remains with each original publisher. “EGRRA’s take” is our own commentary, not a summary of the article.")
+      + (d&&d.updated?"　"+L("最後更新：","Last updated: ")+fmt(d.updated):"");
+    draw();
+  }).catch(function(){
+    ITEMS=[]; draw();
+    elNote.textContent=L("快訊暫時無法載入。","News could not be loaded right now.");
+  });
+
+  EGRRA_I18N.init({
+    dict:{
+      "nw.h1":"Industry News",
+      "nw.lead":"Fire-door regulations, fire-rated material safety and other industry developments relevant to interior fit-out — each with our own take and a link to the original."
+    },
+    sel:[["#nw-h1","nw.h1"],["#nw-lead","nw.lead"]]
+  });
+  window.__redraw=function(){ draw();
+    var d=document.getElementById("note");
+    if(d)d.textContent=L("＊ 本頁僅整理標題與原文連結，著作權屬各原始媒體所有；「煌盛觀察」為本公司自行撰寫的看法，非原文摘要。",
+      "* This page lists headlines and links only; copyright remains with each original publisher. “EGRRA’s take” is our own commentary, not a summary of the article.");
+  };
+
+  var bg=document.querySelector(".burger");
+  if(bg)bg.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("open");});
+})();
+</script>
+</body>
+</html>
