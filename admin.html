@@ -1196,12 +1196,20 @@ function loadNews(){
 /* 本地先更新，畫面立刻反應；伺服器同步是背景的事。
    先前每按一次都要等「POST 存檔 → 整份重新讀取」兩趟往返，
    加上 Blob 寫入延遲，刪一則要好幾秒，刪十則就等半分鐘。 */
+var NEWS_SNAP=null;
+function snap(){ NEWS_SNAP=JSON.parse(JSON.stringify(NEWS.items)); }
+function revert(msg){
+  if(NEWS_SNAP){ NEWS.items=NEWS_SNAP; NEWS_SNAP=null; renderNews(); }
+  if(msg)toast(msg,"err");
+}
 function removeLocal(ids){
+  snap();
   var set={}; ids.forEach(function(i){set[i]=1;});
   NEWS.items=NEWS.items.filter(function(x){return !set[x.id];});
   renderNews();
 }
 function setStatus(ids,st,ed){
+  snap();
   var set={}; ids.forEach(function(i){set[i]=1;});
   NEWS.items.forEach(function(x){
     if(!set[x.id])return;
@@ -1231,13 +1239,13 @@ function newsAct(action,ids,extra){
       }
       if(res.j&&res.j.error==="bad_password"){
         sessionStorage.removeItem(PW_KEY);
-        toast("發布密碼錯誤，請再操作一次並重新輸入","err");
+        revert("發布密碼錯誤，請再操作一次並重新輸入");
       }else{
-        toast("操作失敗："+((res.j&&(res.j.detail||res.j.error))||("HTTP "+res.status)),"err");
+        revert("操作失敗："+((res.j&&(res.j.detail||res.j.error))||("HTTP "+res.status)));
       }
       return null;
     })
-    .catch(function(err){ toast("連不到後端："+(err&&err.message||""),"err"); return null; });
+    .catch(function(err){ revert("連不到後端："+(err&&err.message||"")); return null; });
 }
 content.addEventListener("click",function(e){
   /* 只在產業快訊分頁作用 —— data-del 等屬性在案例／花色頁也有，不隔開會誤觸 */

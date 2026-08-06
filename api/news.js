@@ -99,7 +99,11 @@ export default async function handler(req, res) {
       }
       if (req.query && req.query.stat) {
         res.setHeader("Cache-Control", "no-store");
-        return res.status(200).json({ updated: data.updated, total: data.items.length, counts });
+        return res.status(200).json({
+          updated: data.updated, total: data.items.length, counts,
+          /* id 是 Google News 的不透明識別碼，不含個資，列出來方便比對 */
+          ids: data.items.slice(0, 10).map(x => ({ id: x.id, status: x.status, hasBody: !!(x.body||'').trim() })),
+        });
       }
 
       /* 官網：只給已發布，且不外流內部欄位。
@@ -169,7 +173,13 @@ export default async function handler(req, res) {
     }
 
     await save(data);
-    return res.status(200).json({ ok: true, changed: n });
+    /* 回報收到什麼、比對到什麼 —— 「按了沒反應」時要能立刻分辨
+       是請求沒送到、id 對不上、還是真的沒有符合的項目。 */
+    return res.status(200).json({
+      ok: true, changed: n,
+      received: [...ids],
+      known: data.items.slice(0, 50).map(x => x.id),
+    });
   } catch (e) {
     return res.status(500).json({ error: "server_error", detail: String(e?.message || e) });
   }
