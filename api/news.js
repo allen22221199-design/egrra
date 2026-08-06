@@ -88,10 +88,25 @@ export default async function handler(req, res) {
           return res.status(401).json({ error: "bad_password" });
         return res.status(200).json(data);
       }
-      /* 官網：只給已發布，且不外流內部欄位 */
-      res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+      /* 診斷用的彙總：只有數量，不含任何內容，不需要密碼。
+         「發布了但官網沒出現」時，靠這個就能分辨是沒寫進去、
+         還是寫進去但被快取擋住。 */
+      const counts = { pending: 0, published: 0, rejected: 0, other: 0, emptyBody: 0, aiFailed: 0 };
+      for (const x of data.items) {
+        (counts[x.status] !== undefined ? counts[x.status]++ : counts.other++);
+        if (!x.body || !String(x.body).trim()) counts.emptyBody++;
+        if (x.aiOk === false) counts.aiFailed++;
+      }
+      if (req.query && req.query.stat) {
+        res.setHeader("Cache-Control", "no-store");
+        return res.status(200).json({ updated: data.updated, total: data.items.length, counts });
+      }
+
+      /* 官網：只給已發布，且不外流內部欄位。
+         快取時間壓短 —— 發布後要等好幾分鐘才看得到，會讓人以為沒發布成功。 */
+      res.setHeader("Cache-Control", "public, s-maxage=20, stale-while-revalidate=40");
       return res.status(200).json({
-        updated: data.updated,
+        updated: data.updated, counts,
         items: data.items
           .filter(x => x.status === "published")
           .sort((a, b) => String(b.publishedAt || b.addedAt || "").localeCompare(
