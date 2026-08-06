@@ -38,7 +38,7 @@ window.EGRRA_DEFAULT_DATA = {
           使用者發布的內容會全部消失
        3. 時間絕不可填未來，理由同上面 dataVersion 的說明 */
   sectionVersions: {
-    products: "2026-08-06T06:50:00Z",   /* 單色系列改為純色塊 */
+    products: "2026-08-06T07:10:00Z",   /* 單色系列擴充為 59 款，參考 2026 流行色 */
     cases:    "2026-08-05T09:30:00Z"    /* 最後一次在程式端改案例：補地區資料 */
   },
 
@@ -355,34 +355,83 @@ window.EGRRA_DEFAULT_DATA = {
 
     /* ---- 單色系列：烤漆鋁板實色板 ---- */
     /* 白系 */
+    /* 灰系 */
+    /* 金系 */
+    /* 黑系 */
+    /* 棕系 */
+
+
+    /* ---- 單色系列：烤漆鋁板實色板（純色塊，無紋理）----
+       色盤參考 2026 室內裝修流行色：暖中性、大地色、煙燻橄欖、
+       霧藍與孔雀藍、灰粉與藕紫，含 Glidden 2026 年度色 Warm Mahogany。
+       編碼 0xx白 1xx灰 2xx米金大地 3xx深色 4xx棕紅 5xx綠 6xx藍 7xx粉紫 ---- */
+    /* 白・米白 */
     { id:"ps001", code:"PT-S001", name:"純白", series:"單色系列", stone:"carrara", hex:"#F6F5F2", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS001.jpg" },
     { id:"ps002", code:"PT-S002", name:"象牙白", series:"單色系列", stone:"carrara", hex:"#EFE9DC", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS002.jpg" },
-    { id:"ps003", code:"PT-S003", name:"米白", series:"單色系列", stone:"carrara", hex:"#E9E1D3", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS003.jpg" },
-    { id:"ps004", code:"PT-S004", name:"珍珠灰", series:"單色系列", stone:"carrara", hex:"#D9D6D1", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS004.jpg" },
-    /* 灰系 */
-    { id:"ps005", code:"PT-S101", name:"淺灰", series:"單色系列", stone:"grey", hex:"#C0BEB9", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS101.jpg" },
-    { id:"ps006", code:"PT-S102", name:"銀灰", series:"單色系列", stone:"grey", hex:"#A9AAAC", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS102.jpg" },
-    { id:"ps007", code:"PT-S103", name:"中灰", series:"單色系列", stone:"grey", hex:"#8D8D8D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS103.jpg" },
-    { id:"ps008", code:"PT-S104", name:"鐵灰", series:"單色系列", stone:"grey", hex:"#6F7174", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS104.jpg" },
-    { id:"ps009", code:"PT-S105", name:"深灰", series:"單色系列", stone:"grey", hex:"#4B4D4F", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS105.jpg" },
-    /* 金系 */
-    { id:"ps010", code:"PT-S201", name:"香檳金", series:"單色系列", stone:"gold", hex:"#CAB89B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS201.jpg" },
-    { id:"ps011", code:"PT-S202", name:"鈦金", series:"單色系列", stone:"gold", hex:"#B59C6D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS202.jpg" },
-    { id:"ps012", code:"PT-S203", name:"古銅", series:"單色系列", stone:"gold", hex:"#8B6B46", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS203.jpg" },
-    { id:"ps013", code:"PT-S204", name:"卡其", series:"單色系列", stone:"gold", hex:"#A89471", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS204.jpg" },
-    /* 黑系 */
-    { id:"ps014", code:"PT-S301", name:"石墨黑", series:"單色系列", stone:"black", hex:"#34363B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS301.jpg" },
-    { id:"ps015", code:"PT-S302", name:"曜石黑", series:"單色系列", stone:"black", hex:"#1F2023", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS302.jpg" },
-    { id:"ps016", code:"PT-S303", name:"碳黑", series:"單色系列", stone:"black", hex:"#131417", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS303.jpg" },
-    /* 棕系 */
-    { id:"ps017", code:"PT-S401", name:"咖啡棕", series:"單色系列", stone:"amber", hex:"#5C4737", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS401.jpg" },
-    { id:"ps018", code:"PT-S402", name:"磚紅", series:"單色系列", stone:"amber", hex:"#A54530", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS402.jpg" },
-    { id:"ps019", code:"PT-S403", name:"中國紅", series:"單色系列", stone:"amber", hex:"#9C2D25", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS403.jpg" },
-    { id:"ps020", code:"PT-S404", name:"酒紅", series:"單色系列", stone:"amber", hex:"#6F2834", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS404.jpg" },
-    { id:"ps021", code:"PT-S405", name:"藏青", series:"單色系列", stone:"silver", hex:"#2D3B56", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS405.jpg" },
-    { id:"ps022", code:"PT-S406", name:"天空藍", series:"單色系列", stone:"silver", hex:"#5B80A7", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS406.jpg" },
-    { id:"ps023", code:"PT-S407", name:"墨綠", series:"單色系列", stone:"darkgrey", hex:"#304B3D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS407.jpg" },
-    { id:"ps024", code:"PT-S408", name:"橄欖綠", series:"單色系列", stone:"darkgrey", hex:"#6C7451", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS408.jpg" },
+    { id:"ps003", code:"PT-S003", name:"奶油白", series:"單色系列", stone:"carrara", hex:"#F2EAD8", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS003.jpg" },
+    { id:"ps004", code:"PT-S004", name:"亞麻白", series:"單色系列", stone:"carrara", hex:"#EAE3D6", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS004.jpg" },
+    { id:"ps005", code:"PT-S005", name:"米白", series:"單色系列", stone:"carrara", hex:"#E9E1D3", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS005.jpg" },
+    { id:"ps006", code:"PT-S006", name:"陶土白", series:"單色系列", stone:"carrara", hex:"#E5DCD0", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS006.jpg" },
+    { id:"ps007", code:"PT-S007", name:"燕麥", series:"單色系列", stone:"carrara", hex:"#E3DACA", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS007.jpg" },
+    { id:"ps008", code:"PT-S008", name:"珍珠灰", series:"單色系列", stone:"silver", hex:"#D9D6D1", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS008.jpg" },
+    /* 灰 */
+    { id:"ps009", code:"PT-S101", name:"灰米", series:"單色系列", stone:"silver", hex:"#CFC7BA", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS101.jpg" },
+    { id:"ps010", code:"PT-S102", name:"淺灰", series:"單色系列", stone:"silver", hex:"#C0BEB9", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS102.jpg" },
+    { id:"ps011", code:"PT-S103", name:"蘑菇灰", series:"單色系列", stone:"silver", hex:"#BDB2A5", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS103.jpg" },
+    { id:"ps012", code:"PT-S104", name:"銀灰", series:"單色系列", stone:"grey", hex:"#A9AAAC", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS104.jpg" },
+    { id:"ps013", code:"PT-S105", name:"暖灰", series:"單色系列", stone:"grey", hex:"#9C948B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS105.jpg" },
+    { id:"ps014", code:"PT-S106", name:"中灰", series:"單色系列", stone:"grey", hex:"#8D8D8D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS106.jpg" },
+    { id:"ps015", code:"PT-S107", name:"鐵灰", series:"單色系列", stone:"grey", hex:"#6F7174", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS107.jpg" },
+    { id:"ps016", code:"PT-S108", name:"深灰", series:"單色系列", stone:"darkgrey", hex:"#4B4D4F", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS108.jpg" },
+    /* 米金・大地 */
+    { id:"ps017", code:"PT-S201", name:"奶油黃", series:"單色系列", stone:"gold", hex:"#EFD9A0", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS201.jpg" },
+    { id:"ps018", code:"PT-S202", name:"小麥", series:"單色系列", stone:"gold", hex:"#D8C49A", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS202.jpg" },
+    { id:"ps019", code:"PT-S203", name:"香檳金", series:"單色系列", stone:"gold", hex:"#CAB89B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS203.jpg" },
+    { id:"ps020", code:"PT-S204", name:"沙丘", series:"單色系列", stone:"gold", hex:"#C8B291", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS204.jpg" },
+    { id:"ps021", code:"PT-S205", name:"鈦金", series:"單色系列", stone:"gold", hex:"#B59C6D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS205.jpg" },
+    { id:"ps022", code:"PT-S206", name:"卡其", series:"單色系列", stone:"gold", hex:"#A89471", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS206.jpg" },
+    { id:"ps023", code:"PT-S207", name:"芥末黃", series:"單色系列", stone:"gold", hex:"#C8912E", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS207.jpg" },
+    { id:"ps024", code:"PT-S208", name:"赭黃", series:"單色系列", stone:"gold", hex:"#B8873C", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS208.jpg" },
+    { id:"ps025", code:"PT-S209", name:"焦糖", series:"單色系列", stone:"amber", hex:"#A9743F", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS209.jpg" },
+    /* 深色・黑 */
+    { id:"ps026", code:"PT-S301", name:"石墨黑", series:"單色系列", stone:"black", hex:"#34363B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS301.jpg" },
+    { id:"ps027", code:"PT-S302", name:"墨棕", series:"單色系列", stone:"black", hex:"#2B2320", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS302.jpg" },
+    { id:"ps028", code:"PT-S303", name:"曜石黑", series:"單色系列", stone:"black", hex:"#1F2023", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS303.jpg" },
+    { id:"ps029", code:"PT-S304", name:"碳黑", series:"單色系列", stone:"black", hex:"#131417", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS304.jpg" },
+    /* 棕紅 */
+    { id:"ps030", code:"PT-S401", name:"摩卡", series:"單色系列", stone:"amber", hex:"#9B7B67", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS401.jpg" },
+    { id:"ps031", code:"PT-S402", name:"古銅", series:"單色系列", stone:"amber", hex:"#8B6B46", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS402.jpg" },
+    { id:"ps032", code:"PT-S403", name:"焦赭", series:"單色系列", stone:"amber", hex:"#7A4A32", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS403.jpg" },
+    { id:"ps033", code:"PT-S404", name:"可可", series:"單色系列", stone:"amber", hex:"#6B4E3D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS404.jpg" },
+    { id:"ps034", code:"PT-S405", name:"咖啡棕", series:"單色系列", stone:"amber", hex:"#5C4737", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS405.jpg" },
+    { id:"ps035", code:"PT-S406", name:"赤陶", series:"單色系列", stone:"amber", hex:"#B25F42", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS406.jpg" },
+    { id:"ps036", code:"PT-S407", name:"灼橘", series:"單色系列", stone:"amber", hex:"#A85328", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS407.jpg" },
+    { id:"ps037", code:"PT-S408", name:"磚紅", series:"單色系列", stone:"amber", hex:"#A54530", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS408.jpg" },
+    { id:"ps038", code:"PT-S409", name:"暖桃花心", series:"單色系列", stone:"amber", hex:"#8C3B2E", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS409.jpg" },
+    { id:"ps039", code:"PT-S410", name:"中國紅", series:"單色系列", stone:"amber", hex:"#9C2D25", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS410.jpg" },
+    { id:"ps040", code:"PT-S411", name:"牛血紅", series:"單色系列", stone:"amber", hex:"#6E2B24", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS411.jpg" },
+    { id:"ps041", code:"PT-S412", name:"酒紅", series:"單色系列", stone:"amber", hex:"#6F2834", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS412.jpg" },
+    /* 綠 */
+    { id:"ps042", code:"PT-S501", name:"青瓷綠", series:"單色系列", stone:"silver", hex:"#B7C7B4", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS501.jpg" },
+    { id:"ps043", code:"PT-S502", name:"鼠尾草綠", series:"單色系列", stone:"silver", hex:"#A8B29B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS502.jpg" },
+    { id:"ps044", code:"PT-S503", name:"煙燻橄欖", series:"單色系列", stone:"darkgrey", hex:"#7A7A56", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS503.jpg" },
+    { id:"ps045", code:"PT-S504", name:"苔綠", series:"單色系列", stone:"darkgrey", hex:"#6F7A55", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS504.jpg" },
+    { id:"ps046", code:"PT-S505", name:"橄欖綠", series:"單色系列", stone:"darkgrey", hex:"#6C7451", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS505.jpg" },
+    { id:"ps047", code:"PT-S506", name:"森林綠", series:"單色系列", stone:"darkgrey", hex:"#3E5641", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS506.jpg" },
+    { id:"ps048", code:"PT-S507", name:"墨綠", series:"單色系列", stone:"darkgrey", hex:"#304B3D", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS507.jpg" },
+    /* 藍 */
+    { id:"ps049", code:"PT-S601", name:"霧藍", series:"單色系列", stone:"silver", hex:"#9FB2C1", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS601.jpg" },
+    { id:"ps050", code:"PT-S602", name:"灰藍", series:"單色系列", stone:"grey", hex:"#7089A0", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS602.jpg" },
+    { id:"ps051", code:"PT-S603", name:"天空藍", series:"單色系列", stone:"grey", hex:"#5B80A7", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS603.jpg" },
+    { id:"ps052", code:"PT-S604", name:"孔雀藍", series:"單色系列", stone:"darkgrey", hex:"#2E5D63", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS604.jpg" },
+    { id:"ps053", code:"PT-S605", name:"靛藍", series:"單色系列", stone:"darkgrey", hex:"#33456B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS605.jpg" },
+    { id:"ps054", code:"PT-S606", name:"藏青", series:"單色系列", stone:"darkgrey", hex:"#2D3B56", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS606.jpg" },
+    /* 粉紫 */
+    { id:"ps055", code:"PT-S701", name:"灰粉", series:"單色系列", stone:"silver", hex:"#D9B8AE", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS701.jpg" },
+    { id:"ps056", code:"PT-S702", name:"玫瑰灰", series:"單色系列", stone:"silver", hex:"#C4A49B", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS702.jpg" },
+    { id:"ps057", code:"PT-S703", name:"丁香紫", series:"單色系列", stone:"silver", hex:"#B3A5C4", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS703.jpg" },
+    { id:"ps058", code:"PT-S704", name:"藕紫", series:"單色系列", stone:"purple", hex:"#A88A93", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS704.jpg" },
+    { id:"ps059", code:"PT-S705", name:"梅果紫", series:"單色系列", stone:"purple", hex:"#6B4560", sizes:"120×240 / 120×300 / 150×300 cm", finish:"立體紋路・霧光・平光・消光", desc:"", img:"img/tex/PTS705.jpg" },
   ],
 
   /* ---- 合作客戶（首頁實績區展示；整理自業務專案總表）----
