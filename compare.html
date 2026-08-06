@@ -110,14 +110,8 @@ table.cmp col.c-us{width:31%}
   padding:10px 22px;border-bottom:none}
 .cmp .grp+tr td{border-top:none}
 
-/* 出處編號 */
-.cmp .ref{font-size:10px;color:var(--gold-dk);margin-left:3px;cursor:help;font-weight:700;
-  vertical-align:super}
-.cmp .us .ref{color:var(--gold-lt)}
-.cmp-srcs{margin-top:20px;font-size:12.5px;color:var(--faint);line-height:1.8}
-.reflist{margin:0 0 12px;padding-left:20px}
-.reflist li{margin-bottom:4px}
-.srcline{display:block;padding-top:12px;border-top:1px solid var(--line)}
+.cmp-srcs{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--faint);line-height:1.8}
 
 /* 主打欄底部的行動呼籲 */
 .cmp .ctarow td{border-bottom:none;padding-top:22px;padding-bottom:26px}
@@ -155,8 +149,6 @@ table.cmp col.c-us{width:31%}
   /* 手機寬度放不下「大字＋單位」同一行，單位改成自己一行 */
   .crow .big{font-size:30px;line-height:1.1}
   .crow .big small{display:block;margin:4px 0 0;font-size:13px}
-  .crow .ref{font-size:10px;color:var(--gold-dk);vertical-align:super;font-weight:700}
-  .crow.us .ref{color:var(--gold-lt)}
   .cgrp{background:var(--ink);color:var(--gold-lt);font-size:12px;letter-spacing:.16em;
     padding:10px 16px;border-radius:8px;margin:18px 0 10px}
   .cmp-legend{font-size:12px}
@@ -211,8 +203,8 @@ table.cmp col.c-us{width:31%}
     <div class="cmp-cards" id="cards"></div>
     <p class="cmp-srcs" id="srcs"></p>
 
+    <!-- 主要行動呼籲已在表格主打欄底部，這裡只留延伸閱讀，避免同一個按鈕連著出現兩次 -->
     <div class="cmp-cta">
-      <a class="gold" href="index.html#contact" data-i18n="cmp.cta1">索取樣品 / 型錄 →</a>
       <a class="ghost" href="cases.html" data-i18n="cmp.cta2">看實績案例</a>
       <a class="ghost" href="certifications.html" data-i18n="cmp.cta3">看認證文件</a>
     </div>
@@ -403,22 +395,16 @@ table.cmp col.c-us{width:31%}
   function bigify(v){
     return /^[0-9]{1,2}H$/.test(v) ? '<em>'+esc(v)+'</em>' : tt(v);
   }
-  /* 出處與但書改成表尾編號：留在格子裡會把每一格撐得又長又雜，
-     但這些字又不能拿掉（競品數值一定要能追出處），所以移到表尾。 */
-  var notes=[];
-  function refHtml(txt){
-    if(!txt) return "";
-    var s=t(txt), i=notes.indexOf(s);
-    if(i<0){ notes.push(s); i=notes.length-1; }
-    return '<sup class="ref" title="'+esc(s)+'">'+(i+1)+'</sup>';
-  }
   function cellHtml(c){
     if(!c) return "";
     /* big：資料指定要放大的關鍵數字，獨立一行當賣點；unit 是它後面的小字單位 */
     var big=c.big?'<div class="big">'+tt(c.big)+(c.unit?'<small>'+tt(c.unit)+'</small>':"")+'</div>':"";
+    /* dim＝出處與但書。放在該格內的小字，競品數值才追得到來源；
+       曾改成表尾編號註解，但表尾會堆成一長串，反而礙眼。 */
     return flagHtml(c.flag)+big+
-      '<div class="v">'+bigify(c.v||"")+refHtml(c.dim)+'</div>'+
-      (c.note?'<div class="note">'+tt(c.note)+'</div>':"");
+      '<div class="v">'+bigify(c.v||"")+'</div>'+
+      (c.note?'<div class="note">'+tt(c.note)+'</div>':"")+
+      (c.dim ?'<div class="dim">'+tt(c.dim)+'</div>':"");
   }
   /* 計分：藝格板在這張表拿下幾項。先給結論，再讓人看細節 */
   function scoreHtml(T){
@@ -457,7 +443,6 @@ table.cmp col.c-us{width:31%}
       '<th class="hd us"><b>'+tt(T.us&&T.us.name||"")+'</b><span>'+tt(T.us&&T.us.sub||"")+'</span></th>'+
       (T.cols||[]).map(function(c){return '<th class="hd"><b>'+tt(c.name||"")+'</b><span>'+tt(c.sub||"")+'</span></th>';}).join("")+
       '</tr></thead>';
-    notes=[];   /* 每次重畫都重新編號，切換表格才不會累加 */
     var span=2+(T.cols||[]).length;
     var lastG=null;
     var body='<tbody>'+(T.rows||[]).map(function(r,i){
@@ -488,10 +473,7 @@ table.cmp col.c-us{width:31%}
       return gh+'<div class="ccard"><h3><span>'+pad(i)+'</span>'+tt(r.label||"")+'</h3>'+rows+'</div>';
     }).join("");
 
-    elSrcs.innerHTML=(notes.length
-        ? '<ol class="reflist">'+notes.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ol>'
-        : "")+
-      '<span class="srcline">'+esc(t(T.srcs||""))+'</span>';
+    elSrcs.textContent=t(T.srcs||"");
   }
 
   elTabs.addEventListener("click",function(e){
