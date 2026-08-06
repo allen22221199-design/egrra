@@ -75,12 +75,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const data = await load();
+      /* 主題設定不需要讀佇列，先處理掉，省一次 Blob 讀取 */
       if (req.query && req.query.config) {
         if ((req.query.key || "") !== process.env.ADMIN_PASSWORD)
           return res.status(401).json({ error: "bad_password" });
         return res.status(200).json({ topics: await loadTopics() });
       }
+      const data = await load();
       const wantAll = req.query && req.query.all;
       if (wantAll) {
         if ((req.query.key || "") !== process.env.ADMIN_PASSWORD)
