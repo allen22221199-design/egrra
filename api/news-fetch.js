@@ -23,24 +23,41 @@ const MAX_KEEP = 300;          // 佇列上限，超過就淘汰最舊的已處�
 const PER_QUERY = 12;          // 每個關鍵字最多看幾則
 const MAX_TO_AI = 70;          // 一次最多丟給 AI 幾則 —— 太多會超出回應長度也更容易出錯
 
-/* 追蹤主題，涵蓋產品線會碰到的各個面向。
+/* 預設追蹤主題。實際使用哪些、關鍵字寫什麼，都可以在後台「追蹤主題」調整，
+   設定存在 Blob 的 news/config.json；沒有設定檔時就用這一份。
    關鍵字刻意寫得具體 —— 只打「建材」兩個字會抓回一堆上市公司財報與
-   開幕新聞稿，對建築師與建商沒有價值；具體的詞才問得出有用的東西。
-   抓回來之後還有 AI 過濾與人工審核兩道關卡。 */
-const TOPICS = [
-  { key: "防火法規", qs: [
+   開幕新聞稿；具體的詞才問得出有用的東西。抓回來之後還有 AI 過濾與人工審核。 */
+const DEFAULT_TOPICS = [
+  { key: "土方與工期", on: true, qs: [
+      "土方之亂", "營建剩餘土石方 去化", "土資場 棄土", "營建 缺工 缺料 工期"] },
+  { key: "防火法規", on: true, qs: [
       "防火門 法規", "防火門 消防 安檢", "防火區劃 建築技術規則", "消防安全設備 檢修"] },
-  { key: "耐燃安全", qs: [
+  { key: "耐燃安全", on: true, qs: [
       "耐燃 建材", "建材 防火 認證", "耐燃一級", "外牆 建材 火災"] },
-  { key: "綠建材低碳", qs: [
+  { key: "綠建材低碳", on: true, qs: [
       "綠建材標章", "低碳建材", "建材 減碳 淨零", "循環建材 再生"] },
-  { key: "室內設計", qs: [
+  { key: "室內設計", on: true, qs: [
       "室內設計 趨勢", "空間設計 材質", "商空 裝修 設計", "飯店 翻新 設計"] },
-  { key: "公設與都更", qs: [
+  { key: "公設與都更", on: true, qs: [
       "社區 公設 修繕", "危老 都更 外牆", "老屋 翻新 公寓", "物業管理 公共空間"] },
-  { key: "健康建材", qs: [
+  { key: "健康建材", on: true, qs: [
       "甲醛 建材 檢測", "抗菌 建材 醫療", "室內空氣品質 裝修", "長照 空間 建材"] },
 ];
+const CONFIG_PATH = "news/config.json";
+
+async function loadTopics() {
+  try {
+    const { blobs } = await list({ prefix: CONFIG_PATH, limit: 1 });
+    if (blobs?.[0]?.url) {
+      const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
+      if (r.ok) {
+        const c = await r.json();
+        if (Array.isArray(c.topics) && c.topics.length) return c.topics;
+      }
+    }
+  } catch (e) { /* 沒有設定檔就用預設 */ }
+  return DEFAULT_TOPICS;
+}
 
 const RSS = q =>
   "https://news.google.com/rss/search?q=" + encodeURIComponent(q) +
@@ -125,7 +142,7 @@ async function gemini(prompt) {
    所以這裡的做法是：從多則報導的標題交叉確認「發生了什麼事」，
    再由煌盛的專業角度寫一篇原創短文 —— 重點放在「這對你的案子意味什麼」，
    那本來就是原文沒有的內容，底部再列出所有參考來源。 */
-const PROMPT = (list) => `你是台灣建材公司「煌盛興業」的內容編輯。
+const PROMPT = (list, TOPIC_KEYS) => `你是台灣建材公司「煌盛興業」的內容編輯。
 
 公司產品「藝格板」：以 PrinTex™ 數位紋理技術製作的裝飾板材，通過耐燃一級，
 鋁基材、重量約天然石材的 1/30，有 SGS 抗菌與無甲醛檢測。
@@ -160,7 +177,7 @@ const PROMPT = (list) => `你是台灣建材公司「煌盛興業」的內容編
 
 輸出 JSON 陣列，每個元素：
 {"idx": [這一組的原索引數字],
- "topic": 從這幾個擇一："防火法規"、"耐燃安全"、"綠建材低碳"、"室內設計"、"公設與都更"、"健康建材",
+ "topic": 從這幾個擇一：${TOPIC_KEYS},
  "title": "煌盛自己的標題，不要照抄新聞標題，20字以內",
  "body": "三段短文，段落之間用 \\n\\n 分隔，總長 250-400 字"}
 
@@ -207,6 +224,7 @@ export default async function handler(req, res) {
     /* ---- 抓取 ----
        六類主題共二十幾組關鍵字，逐一序列抓會超過 Serverless 的執行時限，
        因此並行發出；單一來源失敗不影響其他（allSettled）。 */
+    const TOPICS = (await loadTopics()).filter(t => t.on !== false && Array.isArray(t.qs));
     const jobs = [];
     for (const t of TOPICS)
       for (const q of t.qs)
@@ -242,7 +260,7 @@ export default async function handler(req, res) {
     let picked = [];
     let aiOk = true;
     try {
-      picked = await gemini(PROMPT(fresh));
+      picked = await gemini(PROMPT(fresh, TOPICS.map(t => `"${t.key}"`).join("、")));
     } catch (e) {
       /* AI 掛掉不該讓整批消失：原樣收進來，內文留空由人工處理 */
       aiOk = false;

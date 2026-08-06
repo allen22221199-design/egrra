@@ -13,6 +13,33 @@
 import { put, list } from "@vercel/blob";
 
 const BLOB_PATH = "news/queue.json";
+const CONFIG_PATH = "news/config.json";
+
+/* 追蹤主題設定。與 news-fetch.js 共用同一份預設值，
+   使用者在後台調整後存成 news/config.json，蒐集時以那份為準。 */
+const DEFAULT_TOPICS = [
+  { key: "土方與工期", on: true, qs: ["土方之亂", "營建剩餘土石方 去化", "土資場 棄土", "營建 缺工 缺料 工期"] },
+  { key: "防火法規", on: true, qs: ["防火門 法規", "防火門 消防 安檢", "防火區劃 建築技術規則", "消防安全設備 檢修"] },
+  { key: "耐燃安全", on: true, qs: ["耐燃 建材", "建材 防火 認證", "耐燃一級", "外牆 建材 火災"] },
+  { key: "綠建材低碳", on: true, qs: ["綠建材標章", "低碳建材", "建材 減碳 淨零", "循環建材 再生"] },
+  { key: "室內設計", on: true, qs: ["室內設計 趨勢", "空間設計 材質", "商空 裝修 設計", "飯店 翻新 設計"] },
+  { key: "公設與都更", on: true, qs: ["社區 公設 修繕", "危老 都更 外牆", "老屋 翻新 公寓", "物業管理 公共空間"] },
+  { key: "健康建材", on: true, qs: ["甲醛 建材 檢測", "抗菌 建材 醫療", "室內空氣品質 裝修", "長照 空間 建材"] },
+];
+
+async function loadTopics() {
+  try {
+    const { blobs } = await list({ prefix: CONFIG_PATH, limit: 1 });
+    if (blobs?.[0]?.url) {
+      const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
+      if (r.ok) {
+        const c = await r.json();
+        if (Array.isArray(c.topics) && c.topics.length) return c.topics;
+      }
+    }
+  } catch (e) { /* 沒有設定檔就用預設 */ }
+  return DEFAULT_TOPICS;
+}
 
 async function load() {
   const { blobs } = await list({ prefix: BLOB_PATH, limit: 1 });
@@ -49,6 +76,11 @@ export default async function handler(req, res) {
   try {
     if (req.method === "GET") {
       const data = await load();
+      if (req.query && req.query.config) {
+        if ((req.query.key || "") !== process.env.ADMIN_PASSWORD)
+          return res.status(401).json({ error: "bad_password" });
+        return res.status(200).json({ topics: await loadTopics() });
+      }
       const wantAll = req.query && req.query.all;
       if (wantAll) {
         if ((req.query.key || "") !== process.env.ADMIN_PASSWORD)
@@ -101,6 +133,21 @@ export default async function handler(req, res) {
       const before = data.items.length;
       data.items = data.items.filter(x => !ids.has(x.id));
       n = before - data.items.length;
+    } else if (body.action === "topics") {
+      const ts = (Array.isArray(body.topics) ? body.topics : [])
+        .map(t => ({
+          key: String(t.key || "").slice(0, 20),
+          on: t.on !== false,
+          qs: (Array.isArray(t.qs) ? t.qs : [])
+            .map(q => String(q || "").trim()).filter(Boolean).slice(0, 8),
+        }))
+        .filter(t => t.key && t.qs.length);
+      if (!ts.length) return res.status(400).json({ error: "no_topics", detail: "至少要留一個主題" });
+      await put(CONFIG_PATH, JSON.stringify({ topics: ts, updated: now }), {
+        access: "public", addRandomSuffix: false, allowOverwrite: true,
+        contentType: "application/json; charset=utf-8", cacheControlMaxAge: 0,
+      });
+      return res.status(200).json({ ok: true, changed: ts.length });
     } else {
       return res.status(400).json({ error: "unknown_action" });
     }

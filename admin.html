@@ -1084,7 +1084,7 @@ function bars(list,labelMap){
    排程每天抓回來的東西一律是「待審」，按了發布才會出現在官網。
    這是刻意的：公司的賣點是耐燃一級、SGS 這種技術可信度，
    讓未經確認的內容自動上線，省下的時間遠不及寫錯一句的代價。 */
-var NEWS={items:[],updated:"",loaded:false,filter:"pending"};
+var NEWS={items:[],updated:"",loaded:false,filter:"pending",topics:[],showTopics:false};
 function newsPw(){ return sessionStorage.getItem(PW_KEY)||""; }
 function renderNews(){
   var f=NEWS.filter;
@@ -1099,6 +1099,30 @@ function renderNews(){
     '即使換句話說也還是侵權。文末列出參考來源。'+
     '<br><b>AI 只看得到新聞標題，沒有讀過內文</b>，所以它寫的是可合理推論的內容。'+
     '<b style="color:#9c4b42">牽涉法規、罰則、等級、金額的敘述，發布前請務必自己查證</b>。</div></div>'+
+    '<div class="panel pad" style="margin-bottom:16px">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">'+
+        '<b style="font-size:15px">追蹤主題</b>'+
+        '<button class="btn sm" id="nw-topics-toggle">'+(NEWS.showTopics?"收合":"設定要抓哪些")+'</button>'+
+      '</div>'+
+      (NEWS.showTopics?'<div id="nw-topics" style="margin-top:14px">'+
+        (NEWS.topics.length?NEWS.topics.map(function(t,i){
+          return '<div style="display:flex;gap:10px;align-items:flex-start;padding:9px 0;'+
+            'border-top:1px solid var(--line)">'+
+            '<label style="display:flex;align-items:center;gap:7px;min-width:120px;padding-top:8px">'+
+              '<input type="checkbox" data-ton="'+i+'"'+(t.on!==false?" checked":"")+' /> '+
+              '<b style="font-size:14px">'+esc(t.key)+'</b></label>'+
+            '<input data-tqs="'+i+'" value="'+esc((t.qs||[]).join("、"))+'" '+
+              'placeholder="關鍵字，用、分隔" style="flex:1;min-width:200px;border:1px solid var(--line);'+
+              'border-radius:8px;padding:8px 11px;font-family:inherit;font-size:13.5px" />'+
+          '</div>';
+        }).join(""):'<div style="color:var(--faint);font-size:13px">載入中…</div>')+
+        '<div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+          '<button class="btn sm gold" id="nw-topics-save">儲存主題設定</button>'+
+          '<button class="btn sm" id="nw-topics-add">新增一個主題</button>'+
+          '<span style="color:var(--faint);font-size:12px">'+
+            '取消勾選就不再抓那一類；關鍵字要寫得具體，只打「建材」會抓回一堆財經新聞。</span>'+
+        '</div></div>':"")+
+    '</div>'+
     '<div class="listbar">'+
       '<div class="fchips" id="nw-f">'+
         [["pending","待審",cnt.pending],["published","已發布",cnt.published],["rejected","已略過",cnt.rejected]]
@@ -1138,6 +1162,13 @@ function renderNews(){
         '<button class="btn sm danger" data-nwdel="'+esc(x.id)+'">刪除</button>'+
       '</div></div>';
   }).join("")+'</div>';
+}
+function loadTopics(){
+  var pw=newsPw(); if(!pw)return;
+  fetch("/api/news?config=1&key="+encodeURIComponent(pw))
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d&&d.topics){ NEWS.topics=d.topics; renderNews(); } })
+    .catch(function(){});
 }
 function loadNews(){
   var pw=newsPw(); if(!pw){ pw=getPw(); if(!pw)return; }
@@ -1188,6 +1219,35 @@ content.addEventListener("click",function(e){
   var t=e.target.closest("[data-f]");
   if(t&&t.closest("#nw-f")){ NEWS.filter=t.dataset.f; renderNews(); return; }
   if(e.target.closest("#nw-reload")){ NEWS.loaded=false; renderNews(); return; }
+  if(e.target.closest("#nw-topics-toggle")){
+    NEWS.showTopics=!NEWS.showTopics;
+    if(NEWS.showTopics&&!NEWS.topics.length)loadTopics();
+    renderNews(); return;
+  }
+  if(e.target.closest("#nw-topics-add")){
+    var k=prompt("新主題的名稱（例如：都市更新）"); if(!k)return;
+    var q=prompt("關鍵字，用、分隔（例如：都更 補助、危老 重建）"); if(!q)return;
+    NEWS.topics.push({key:k.trim(),on:true,qs:q.split(/[、,，]/).map(function(x){return x.trim();}).filter(Boolean)});
+    renderNews(); return;
+  }
+  if(e.target.closest("#nw-topics-save")){
+    var pw=getPw(); if(!pw)return;
+    var out=NEWS.topics.map(function(t,i){
+      var cb=content.querySelector('[data-ton="'+i+'"]');
+      var qi=content.querySelector('[data-tqs="'+i+'"]');
+      return { key:t.key, on:cb?cb.checked:true,
+               qs:(qi?qi.value:"").split(/[、,，]/).map(function(x){return x.trim();}).filter(Boolean) };
+    }).filter(function(t){return t.qs.length;});
+    if(!out.length){ toast("至少要留一個主題，而且要有關鍵字","err"); return; }
+    fetch("/api/news",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({password:pw,action:"topics",topics:out})})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d&&d.ok){ NEWS.topics=out; toast("已儲存 "+d.changed+" 個主題","ok"); renderNews(); }
+        else toast("儲存失敗："+((d&&(d.detail||d.error))||"未知"),"err");
+      }).catch(function(){ toast("連不到後端","err"); });
+    return;
+  }
   if(e.target.closest("#nw-fetch")){
     var pw=getPw(); if(!pw)return;
     var b=e.target.closest("#nw-fetch"); b.disabled=true; b.textContent="抓取中…";
