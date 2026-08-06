@@ -59,8 +59,10 @@ export default async function handler(req, res) {
           .filter(x => x.status === "published")
           .sort((a, b) => String(b.publishedAt || b.addedAt || "").localeCompare(
                           String(a.publishedAt || a.addedAt || "")))
-          .map(({ id, title, source, url, date, topic, angle, publishedAt }) =>
-               ({ id, title, source, url, date, topic, angle, publishedAt })),
+          .map(({ id, title, body, topic, sources, publishedAt }) =>
+               ({ id, title, body, topic, publishedAt,
+                  sources: (sources || []).map(({ title, source, url, date }) =>
+                                              ({ title, source, url, date })) })),
       });
     }
 
@@ -85,8 +87,9 @@ export default async function handler(req, res) {
     } else if (body.action === "update") {
       data.items.forEach(x => {
         if (ids.has(x.id)) {
-          if (typeof body.angle === "string") x.angle = body.angle.slice(0, 120);
+          if (typeof body.body === "string") x.body = body.body.slice(0, 4000);
           if (typeof body.title === "string" && body.title.trim()) x.title = body.title.slice(0, 200);
+          x.editedAt = now;
           n++;
         }
       });
