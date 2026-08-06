@@ -140,6 +140,24 @@ export default async function handler(req, res) {
     } else if (body.action === "reject") {
       /* 標記而非刪除：刪掉的話下次抓取會因為 id 不在佇列裡而重新收進來 */
       data.items.forEach(x => { if (ids.has(x.id)) { x.status = "rejected"; n++; } });
+    } else if (body.action === "save") {
+      /* 內容與狀態一次改完。
+         先前發布要送兩個請求（先 update 再 publish），每個都是
+         「讀取 → 修改 → 整份寫回」；兩次寫入之間 Blob 若還沒同步，
+         後一次會讀到舊資料而把前一次蓋掉，發布就這樣消失。
+         合併成一次就沒有這個競態，往返也少一趟。 */
+      const st = body.status;
+      data.items.forEach(x => {
+        if (!ids.has(x.id)) return;
+        if (typeof body.body === "string") x.body = body.body.slice(0, 4000);
+        if (typeof body.title === "string" && body.title.trim()) x.title = body.title.slice(0, 200);
+        if (st === "published" || st === "rejected" || st === "pending") {
+          x.status = st;
+          if (st === "published") x.publishedAt = now;
+        }
+        x.editedAt = now;
+        n++;
+      });
     } else if (body.action === "update") {
       data.items.forEach(x => {
         if (ids.has(x.id)) {

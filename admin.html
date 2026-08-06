@@ -1310,7 +1310,8 @@ content.addEventListener("click",function(e){
     var id=pub.dataset.pub, ed=nwEdits(id);
     if(!ed.body||!ed.body.trim()){ toast("內文是空的，請先寫好再發布","err"); return; }
     setStatus([id],"published",ed);
-    newsAct("update",id,ed).then(function(){ return newsAct("publish",id); })
+    /* 內容與狀態一次送出 —— 分兩次會有寫入競態，後一次可能蓋掉前一次 */
+    newsAct("save",id,{title:ed.title,body:ed.body,status:"published"})
       .then(function(d){ if(d&&d.ok)toast("已發布到官網","ok"); });
     return;
   }
@@ -1338,7 +1339,9 @@ content.addEventListener("click",function(e){
     var act=bulk.dataset.bulk;
     if(act==="delete"&&!confirm("確定刪除勾選的 "+sel.length+" 則？"))return;
     if(act==="delete")removeLocal(sel); else setStatus(sel,act==="publish"?"published":"rejected");
-    newsAct(act,sel).then(function(d){
+    var call=act==="delete"?newsAct("delete",sel)
+            :newsAct("save",sel,{status:act==="publish"?"published":"rejected"});
+    call.then(function(d){
       if(d&&d.ok)toast((act==="delete"?"已刪除 ":act==="publish"?"已發布 ":"已略過 ")+sel.length+" 則","ok"); });
     return;
   }
