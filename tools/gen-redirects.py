@@ -150,16 +150,54 @@ def build():
     return redirects
 
 
-def main():
+def write_vercel(rules):
     p = os.path.join(ROOT, "vercel.json")
     cfg = json.load(open(p, encoding="utf-8"))
-    cfg["redirects"] = build()
+    cfg["redirects"] = rules
     with open(p, "w", encoding="utf-8", newline="\n") as f:
         f.write(json.dumps(cfg, ensure_ascii=False, indent=2) + "\n")
-    n = len(cfg["redirects"])
-    print(f"vercel.json：{n} 條轉址（Vercel 上限 1024）")
-    if n > 1024:
+    print(f"vercel.json：{len(rules)} 條（Vercel 上限 1024）")
+    if len(rules) > 1024:
         raise SystemExit("★ 超過 Vercel 上限，需要改用萬用規則收斂")
+
+
+def write_cloudflare(rules):
+    """
+    Cloudflare Pages 的 _redirects。搬到 Cloudflare 之後 vercel.json 不會被讀，
+    這 574 條轉址全部會消失 —— 兩份一起產，才不會搬家搬到一半才發現。
+
+    格式差異：
+      Vercel      {"source": "/a", "destination": "/b", "statusCode": 301}
+      Cloudflare  /a  /b  301          （空白分隔的純文字，一行一條）
+    萬用字元也不同：Vercel 用 (.*)，Cloudflare 用 *。
+    額度：免費方案 2000 條靜態 + 100 條動態（含 * 的算動態）。
+    """
+    lines = [
+        "# 舊站 egrra.com 的 301 轉址（Cloudflare Pages 格式）",
+        "# 這個檔由 tools/gen-redirects.py 產生，不要手改 —— 改了下次重跑就沒了。",
+        "# 對照表與踩過的坑都寫在那支程式裡。",
+        "",
+    ]
+    static, dynamic = 0, 0
+    for r in rules:
+        src = r["source"].replace("(.*)", "*")
+        if "*" in src:
+            dynamic += 1
+        else:
+            static += 1
+        lines.append(f'{src}  {r["destination"]}  301')
+    p = os.path.join(ROOT, "_redirects")
+    with open(p, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"_redirects：靜態 {static} 條（上限 2000）、動態 {dynamic} 條（上限 100）")
+    if static > 2000 or dynamic > 100:
+        raise SystemExit("★ 超過 Cloudflare Pages 上限")
+
+
+def main():
+    rules = build()
+    write_vercel(rules)
+    write_cloudflare(rules)
 
 
 if __name__ == "__main__":

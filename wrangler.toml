@@ -1,0 +1,55 @@
+#=============================================================================
+# 煌盛興業 EGRRA — Cloudflare Pages 設定
+#-----------------------------------------------------------------------------
+# 搬家原因：Vercel 的 Fair Use 明訂免費的 Hobby 方案「僅限非商業個人用途」，
+# 而「Advertising the sale of a product or service」就算商業使用 —— 這個站
+# 現在就已經不合規。Cloudflare 的服務條款沒有這條限制（唯一相關的是免費
+# 方案的網站不能處理信用卡資料，我們沒有金流）。
+#
+# ★ 免費方案的硬限制：每次呼叫只有 10 ms CPU ★
+#   等網路的時間不算，但解析、運算要算。移植時有兩支要改做法，不能照搬：
+#     - upload：原本後台把圖轉 base64 再 POST，Worker 要解碼。
+#               改成瀏覽器直接送二進位，Worker 只做 arrayBuffer() 塞進 KV。
+#     - news-fetch：原本一次抓 7 個主題、70 則丟給 AI，還有一段 O(n²) 逐字
+#               去重。改成每天輪一個主題。
+#=============================================================================
+
+name = "egrra-official"
+compatibility_date = "2026-08-10"
+pages_build_output_dir = "."
+
+# --- KV：後台發布的快照、產業快訊、後台上傳的圖片 -----------------------------
+# 為什麼不用 R2：R2 要跑一次 checkout 開通，文件沒寫清楚會不會要求留卡號。
+# 實測用量後發現不需要 —— repo 裡 61 MB 圖片是靜態檔案，由 Pages 直接服務
+# （流量無上限、不佔儲存），後台真正上傳到雲端的只有 49 張約 15 MB。
+# KV 免費 1 GB、單筆上限 25 MB，綽綽有餘，而且不用綁卡。
+#
+# 建立方式：Workers & Pages → KV → Create namespace，
+# 然後把下面的 id 換成實際的 namespace id。
+[[kv_namespaces]]
+binding = "EGRRA_KV"
+id = "★建立後把 namespace id 填在這裡★"
+
+# --- D1：網站流量統計 ---------------------------------------------------------
+# stats 是逐筆寫入（每個 session 每頁一筆），KV 免費方案每天只有 1000 次寫入，
+# 會被瀏覽量直接吃掉。D1 免費是每天 10 萬次寫入、500 萬次讀取、5 GB。
+#
+# 建立方式：Workers & Pages → D1 → Create database，
+# 然後執行 tools/d1-schema.sql 建表。
+[[d1_databases]]
+binding = "EGRRA_DB"
+database_name = "egrra-stats"
+database_id = "★建立後把 database id 填在這裡★"
+
+# --- Cron：產業快訊每日蒐集 ---------------------------------------------------
+# 免費方案每個帳號 5 個 cron，我們只用 1 個。
+# 時間是 UTC，01:00 UTC = 台灣早上 9 點。
+[triggers]
+crons = ["0 1 * * *"]
+
+# --- 環境變數 -----------------------------------------------------------------
+# 密碼與金鑰不要寫在這個檔（會進 git）。到
+# Pages 專案 → Settings → Environment variables 設定：
+#   ADMIN_PASSWORD    後台發布密碼
+#   GEMINI_API_KEY    產業快訊改寫與智能客服用
+#   GEMINI_MODEL      選填，預設 gemini-2.5-flash
