@@ -24,22 +24,20 @@ pages_build_output_dir = "."
 # （流量無上限、不佔儲存），後台真正上傳到雲端的只有 49 張約 15 MB。
 # KV 免費 1 GB、單筆上限 25 MB，綽綽有餘，而且不用綁卡。
 #
-# 建立方式：Workers & Pages → KV → Create namespace，
-# 然後把下面的 id 換成實際的 namespace id。
+# 2026-08-10 已透過 API 建立完成（namespace 名稱 egrra-kv）。
 [[kv_namespaces]]
 binding = "EGRRA_KV"
-id = "★建立後把 namespace id 填在這裡★"
+id = "dc382523468c427984e667205d257d8c"
 
 # --- D1：網站流量統計 ---------------------------------------------------------
 # stats 是逐筆寫入（每個 session 每頁一筆），KV 免費方案每天只有 1000 次寫入，
 # 會被瀏覽量直接吃掉。D1 免費是每天 10 萬次寫入、500 萬次讀取、5 GB。
 #
-# 建立方式：Workers & Pages → D1 → Create database，
-# 然後執行 tools/d1-schema.sql 建表。
+# 2026-08-10 已透過 API 建立完成，tools/d1-schema.sql 也跑過了（sessions 表 + idx_sessions_day）。
 [[d1_databases]]
 binding = "EGRRA_DB"
 database_name = "egrra-stats"
-database_id = "★建立後把 database id 填在這裡★"
+database_id = "16215946-23c7-4660-b2c4-a5403fb3ab3c"
 
 # --- Cron：產業快訊每日蒐集 ---------------------------------------------------
 # 免費方案每個帳號 5 個 cron，我們只用 1 個。
