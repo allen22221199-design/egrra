@@ -7,7 +7,7 @@
 <link rel="canonical" href="https://egrra.vercel.app/products.html" />
 <script>document.documentElement.classList.add('js');</script>
 <title>花色庫｜煌盛興業 EGRRA・藝格板</title>
-<meta name="description" content="煌盛興業 EGRRA 藝格板花色庫，可依系列與色系篩選，重現大理石、金屬繡蝕、木紋等數位紋理。" />
+<meta name="description" content="煌盛興業 EGRRA 藝格板花色庫，可依系列與色系篩選，重現大理石、金屬鏽蝕、木紋等數位紋理。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
@@ -210,7 +210,7 @@ EGRRA_I18N.init({
   }
   function match(p){
     if(state.series!=="全部"&&p.series!==state.series)return false;
-    if(state.tone!=="全部"&&T.toneOf(p.stone)!==state.tone)return false;
+    if(state.tone!=="全部"&&T.toneOf(p)!==state.tone)return false;   /* 傳整個產品，讓它優先用自訂的 tone */
     return true;
   }
   /* 中英切換：動態字串經 I 翻譯（zh 模式原樣傳回） */

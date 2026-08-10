@@ -329,7 +329,7 @@ function init() {
   const isEN = () => document.documentElement.getAttribute("data-lang") === "en";
   const T3D = { "左牆":"Left", "右牆":"Right", "端牆":"End",
     "鋁":"Aluminium", "玻璃":"Glass", "金屬":"Metal", "木質":"Wood",
-    "石紋系列":"Stone Series", "繡蝕系列":"Rust Series", "木紋系列":"Wood Series" };
+    "石紋系列":"Stone Series", "鏽蝕系列":"Rust Series", "木紋系列":"Wood Series" };
   const t3 = s => (isEN() && T3D[s]) ? T3D[s] : s;
   const tPanel = s => isEN() ? s.replace("尺", " ft") : s;
   const tName = s => (window.EGRRA_I18N ? EGRRA_I18N.pname(s) : s);

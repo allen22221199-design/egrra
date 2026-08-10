@@ -361,7 +361,7 @@ function optsFrom(arr,key,fallback){
   (fallback||[]).forEach(function(v){if(!seen[v]){seen[v]=1;out.push(v);}});
   return out;
 }
-function seriesOpts(){return optsFrom(DATA.products,"series",["石紋系列","繡蝕系列","木紋系列"]);}
+function seriesOpts(){return optsFrom(DATA.products,"series",["石紋系列","鏽蝕系列","木紋系列"]);}
 /* 一個案場可同時屬於多個類別（例如同時做防火門與消防箱）。
    新資料存 cats 陣列；舊資料只有單一 category，讀取時一併相容。 */
 function catsOf(c){

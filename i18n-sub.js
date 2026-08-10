@@ -38,13 +38,14 @@ window.EGRRA_I18N = (function () {
     "牆面": "Wall", "全棟廊道": "Corridor", "防火消防美化": "Fire Equipment",
     "豪宅客製": "Luxury Custom", "其他": "Other", "實績案例": "Project",
     /* 產品系列 / 色系 */
-    "石紋系列": "Stone Series", "繡蝕系列": "Rust Series", "木紋系列": "Wood Series",
+    "石紋系列": "Stone Series", "鏽蝕系列": "Rust Series", "木紋系列": "Wood Series",
     "花崗石系列": "Granite Series",
     "單色系列": "Solid Colour Series",
     "120×240 / 120×300 / 150×300 cm": "120×240 / 120×300 / 150×300 cm",
     "三塗三烤": "Triple-coat, triple-bake",
     "花色編碼": "Colour code",
     "淺白": "Light", "米金": "Beige", "暖棕": "Warm", "灰階": "Grey", "深黑": "Dark",
+    "紅磚": "Red", "綠": "Green", "藍": "Blue", "粉紫": "Pink",
     /* 規格 */
     "立體紋路・霧光・平光・消光": "Embossed · Matte · Satin · Flat",
     "以才計價，依需求數量報價": "Priced per unit (30×30 cm); quoted by quantity",

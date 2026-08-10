@@ -28,14 +28,30 @@ window.EGRRA_TEX = (function(){
   };
   var TEX={};for(var k in STONES){TEX[k]=stoneSVG(STONES[k]);}
   /* 色系分組（花色庫篩選用）*/
+  /* 色系篩選。stone 是「程式生成紋理」用的材質代號，不適合直接當色系 ——
+     單色系列的墨綠、藏青都借用了 darkgrey/grey，會被歸進「灰階」，
+     設計師想找綠色時根本找不到。
+     因此每一款可另外指定 tone；沒指定才回頭依 stone 推。 */
   var TONES=[
     {key:"light", label:"淺白", stones:["carrara","silver"]},
     {key:"beige", label:"米金", stones:["beige","gold"]},
     {key:"warm",  label:"暖棕", stones:["amber","rust","wood"]},
     {key:"grey",  label:"灰階", stones:["grey","darkgrey"]},
-    {key:"dark",  label:"深黑", stones:["black","purple"]}
+    {key:"dark",  label:"深黑", stones:["black","purple"]},
+    {key:"red",   label:"紅磚",  stones:[]},
+    {key:"green", label:"綠",   stones:[]},
+    {key:"blue",  label:"藍",   stones:[]},
+    {key:"pink",  label:"粉紫",  stones:[]}
   ];
-  function toneOf(stone){for(var i=0;i<TONES.length;i++){if(TONES[i].stones.indexOf(stone)>=0)return TONES[i].key;}return "other";}
+  function toneOf(stoneOrProduct){
+    /* 傳產品物件時優先用它自己的 tone；傳字串就是舊的 stone 推法 */
+    if(stoneOrProduct&&typeof stoneOrProduct==="object"){
+      if(stoneOrProduct.tone)return stoneOrProduct.tone;
+      stoneOrProduct=stoneOrProduct.stone;
+    }
+    for(var i=0;i<TONES.length;i++){if(TONES[i].stones.indexOf(stoneOrProduct)>=0)return TONES[i].key;}
+    return "other";
+  }
   return {
     tex:function(key){return TEX[key]||TEX.carrara;},
     STONES:STONES, TONES:TONES, toneOf:toneOf, svg:stoneSVG

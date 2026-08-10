@@ -42,18 +42,18 @@
     { id:"products", keys:["產品","花色","系列","顏色","款式","色卡","有哪些","有什麼","商品","種類","大理石","石材","選擇"],
       reply:function(){
         var stone=seriesNames("石紋系列");
-        var t="我們的藝格板主要分三大系列：<b>石紋系列</b>（仿大理石、板岩）、<b>繡蝕系列</b>（金屬繡蝕質感）、<b>木紋系列</b>（溫潤木質）。";
+        var t="我們的藝格板主要分三大系列：<b>石紋系列</b>（仿大理石、板岩）、<b>鏽蝕系列</b>（金屬鏽蝕質感）、<b>木紋系列</b>（溫潤木質）。";
         if(stone.length)t+="<br><br>石紋系列目前有 "+stone.length+" 款花色，例如："+sample(stone,6)+" …";
         t+="<br><br>另外也有<b>消防箱</b>與<b>防火門</b>的美化應用。想看哪個系列，或直接跟我說花色名稱？";
-        return {text:t,chips:["石紋系列","繡蝕系列","木紋系列","消防箱／防火門","怎麼計價"]};
+        return {text:t,chips:["石紋系列","鏽蝕系列","木紋系列","消防箱／防火門","怎麼計價"]};
       } },
 
     { id:"series-stone", keys:["石紋"],
       reply:function(){var n=seriesNames("石紋系列");
         return {text:"<b>石紋系列</b>重現天然大理石與板岩的紋理，"+(n.length?"包含 "+n.length+" 款：<br>"+n.join("、")+"。":"款式眾多。")+"<br><br>想知道某一款的尺寸或表面處理，直接跟我說名稱即可！",chips:["尺寸規格","怎麼計價","聯絡我們"]};} },
-    { id:"series-rust", keys:["繡蝕","鏽蝕","鏽","金屬感","工業風","工業"],
-      reply:function(){var n=seriesNames("繡蝕系列");
-        return {text:"<b>繡蝕系列</b>呈現金屬繡蝕、歲月斑駁的工業美學，冷冽而深邃。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。")+"",chips:["其他系列","聯絡我們"]};} },
+    { id:"series-rust", keys:["鏽蝕","鏽蝕","鏽","金屬感","工業風","工業"],
+      reply:function(){var n=seriesNames("鏽蝕系列");
+        return {text:"<b>鏽蝕系列</b>呈現金屬鏽蝕、歲月斑駁的工業美學，冷冽而深邃。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。")+"",chips:["其他系列","聯絡我們"]};} },
     { id:"series-wood", keys:["木紋","木質","木頭","原木"],
       reply:function(){var n=seriesNames("木紋系列");
         return {text:"<b>木紋系列</b>是溫潤自然的木質紋理，為空間注入柔和暖意。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。")+"",chips:["其他系列","聯絡我們"]};} },
