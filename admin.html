@@ -265,7 +265,7 @@ a{color:inherit}
     </nav>
     <div class="foot">
       改完按「<b>發布上線</b>」<br>約 1 分鐘後全站生效<br>
-      <a href="index.html" target="_blank" rel="noopener">↗ 開啟官網</a>
+      <a href="/" target="_blank" rel="noopener">↗ 開啟官網</a>
     </div>
   </aside>
 
@@ -1062,8 +1062,8 @@ var EV_LABEL={
   contact_tiktok:"點 TikTok", contact_mail:"點 Email",
   nav_colours:"前往花色庫", nav_projects:"前往實績案例", nav_certs:"前往認證頁"
 };
-var PAGE_LABEL={"/":"首頁","/index.html":"首頁","/products.html":"花色庫",
-  "/cases.html":"實績案例","/certifications.html":"認證與規範"};
+var PAGE_LABEL={"/":"首頁","/":"首頁","/products":"花色庫",
+  "/cases":"實績案例","/certifications":"認證與規範"};
 var SEC_LABEL={home:"首屏",about:"關於煌盛",tech:"核心技術",products:"產品系列",
   gallery:"石紋花色",portfolio:"實績案例",qa:"常見問題",contact:"聯絡我們"};
 var SRC_LABEL={direct:"直接進入",google:"Google 搜尋",bing:"Bing 搜尋",facebook:"Facebook",
@@ -1596,7 +1596,7 @@ document.getElementById("btn-publish").onclick=function(){
 };
 document.getElementById("btn-preview").onclick=function(){
   if(dirty)saveData(true);
-  window.open("index.html?t="+Date.now(),"_blank");
+  window.open("/?t="+Date.now(),"_blank");
 };
 document.getElementById("btn-export").onclick=function(){
   var blob=new Blob([JSON.stringify(DATA,null,2)],{type:"application/json"});

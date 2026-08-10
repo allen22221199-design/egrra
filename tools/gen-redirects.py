@@ -82,29 +82,29 @@ HUE = [
 
 # 固定頁面
 PAGE = {
-    "/實績案例": "/cases.html", "/實績案例-2-2": "/cases.html",
+    "/實績案例": "/cases", "/實績案例-2-2": "/cases",
     "/煌盛興業股份有限公司": "/#about", "/about-us": "/#about",
-    "/產品介紹-product": "/products.html", "/石紋系列": "/products.html",
-    "/shop": "/products.html",
+    "/產品介紹-product": "/products", "/石紋系列": "/products",
+    "/shop": "/products",
     "/聯絡我們": "/#contact", "/contact-us": "/#contact",
-    "/藝格板": "/#tech", "/qa": "/#qa", "/blog": "/news.html",
-    "/product-category/消防箱": "/cases.html",
-    "/product-category/防火門": "/cases.html",
-    "/product-category/藝格板": "/products.html",
-    "/product-category/藝格板/木紋系列": "/products.html",
-    "/product-category/藝格板/石紋系列": "/products.html",
-    "/product-category/藝格板/繡蝕系列": "/products.html",
-    "/portfolio-tag/藝格板": "/products.html",
+    "/藝格板": "/#tech", "/qa": "/#qa", "/blog": "/news",
+    "/product-category/消防箱": "/cases",
+    "/product-category/防火門": "/cases",
+    "/product-category/藝格板": "/products",
+    "/product-category/藝格板/木紋系列": "/products",
+    "/product-category/藝格板/石紋系列": "/products",
+    "/product-category/藝格板/繡蝕系列": "/products",
+    "/portfolio-tag/藝格板": "/products",
 }
 
 # 萬用收尾。一定要排在所有明確規則之後 —— Vercel 由上往下比，先中先贏。
 FALLBACK = [
-    ("/portfolio-item/(.*)", "/cases.html"),
-    ("/portfolio-item",      "/cases.html"),
-    ("/product/(.*)",        "/products.html"),
-    ("/product",             "/products.html"),
-    ("/product-category/(.*)", "/products.html"),
-    ("/shop/(.*)",           "/products.html"),
+    ("/portfolio-item/(.*)", "/cases"),
+    ("/portfolio-item",      "/cases"),
+    ("/product/(.*)",        "/products"),
+    ("/product",             "/products"),
+    ("/product-category/(.*)", "/products"),
+    ("/shop/(.*)",           "/products"),
 ]
 
 
@@ -131,11 +131,11 @@ def build():
     pairs = []
     for kind, mp in CASE.items():
         for slug, cid in mp.items():
-            pairs.append((f"/{kind}/{slug}", f"/cases.html?case={cid}"))
+            pairs.append((f"/{kind}/{slug}", f"/cases?case={cid}"))
     for slug in PROD_AS_CASE:
-        pairs.append((f"/product/{slug}", "/cases.html"))
+        pairs.append((f"/product/{slug}", "/cases"))
     for h in HUE:
-        pairs.append((f"/product/{h}", "/products.html"))
+        pairs.append((f"/product/{h}", "/products"))
     pairs.extend(PAGE.items())
 
     seen, redirects = set(), []
@@ -159,6 +159,11 @@ def write_vercel(rules):
     print(f"vercel.json：{len(rules)} 條（Vercel 上限 1024）")
     if len(rules) > 1024:
         raise SystemExit("★ 超過 Vercel 上限，需要改用萬用規則收斂")
+
+
+# 轉址目標一律用「乾淨網址」（/cases 不是 /cases.html）。
+# Cloudflare Pages 會自動把 /cases.html 再轉到 /cases，目標若寫 .html
+# 就變成 301→301 兩段轉址 —— 能動，但浪費抓取預算，Google 也不喜歡。
 
 
 def write_cloudflare(rules):

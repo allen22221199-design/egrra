@@ -13,31 +13,31 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/products.html</loc>
+    <loc>https://egrra.vercel.app/products</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/cases.html</loc>
+    <loc>https://egrra.vercel.app/cases</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/compare.html</loc>
+    <loc>https://egrra.vercel.app/compare</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/certifications.html</loc>
+    <loc>https://egrra.vercel.app/certifications</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/news.html</loc>
+    <loc>https://egrra.vercel.app/news</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

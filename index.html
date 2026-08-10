@@ -619,12 +619,12 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <nav class="nav-links" id="menu">
       <a href="#about" data-i18n="nav.about">關於煌盛</a>
       <a href="#tech" data-i18n="nav.tech">核心技術</a>
-      <a href="compare.html" data-i18n="nav.compare">競品比較</a>
+      <a href="/compare" data-i18n="nav.compare">競品比較</a>
       <a href="#products" data-i18n="nav.products">產品系列</a>
-      <a href="certifications.html" data-i18n="nav.certs">認證</a>
-      <a href="products.html" data-i18n="nav.library">花色庫</a>
-      <a href="cases.html" data-i18n="nav.portfolio">實績案例</a>
-      <a href="news.html" data-i18n="nav.news">產業快訊</a>
+      <a href="/certifications" data-i18n="nav.certs">認證</a>
+      <a href="/products" data-i18n="nav.library">花色庫</a>
+      <a href="/cases" data-i18n="nav.portfolio">實績案例</a>
+      <a href="/news" data-i18n="nav.news">產業快訊</a>
       <a href="#contact" class="nav-cta" data-i18n="nav.contact">聯絡我們</a>
 <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
@@ -808,7 +808,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <div class="mini-cmp reveal">
       <div class="mc-head">
         <h3 data-i18n="mc.h">那，跟其他做法差在哪？</h3>
-        <a href="compare.html" data-i18n="mc.more">看完整比較 →</a>
+        <a href="/compare" data-i18n="mc.more">看完整比較 →</a>
       </div>
       <div class="mc-table">
         <div class="mc-row mc-hd">
@@ -899,7 +899,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       <div><b>計價方式</b>以才計價・依需求數量報價</div>
     </div>
     <div class="reveal" style="text-align:center;margin-top:44px">
-      <a href="products.html" class="btn btn-gold">瀏覽完整花色庫 <span class="arrow">→</span></a>
+      <a href="/products" class="btn btn-gold">瀏覽完整花色庫 <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -929,7 +929,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <div class="pf-grid" id="pfgrid"></div>
     <p class="pf-more">— 以上為部分案例 —</p>
     <div class="reveal" style="text-align:center;margin-top:26px">
-      <a href="cases.html" class="btn btn-line">查看完整實績案例牆 <span class="arrow">→</span></a>
+      <a href="/cases" class="btn btn-line">查看完整實績案例牆 <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -1322,7 +1322,7 @@ function openPLB(i){}
     var now=Date.now();
     if(now-t0>3000)n=0;
     t0=now;
-    if(++n>=5){n=0;location.href="admin.html";}
+    if(++n>=5){n=0;location.href="/admin";}
   });
 })();
 
@@ -1634,7 +1634,7 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
     [".gallery-wrap a.btn","gl.btn#html"],
     [".pf-head .eyebrow","pf.eye"],[".pf-head h2","pf.h2"],[".pf-head .section-head p","pf.p"],[".pf-head > a.btn","pf.btn1#html"],
     [".cl-head h3","cl.h3"],[".cl-head p","cl.p"],[".cl-note","cl.note"],[".pf-more","pf.more"],
-    [".portfolio a[href='cases.html']","pf.btn2#html"],
+    [".portfolio a[href='/cases']","pf.btn2#html"],
     [".qa .section-head .eyebrow","qa.eye"],[".qa .section-head p","qa.p"],
     ["#acc .acc-item:nth-child(1) .acc-q","q1#html"],["#acc .acc-item:nth-child(1) .acc-a p","a1"],
     ["#acc .acc-item:nth-child(2) .acc-q","q2#html"],["#acc .acc-item:nth-child(2) .acc-a p","a2"],

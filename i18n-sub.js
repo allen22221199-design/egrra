@@ -16,16 +16,16 @@ window.EGRRA_I18N = (function () {
     "foot.home": "Home"
   };
   var SEL = [
-    [".nav-links a[href='index.html#about']", "nav.about"],
-    [".nav-links a[href='index.html#tech']", "nav.tech"],
-    [".nav-links a[href='index.html#products']", "nav.products"],
-    [".nav-links a[href='products.html']", "nav.library"],
-    [".nav-links a[href='cases.html']", "nav.portfolio"],
-    [".nav-links a[href='compare.html']", "nav.compare"],
-    [".nav-links a[href='news.html']", "nav.news"],
-    [".nav-links a[href='certifications.html']", "nav.certs"],
-    [".nav-links a[href='index.html#contact']", "nav.contact"],
-    [".foot a[href='index.html']", "foot.home"]
+    [".nav-links a[href='/#about']", "nav.about"],
+    [".nav-links a[href='/#tech']", "nav.tech"],
+    [".nav-links a[href='/#products']", "nav.products"],
+    [".nav-links a[href='/products']", "nav.library"],
+    [".nav-links a[href='/cases']", "nav.portfolio"],
+    [".nav-links a[href='/compare']", "nav.compare"],
+    [".nav-links a[href='/news']", "nav.news"],
+    [".nav-links a[href='/certifications']", "nav.certs"],
+    [".nav-links a[href='/#contact']", "nav.contact"],
+    [".foot a[href='/']", "foot.home"]
   ];
 
   /* ---- 動態字串精確對照（分類 / 系列 / 色系 / 規格 / 彈窗欄位） ---- */
@@ -316,6 +316,6 @@ window.EGRRA_I18N = (function () {
     var now = Date.now();
     if (now - t0 > 3000) n = 0;
     t0 = now;
-    if (++n >= 5) { n = 0; location.href = "admin.html"; }
+    if (++n >= 5) { n = 0; location.href = "/admin"; }
   });
 })();
