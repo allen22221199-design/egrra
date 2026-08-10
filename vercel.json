@@ -5,5 +5,1947 @@
       "path": "/api/news-fetch",
       "schedule": "0 1 * * *"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/portfolio-item/京懋-朗庭會-2",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/京懋-朗庭會-2/",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%BA%AC%E6%87%8B-%E6%9C%97%E5%BA%AD%E6%9C%83-2",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%BA%AC%E6%87%8B-%E6%9C%97%E5%BA%AD%E6%9C%83-2/",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/京懋-防火門",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/京懋-防火門/",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%BA%AC%E6%87%8B-%E9%98%B2%E7%81%AB%E9%96%80",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%BA%AC%E6%87%8B-%E9%98%B2%E7%81%AB%E9%96%80/",
+      "destination": "/cases.html?case=c4",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/三輝-保生",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/三輝-保生/",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F/",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D%E6%AD%8C%E5%8A%87%E8%8B%91",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D%E6%AD%8C%E5%8A%87%E8%8B%91/",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/三輝歌劇苑",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/三輝歌劇苑/",
+      "destination": "/cases.html?case=c2",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏璟-土城日月光-商場",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏璟-土城日月光-商場/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E5%95%86%E5%A0%B4",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E5%95%86%E5%A0%B4/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏璟-土城日月光-集合住宅",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏璟-土城日月光-集合住宅/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E6%99%AE-%E5%B7%9D%E6%99%AEpark",
+      "destination": "/cases.html?case=c10",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E6%99%AE-%E5%B7%9D%E6%99%AEpark/",
+      "destination": "/cases.html?case=c10",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏普-川普park",
+      "destination": "/cases.html?case=c10",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/宏普-川普park/",
+      "destination": "/cases.html?case=c10",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%93%B2%E4%BA%BA-%E5%BE%B7%E6%9E%97",
+      "destination": "/cases.html?case=c13",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%93%B2%E4%BA%BA-%E5%BE%B7%E6%9E%97/",
+      "destination": "/cases.html?case=c13",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/哲人-德林",
+      "destination": "/cases.html?case=c13",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/哲人-德林/",
+      "destination": "/cases.html?case=c13",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85",
+      "destination": "/cases.html?case=c15",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85/",
+      "destination": "/cases.html?case=c15",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/揚昇-君悅",
+      "destination": "/cases.html?case=c15",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/揚昇-君悅/",
+      "destination": "/cases.html?case=c15",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80",
+      "destination": "/cases.html?case=c17",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80/",
+      "destination": "/cases.html?case=c17",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/昇陽-防火門",
+      "destination": "/cases.html?case=c17",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/昇陽-防火門/",
+      "destination": "/cases.html?case=c17",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%AD%A3%E9%9A%86-%E5%A4%A9%E7%AC%AC",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%AD%A3%E9%9A%86-%E5%A4%A9%E7%AC%AC/",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/正隆-天第",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/正隆-天第/",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85/",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/璟都柏悅",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/璟都柏悅/",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/新北新店-碧波白",
+      "destination": "/cases.html?case=c20",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/新北新店-碧波白/",
+      "destination": "/cases.html?case=c20",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%96%B0%E5%8C%97%E6%96%B0%E5%BA%97-%E7%A2%A7%E6%B3%A2%E7%99%BD",
+      "destination": "/cases.html?case=c20",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E6%96%B0%E5%8C%97%E6%96%B0%E5%BA%97-%E7%A2%A7%E6%B3%A2%E7%99%BD/",
+      "destination": "/cases.html?case=c20",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133",
+      "destination": "/cases.html?case=c21",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133/",
+      "destination": "/cases.html?case=c21",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/華山33",
+      "destination": "/cases.html?case=c21",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/華山33/",
+      "destination": "/cases.html?case=c21",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%B3%93%E9%99%BD-%E6%82%A6%E5%AE%B9%E8%8E%8A",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%B3%93%E9%99%BD-%E6%82%A6%E5%AE%B9%E8%8E%8A/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊a",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊a/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%B3%93%E9%99%BD-%E6%82%A6%E5%AE%B9%E8%8E%8Aa",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E8%B3%93%E9%99%BD-%E6%82%A6%E5%AE%B9%E8%8E%8Aa/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/石紋電視牆",
+      "destination": "/cases.html?case=c25",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/石紋電視牆/",
+      "destination": "/cases.html?case=c25",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%9F%B3%E7%B4%8B%E9%9B%BB%E8%A6%96%E7%89%86",
+      "destination": "/cases.html?case=c25",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%9F%B3%E7%B4%8B%E9%9B%BB%E8%A6%96%E7%89%86/",
+      "destination": "/cases.html?case=c25",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92",
+      "destination": "/cases.html?case=c12",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92/",
+      "destination": "/cases.html?case=c12",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/山發-正隆one富饒",
+      "destination": "/cases.html?case=c12",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/山發-正隆one富饒/",
+      "destination": "/cases.html?case=c12",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/礁溪-park-one",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/礁溪-park-one/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%A4%81%E6%BA%AA-park-one",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%A4%81%E6%BA%AA-park-one/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%A4%81%E6%BA%AA-park-one-2",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/%E7%A4%81%E6%BA%AA-park-one-2/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/礁溪-park-one-2",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/礁溪-park-one-2/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted/",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中山區-ted",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中山區-ted/",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted-2",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted-2/",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中山區-ted-2",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中山區-ted-2/",
+      "destination": "/cases.html?case=c3",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80-%E6%AD%A3%E9%9A%86%E5%A4%A9%E7%AC%AC",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80-%E6%AD%A3%E9%9A%86%E5%A4%A9%E7%AC%AC/",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區-正隆天第",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區-正隆天第/",
+      "destination": "/cases.html?case=c18",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E5%9C%9F%E5%9F%8E%E5%8D%80-%E6%97%A5%E6%9C%88%E5%85%89",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E5%9C%9F%E5%9F%8E%E5%8D%80-%E6%97%A5%E6%9C%88%E5%85%89/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-土城區-日月光",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-土城區-日月光/",
+      "destination": "/cases.html?case=c8",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-amax",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-amax/",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-amax",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-amax/",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-amax-2",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-amax-2/",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-amax-2",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-amax-2/",
+      "destination": "/cases.html?case=c9",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-%E6%82%85%E5%AE%B9%E8%8E%8A",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-%E6%82%85%E5%AE%B9%E8%8E%8A/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-悅容莊",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-新莊區-悅容莊/",
+      "destination": "/cases.html?case=c22",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E6%9F%8F%E6%82%85",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E6%9F%8F%E6%82%85/",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/product/桃市-桃園區-柏悅",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/product/桃市-桃園區-柏悅/",
+      "destination": "/cases.html?case=c19",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9301",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9301/",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/高雄-中正大樓01",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/高雄-中正大樓01/",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302/",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/高雄-中正大樓02",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/高雄-中正大樓02/",
+      "destination": "/cases.html?case=c7",
+      "permanent": true
+    },
+    {
+      "source": "/product/宜蘭-礁溪鄉",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/product/宜蘭-礁溪鄉/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%AE%9C%E8%98%AD-%E7%A4%81%E6%BA%AA%E9%84%89",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%AE%9C%E8%98%AD-%E7%A4%81%E6%BA%AA%E9%84%89/",
+      "destination": "/cases.html?case=c27",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區-廈門街案",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區-廈門街案/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80-%E5%BB%88%E9%96%80%E8%A1%97%E6%A1%88",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80-%E5%BB%88%E9%96%80%E8%A1%97%E6%A1%88/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E6%AD%A3%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-中正區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-北投區-某宅",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-北投區-某宅/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%8C%97%E6%8A%95%E5%8D%80-%E6%9F%90%E5%AE%85",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%8C%97%E6%8A%95%E5%8D%80-%E6%9F%90%E5%AE%85/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80-%E4%B8%89%E5%8C%AF",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80-%E4%B8%89%E5%8C%AF/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大同區-三匯",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大同區-三匯/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大同區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大同區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區-國證",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區-國證/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-%E5%9C%8B%E8%AD%89",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-%E5%9C%8B%E8%AD%89/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大安區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大直區-水綠清翫-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大直區-水綠清翫-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E7%9B%B4%E5%8D%80-%E6%B0%B4%E7%B6%A0%E6%B8%85%E7%BF%AB-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E7%9B%B4%E5%8D%80-%E6%B0%B4%E7%B6%A0%E6%B8%85%E7%BF%AB-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E7%9B%B4%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E7%9B%B4%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大直區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-大直區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%96%87%E5%B1%B1%E5%8D%80-%E5%BE%AE%E5%B1%B1%E4%B8%98",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%96%87%E5%B1%B1%E5%8D%80-%E5%BE%AE%E5%B1%B1%E4%B8%98/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-文山區-微山丘",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-文山區-微山丘/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%8002",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%8002/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區02",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/北市-松山區02/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/台中-南屯-大聚",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/台中-南屯-大聚/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8F%B0%E4%B8%AD-%E5%8D%97%E5%B1%AF-%E5%A4%A7%E8%81%9A",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8F%B0%E4%B8%AD-%E5%8D%97%E5%B1%AF-%E5%A4%A7%E8%81%9A/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8F%B0%E4%B8%AD-%E6%9F%90%E5%BB%A0%E8%BE%A6",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8F%B0%E4%B8%AD-%E6%9F%90%E5%BB%A0%E8%BE%A6/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/台中-某廠辦",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/台中-某廠辦/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-三重區-左岸京站",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-三重區-左岸京站/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-板橋區-府中心",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-板橋區-府中心/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%9D%BF%E6%A9%8B%E5%8D%80-%E5%BA%9C%E4%B8%AD%E5%BF%83",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%9D%BF%E6%A9%8B%E5%8D%80-%E5%BA%9C%E4%B8%AD%E5%BF%83/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%9D%BF%E6%A9%8B%E5%8D%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%9D%BF%E6%A9%8B%E5%8D%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-板橋區",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-板橋區/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-永和區-仁愛柏麗01",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-永和區-仁愛柏麗01/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B0%B8%E5%92%8C%E5%8D%80-%E4%BB%81%E6%84%9B%E6%9F%8F%E9%BA%9701",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B0%B8%E5%92%8C%E5%8D%80-%E4%BB%81%E6%84%9B%E6%9F%8F%E9%BA%9701/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-汐止區-春田吉市",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/新北-汐止區-春田吉市/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E4%BA%AC%E6%87%8B%E6%9C%83",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E4%BA%AC%E6%87%8B%E6%9C%83/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/桃市-桃園區-京懋會",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/桃市-桃園區-京懋會/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%85%8B%E9%87%8C%E7%89%B9%E7%81%B0",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%85%8B%E9%87%8C%E7%89%B9%E7%81%B0/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/克里特灰",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/克里特灰/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8A%A0%E9%87%8C%E5%A5%A7%E9%87%91",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8A%A0%E9%87%8C%E5%A5%A7%E9%87%91/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/加里奧金",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/加里奧金/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8D%A1%E6%8B%89%E6%8B%89",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%8D%A1%E6%8B%89%E6%8B%89/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/卡拉拉",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/卡拉拉/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/安格拉",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/安格拉/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%AE%89%E6%A0%BC%E6%8B%89",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%AE%89%E6%A0%BC%E6%8B%89/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%B8%9D%E5%AF%B6%E7%B1%B3%E9%BB%83",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%B8%9D%E5%AF%B6%E7%B1%B3%E9%BB%83/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/帝寶米黃",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/帝寶米黃/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/帝諾",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/帝諾/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%B8%9D%E8%AB%BE",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E5%B8%9D%E8%AB%BE/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/抽象紋理",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/抽象紋理/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/深灰石紋",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/深灰石紋/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%B7%B1%E7%81%B0%E7%9F%B3%E7%B4%8B",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E6%B7%B1%E7%81%B0%E7%9F%B3%E7%B4%8B/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/琥珀",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/琥珀/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%90%A5%E7%8F%80",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%90%A5%E7%8F%80/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%90%A5%E7%8F%80-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%90%A5%E7%8F%80-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/琥珀-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/琥珀-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/白玉蘭",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/白玉蘭/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%B4%AB%E4%B8%81%E9%BB%91",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E7%B4%AB%E4%B8%81%E9%BB%91/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/紫丁黑",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/紫丁黑/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E8%81%96%E7%BE%85%E8%98%AD%E9%BB%91",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E8%81%96%E7%BE%85%E8%98%AD%E9%BB%91/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/聖羅蘭黑",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/聖羅蘭黑/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8A%80%E7%8B%90",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8A%80%E7%8B%90/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/銀狐",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/銀狐/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-1",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-1/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-1",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-1/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-3",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-3/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-3",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-3/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-4",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-4/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-4",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-4/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-6",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-6/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-6",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-6/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-6-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/鏽蝕-6-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-6-2",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%8F%BD%E8%9D%95-6-2/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%85%E4%BB%95%E7%99%BD",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%85%E4%BB%95%E7%99%BD/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雅仕白",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雅仕白/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雕刻白",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雕刻白/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%95%E5%88%BB%E7%99%BD",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%95%E5%88%BB%E7%99%BD/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%AA%E7%99%BD%E7%B4%B0%E7%B4%8B",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%9B%AA%E7%99%BD%E7%B4%B0%E7%B4%8B/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雪白細紋",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/雪白細紋/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/黃金雕刻白",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/黃金雕刻白/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%BB%83%E9%87%91%E9%9B%95%E5%88%BB%E7%99%BD",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%BB%83%E9%87%91%E9%9B%95%E5%88%BB%E7%99%BD/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/黑網石",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/黑網石/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%BB%91%E7%B6%B2%E7%9F%B3",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/%E9%BB%91%E7%B6%B2%E7%9F%B3/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/實績案例",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/實績案例/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/實績案例-2-2",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/實績案例-2-2/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%85%8C%E7%9B%9B%E8%88%88%E6%A5%AD%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%85%8C%E7%9B%9B%E8%88%88%E6%A5%AD%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8/",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/煌盛興業股份有限公司",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/煌盛興業股份有限公司/",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/about-us",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/產品介紹-product",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/產品介紹-product/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%94%A2%E5%93%81%E4%BB%8B%E7%B4%B9-product",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%94%A2%E5%93%81%E4%BB%8B%E7%B4%B9-product/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/石紋系列",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/石紋系列/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%9F%B3%E7%B4%8B%E7%B3%BB%E5%88%97",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/%E7%9F%B3%E7%B4%8B%E7%B3%BB%E5%88%97/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/shop/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/聯絡我們",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/聯絡我們/",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/藝格板",
+      "destination": "/#tech",
+      "permanent": true
+    },
+    {
+      "source": "/藝格板/",
+      "destination": "/#tech",
+      "permanent": true
+    },
+    {
+      "source": "/%E8%97%9D%E6%A0%BC%E6%9D%BF",
+      "destination": "/#tech",
+      "permanent": true
+    },
+    {
+      "source": "/%E8%97%9D%E6%A0%BC%E6%9D%BF/",
+      "destination": "/#tech",
+      "permanent": true
+    },
+    {
+      "source": "/qa",
+      "destination": "/#qa",
+      "permanent": true
+    },
+    {
+      "source": "/qa/",
+      "destination": "/#qa",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/news.html",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/news.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/消防箱",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/消防箱/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/防火門",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/防火門/",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/木紋系列",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/木紋系列/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/石紋系列",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/石紋系列/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%9F%B3%E7%B4%8B%E7%B3%BB%E5%88%97",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%9F%B3%E7%B4%8B%E7%B3%BB%E5%88%97/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/繡蝕系列",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/藝格板/繡蝕系列/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-tag/藝格板",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-tag/藝格板/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-tag/%E8%97%9D%E6%A0%BC%E6%9D%BF",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-tag/%E8%97%9D%E6%A0%BC%E6%9D%BF/",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item/:x*",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio-item",
+      "destination": "/cases.html",
+      "permanent": true
+    },
+    {
+      "source": "/product/:x*",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/product-category/:x*",
+      "destination": "/products.html",
+      "permanent": true
+    },
+    {
+      "source": "/shop/:x*",
+      "destination": "/products.html",
+      "permanent": true
+    }
   ]
 }

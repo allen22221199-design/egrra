@@ -257,6 +257,38 @@ EGRRA_I18N.init({
 
   window.__redraw=render;   /* 語言切換時由 i18n 呼叫重繪 */
   render();
+
+  /* ===== 單一案例的深層連結 ?case=c8 =====
+     兩個用途：
+     1. 業務可以把某一件案例的連結單獨傳給客戶，對方點開直接看到那件。
+     2. 舊站 egrra.com 的 /portfolio-item/… 轉址過來時能精準落在對應案例，
+        而不是全部倒進列表頁（轉址到列表頁會被 Google 當成軟性 404，
+        累積的權重轉不過來）。
+     找不到對應 id 時安靜略過，讓訪客停在列表就好，不要跳錯的案例。 */
+  function caseParam(){
+    try{ return new URLSearchParams(location.search).get("case")||""; }
+    catch(e){ var m=/[?&]case=([^&]*)/.exec(location.search); return m?decodeURIComponent(m[1]):""; }
+  }
+  function setParam(id){
+    if(!history.replaceState)return;
+    var u=location.pathname+(id?"?case="+encodeURIComponent(id):"")+location.hash;
+    try{ history.replaceState(null,"",u); }catch(e){}
+  }
+  var _open=openModal;
+  openModal=function(c){ _open(c); setParam(c&&c.id); };
+  document.getElementById("m-close").addEventListener("click",function(){setParam("");});
+  ov.addEventListener("click",function(e){if(e.target===ov)setParam("");});
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&!ov.classList.contains("show"))setParam("");
+  });
+
+  (function(){
+    var id=caseParam(); if(!id)return;
+    for(var i=0;i<CASES.length;i++){
+      if(String(CASES[i].id)===String(id)){ openModal(CASES[i]); return; }
+    }
+    setParam("");   /* id 已失效（案例被刪掉）→ 清掉網址參數，留在列表 */
+  })();
 })();
 </script>
 <script src="line-widget.js"></script>
