@@ -28,12 +28,22 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/京懋-防火門",
+      "source": "/portfolio-item/%e4%ba%ac%e6%87%8b-%e6%9c%97%e5%ba%ad%e6%9c%83-2",
       "destination": "/cases.html?case=c4",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/京懋-防火門/",
+      "source": "/portfolio-item/%e4%ba%ac%e6%87%8b-%e6%9c%97%e5%ba%ad%e6%9c%83-2/",
+      "destination": "/cases.html?case=c4",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e4%ba%ac%e6%87%8b-%e9%98%b2%e7%81%ab%e9%96%80",
+      "destination": "/cases.html?case=c4",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e4%ba%ac%e6%87%8b-%e9%98%b2%e7%81%ab%e9%96%80/",
       "destination": "/cases.html?case=c4",
       "statusCode": 301
     },
@@ -48,6 +58,26 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/京懋-防火門",
+      "destination": "/cases.html?case=c4",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/京懋-防火門/",
+      "destination": "/cases.html?case=c4",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F",
+      "destination": "/cases.html?case=c2",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F/",
+      "destination": "/cases.html?case=c2",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/三輝-保生",
       "destination": "/cases.html?case=c2",
       "statusCode": 301
@@ -58,12 +88,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F",
+      "source": "/portfolio-item/%e4%b8%89%e8%bc%9d-%e4%bf%9d%e7%94%9f",
       "destination": "/cases.html?case=c2",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E4%B8%89%E8%BC%9D-%E4%BF%9D%E7%94%9F/",
+      "source": "/portfolio-item/%e4%b8%89%e8%bc%9d-%e4%bf%9d%e7%94%9f/",
       "destination": "/cases.html?case=c2",
       "statusCode": 301
     },
@@ -88,6 +118,16 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%e4%b8%89%e8%bc%9d%e6%ad%8c%e5%8a%87%e8%8b%91",
+      "destination": "/cases.html?case=c2",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e4%b8%89%e8%bc%9d%e6%ad%8c%e5%8a%87%e8%8b%91/",
+      "destination": "/cases.html?case=c2",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/宏璟-土城日月光-商場",
       "destination": "/cases.html?case=c8",
       "statusCode": 301
@@ -108,12 +148,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85",
+      "source": "/portfolio-item/%e5%ae%8f%e7%92%9f-%e5%9c%9f%e5%9f%8e%e6%97%a5%e6%9c%88%e5%85%89-%e5%95%86%e5%a0%b4",
       "destination": "/cases.html?case=c8",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85/",
+      "source": "/portfolio-item/%e5%ae%8f%e7%92%9f-%e5%9c%9f%e5%9f%8e%e6%97%a5%e6%9c%88%e5%85%89-%e5%95%86%e5%a0%b4/",
       "destination": "/cases.html?case=c8",
       "statusCode": 301
     },
@@ -128,6 +168,36 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85",
+      "destination": "/cases.html?case=c8",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E5%AE%8F%E7%92%9F-%E5%9C%9F%E5%9F%8E%E6%97%A5%E6%9C%88%E5%85%89-%E9%9B%86%E5%90%88%E4%BD%8F%E5%AE%85/",
+      "destination": "/cases.html?case=c8",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e5%ae%8f%e7%92%9f-%e5%9c%9f%e5%9f%8e%e6%97%a5%e6%9c%88%e5%85%89-%e9%9b%86%e5%90%88%e4%bd%8f%e5%ae%85",
+      "destination": "/cases.html?case=c8",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e5%ae%8f%e7%92%9f-%e5%9c%9f%e5%9f%8e%e6%97%a5%e6%9c%88%e5%85%89-%e9%9b%86%e5%90%88%e4%bd%8f%e5%ae%85/",
+      "destination": "/cases.html?case=c8",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/宏普-川普park",
+      "destination": "/cases.html?case=c10",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/宏普-川普park/",
+      "destination": "/cases.html?case=c10",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/%E5%AE%8F%E6%99%AE-%E5%B7%9D%E6%99%AEpark",
       "destination": "/cases.html?case=c10",
       "statusCode": 301
@@ -138,12 +208,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/宏普-川普park",
+      "source": "/portfolio-item/%e5%ae%8f%e6%99%ae-%e5%b7%9d%e6%99%aepark",
       "destination": "/cases.html?case=c10",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/宏普-川普park/",
+      "source": "/portfolio-item/%e5%ae%8f%e6%99%ae-%e5%b7%9d%e6%99%aepark/",
       "destination": "/cases.html?case=c10",
       "statusCode": 301
     },
@@ -158,6 +228,16 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%e5%93%b2%e4%ba%ba-%e5%be%b7%e6%9e%97",
+      "destination": "/cases.html?case=c13",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e5%93%b2%e4%ba%ba-%e5%be%b7%e6%9e%97/",
+      "destination": "/cases.html?case=c13",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/哲人-德林",
       "destination": "/cases.html?case=c13",
       "statusCode": 301
@@ -168,12 +248,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85",
+      "source": "/portfolio-item/%e6%8f%9a%e6%98%87-%e5%90%9b%e6%82%85",
       "destination": "/cases.html?case=c15",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85/",
+      "source": "/portfolio-item/%e6%8f%9a%e6%98%87-%e5%90%9b%e6%82%85/",
       "destination": "/cases.html?case=c15",
       "statusCode": 301
     },
@@ -188,13 +268,13 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80",
-      "destination": "/cases.html?case=c17",
+      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85",
+      "destination": "/cases.html?case=c15",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80/",
-      "destination": "/cases.html?case=c17",
+      "source": "/portfolio-item/%E6%8F%9A%E6%98%87-%E5%90%9B%E6%82%85/",
+      "destination": "/cases.html?case=c15",
       "statusCode": 301
     },
     {
@@ -204,6 +284,26 @@
     },
     {
       "source": "/portfolio-item/昇陽-防火門/",
+      "destination": "/cases.html?case=c17",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e6%98%87%e9%99%bd-%e9%98%b2%e7%81%ab%e9%96%80",
+      "destination": "/cases.html?case=c17",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e6%98%87%e9%99%bd-%e9%98%b2%e7%81%ab%e9%96%80/",
+      "destination": "/cases.html?case=c17",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80",
+      "destination": "/cases.html?case=c17",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E6%98%87%E9%99%BD-%E9%98%B2%E7%81%AB%E9%96%80/",
       "destination": "/cases.html?case=c17",
       "statusCode": 301
     },
@@ -218,6 +318,16 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%e6%ad%a3%e9%9a%86-%e5%a4%a9%e7%ac%ac",
+      "destination": "/cases.html?case=c18",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e6%ad%a3%e9%9a%86-%e5%a4%a9%e7%ac%ac/",
+      "destination": "/cases.html?case=c18",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/正隆-天第",
       "destination": "/cases.html?case=c18",
       "statusCode": 301
@@ -228,22 +338,32 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85",
-      "destination": "/cases.html?case=c19",
-      "statusCode": 301
-    },
-    {
-      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85/",
-      "destination": "/cases.html?case=c19",
-      "statusCode": 301
-    },
-    {
       "source": "/portfolio-item/璟都柏悅",
       "destination": "/cases.html?case=c19",
       "statusCode": 301
     },
     {
       "source": "/portfolio-item/璟都柏悅/",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e7%92%9f%e9%83%bd%e6%9f%8f%e6%82%85",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e7%92%9f%e9%83%bd%e6%9f%8f%e6%82%85/",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E7%92%9F%E9%83%BD%E6%9F%8F%E6%82%85/",
       "destination": "/cases.html?case=c19",
       "statusCode": 301
     },
@@ -258,6 +378,16 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%e6%96%b0%e5%8c%97%e6%96%b0%e5%ba%97-%e7%a2%a7%e6%b3%a2%e7%99%bd",
+      "destination": "/cases.html?case=c20",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e6%96%b0%e5%8c%97%e6%96%b0%e5%ba%97-%e7%a2%a7%e6%b3%a2%e7%99%bd/",
+      "destination": "/cases.html?case=c20",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/%E6%96%B0%E5%8C%97%E6%96%B0%E5%BA%97-%E7%A2%A7%E6%B3%A2%E7%99%BD",
       "destination": "/cases.html?case=c20",
       "statusCode": 301
@@ -268,12 +398,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133",
+      "source": "/portfolio-item/%e8%8f%af%e5%b1%b133",
       "destination": "/cases.html?case=c21",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133/",
+      "source": "/portfolio-item/%e8%8f%af%e5%b1%b133/",
       "destination": "/cases.html?case=c21",
       "statusCode": 301
     },
@@ -284,6 +414,16 @@
     },
     {
       "source": "/portfolio-item/華山33/",
+      "destination": "/cases.html?case=c21",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133",
+      "destination": "/cases.html?case=c21",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E8%8F%AF%E5%B1%B133/",
       "destination": "/cases.html?case=c21",
       "statusCode": 301
     },
@@ -308,12 +448,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/賓陽-悦容莊a",
+      "source": "/portfolio-item/%e8%b3%93%e9%99%bd-%e6%82%a6%e5%ae%b9%e8%8e%8a",
       "destination": "/cases.html?case=c22",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/賓陽-悦容莊a/",
+      "source": "/portfolio-item/%e8%b3%93%e9%99%bd-%e6%82%a6%e5%ae%b9%e8%8e%8a/",
       "destination": "/cases.html?case=c22",
       "statusCode": 301
     },
@@ -328,12 +468,32 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/石紋電視牆",
+      "source": "/portfolio-item/%e8%b3%93%e9%99%bd-%e6%82%a6%e5%ae%b9%e8%8e%8aa",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e8%b3%93%e9%99%bd-%e6%82%a6%e5%ae%b9%e8%8e%8aa/",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊a",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/賓陽-悦容莊a/",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e7%9f%b3%e7%b4%8b%e9%9b%bb%e8%a6%96%e7%89%86",
       "destination": "/cases.html?case=c25",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/石紋電視牆/",
+      "source": "/portfolio-item/%e7%9f%b3%e7%b4%8b%e9%9b%bb%e8%a6%96%e7%89%86/",
       "destination": "/cases.html?case=c25",
       "statusCode": 301
     },
@@ -348,12 +508,22 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92",
+      "source": "/portfolio-item/石紋電視牆",
+      "destination": "/cases.html?case=c25",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/石紋電視牆/",
+      "destination": "/cases.html?case=c25",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e5%b1%b1%e7%99%bc-%e6%ad%a3%e9%9a%86one%e5%af%8c%e9%a5%92",
       "destination": "/cases.html?case=c12",
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92/",
+      "source": "/portfolio-item/%e5%b1%b1%e7%99%bc-%e6%ad%a3%e9%9a%86one%e5%af%8c%e9%a5%92/",
       "destination": "/cases.html?case=c12",
       "statusCode": 301
     },
@@ -368,12 +538,32 @@
       "statusCode": 301
     },
     {
+      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92",
+      "destination": "/cases.html?case=c12",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%E5%B1%B1%E7%99%BC-%E6%AD%A3%E9%9A%86one%E5%AF%8C%E9%A5%92/",
+      "destination": "/cases.html?case=c12",
+      "statusCode": 301
+    },
+    {
       "source": "/portfolio-item/礁溪-park-one",
       "destination": "/cases.html?case=c27",
       "statusCode": 301
     },
     {
       "source": "/portfolio-item/礁溪-park-one/",
+      "destination": "/cases.html?case=c27",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e7%a4%81%e6%ba%aa-park-one",
+      "destination": "/cases.html?case=c27",
+      "statusCode": 301
+    },
+    {
+      "source": "/portfolio-item/%e7%a4%81%e6%ba%aa-park-one/",
       "destination": "/cases.html?case=c27",
       "statusCode": 301
     },
@@ -408,13 +598,13 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted",
-      "destination": "/cases.html?case=c3",
+      "source": "/portfolio-item/%e7%a4%81%e6%ba%aa-park-one-2",
+      "destination": "/cases.html?case=c27",
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted/",
-      "destination": "/cases.html?case=c3",
+      "source": "/portfolio-item/%e7%a4%81%e6%ba%aa-park-one-2/",
+      "destination": "/cases.html?case=c27",
       "statusCode": 301
     },
     {
@@ -428,12 +618,42 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted/",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e5%b1%b1%e5%8d%80-ted",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e5%b1%b1%e5%8d%80-ted/",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted-2",
       "destination": "/cases.html?case=c3",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8C%97%E5%B8%82-%E4%B8%AD%E5%B1%B1%E5%8D%80-ted-2/",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e5%b1%b1%e5%8d%80-ted-2",
+      "destination": "/cases.html?case=c3",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e5%b1%b1%e5%8d%80-ted-2/",
       "destination": "/cases.html?case=c3",
       "statusCode": 301
     },
@@ -458,6 +678,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80-%e6%ad%a3%e9%9a%86%e5%a4%a9%e7%ac%ac",
+      "destination": "/cases.html?case=c18",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80-%e6%ad%a3%e9%9a%86%e5%a4%a9%e7%ac%ac/",
+      "destination": "/cases.html?case=c18",
+      "statusCode": 301
+    },
+    {
       "source": "/product/北市-中正區-正隆天第",
       "destination": "/cases.html?case=c18",
       "statusCode": 301
@@ -465,6 +695,16 @@
     {
       "source": "/product/北市-中正區-正隆天第/",
       "destination": "/cases.html?case=c18",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e5%9c%9f%e5%9f%8e%e5%8d%80-%e6%97%a5%e6%9c%88%e5%85%89",
+      "destination": "/cases.html?case=c8",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e5%9c%9f%e5%9f%8e%e5%8d%80-%e6%97%a5%e6%9c%88%e5%85%89/",
+      "destination": "/cases.html?case=c8",
       "statusCode": 301
     },
     {
@@ -508,12 +748,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/新北-新莊區-amax-2",
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-amax",
       "destination": "/cases.html?case=c9",
       "statusCode": 301
     },
     {
-      "source": "/product/新北-新莊區-amax-2/",
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-amax/",
       "destination": "/cases.html?case=c9",
       "statusCode": 301
     },
@@ -524,6 +764,26 @@
     },
     {
       "source": "/product/%E6%96%B0%E5%8C%97-%E6%96%B0%E8%8E%8A%E5%8D%80-amax-2/",
+      "destination": "/cases.html?case=c9",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/新北-新莊區-amax-2",
+      "destination": "/cases.html?case=c9",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/新北-新莊區-amax-2/",
+      "destination": "/cases.html?case=c9",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-amax-2",
+      "destination": "/cases.html?case=c9",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-amax-2/",
       "destination": "/cases.html?case=c9",
       "statusCode": 301
     },
@@ -548,6 +808,26 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-%e6%82%85%e5%ae%b9%e8%8e%8a",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%96%b0%e8%8e%8a%e5%8d%80-%e6%82%85%e5%ae%b9%e8%8e%8a/",
+      "destination": "/cases.html?case=c22",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/桃市-桃園區-柏悅",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/桃市-桃園區-柏悅/",
+      "destination": "/cases.html?case=c19",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E6%9F%8F%E6%82%85",
       "destination": "/cases.html?case=c19",
       "statusCode": 301
@@ -558,12 +838,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/桃市-桃園區-柏悅",
+      "source": "/product/%e6%a1%83%e5%b8%82-%e6%a1%83%e5%9c%92%e5%8d%80-%e6%9f%8f%e6%82%85",
       "destination": "/cases.html?case=c19",
       "statusCode": 301
     },
     {
-      "source": "/product/桃市-桃園區-柏悅/",
+      "source": "/product/%e6%a1%83%e5%b8%82-%e6%a1%83%e5%9c%92%e5%8d%80-%e6%9f%8f%e6%82%85/",
       "destination": "/cases.html?case=c19",
       "statusCode": 301
     },
@@ -578,6 +858,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e9%ab%98%e9%9b%84-%e4%b8%ad%e6%ad%a3%e5%a4%a7%e6%a8%9301",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%ab%98%e9%9b%84-%e4%b8%ad%e6%ad%a3%e5%a4%a7%e6%a8%9301/",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
       "source": "/product/高雄-中正大樓01",
       "destination": "/cases.html?case=c7",
       "statusCode": 301
@@ -588,22 +878,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302",
-      "destination": "/cases.html?case=c7",
-      "statusCode": 301
-    },
-    {
-      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302/",
-      "destination": "/cases.html?case=c7",
-      "statusCode": 301
-    },
-    {
       "source": "/product/高雄-中正大樓02",
       "destination": "/cases.html?case=c7",
       "statusCode": 301
     },
     {
       "source": "/product/高雄-中正大樓02/",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%ab%98%e9%9b%84-%e4%b8%ad%e6%ad%a3%e5%a4%a7%e6%a8%9302",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%ab%98%e9%9b%84-%e4%b8%ad%e6%ad%a3%e5%a4%a7%e6%a8%9302/",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302",
+      "destination": "/cases.html?case=c7",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E9%AB%98%E9%9B%84-%E4%B8%AD%E6%AD%A3%E5%A4%A7%E6%A8%9302/",
       "destination": "/cases.html?case=c7",
       "statusCode": 301
     },
@@ -628,12 +928,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%ae%9c%e8%98%ad-%e7%a4%81%e6%ba%aa%e9%84%89",
+      "destination": "/cases.html?case=c27",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%ae%9c%e8%98%ad-%e7%a4%81%e6%ba%aa%e9%84%89/",
+      "destination": "/cases.html?case=c27",
+      "statusCode": 301
+    },
+    {
       "source": "/product/北市-中正區-廈門街案",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/北市-中正區-廈門街案/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80-%e5%bb%88%e9%96%80%e8%a1%97%e6%a1%88",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80-%e5%bb%88%e9%96%80%e8%a1%97%e6%a1%88/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -668,12 +988,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/北市-北投區-某宅",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/北市-北投區-某宅/",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e4%b8%ad%e6%ad%a3%e5%8d%80/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -684,6 +1004,36 @@
     },
     {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%8C%97%E6%8A%95%E5%8D%80-%E6%9F%90%E5%AE%85/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%8c%97%e6%8a%95%e5%8d%80-%e6%9f%90%e5%ae%85",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%8c%97%e6%8a%95%e5%8d%80-%e6%9f%90%e5%ae%85/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/北市-北投區-某宅",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/北市-北投區-某宅/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%90%8c%e5%8d%80-%e4%b8%89%e5%8c%af",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%90%8c%e5%8d%80-%e4%b8%89%e5%8c%af/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -708,22 +1058,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product/北市-大同區",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/product/北市-大同區/",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%90%8C%E5%8D%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%90%8c%e5%8d%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%90%8c%e5%8d%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/北市-大同區",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/北市-大同區/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -738,12 +1098,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80-%e5%9c%8b%e8%ad%89",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80-%e5%9c%8b%e8%ad%89/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-%E5%9C%8B%E8%AD%89",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80-%E5%9C%8B%E8%AD%89/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80-2",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80-2/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -778,6 +1158,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e5%ae%89%e5%8d%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E5%AE%89%E5%8D%80",
       "destination": "/cases.html",
       "statusCode": 301
@@ -808,6 +1198,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e7%9b%b4%e5%8d%80-%e6%b0%b4%e7%b6%a0%e6%b8%85%e7%bf%ab-2",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e7%9b%b4%e5%8d%80-%e6%b0%b4%e7%b6%a0%e6%b8%85%e7%bf%ab-2/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E5%A4%A7%E7%9B%B4%E5%8D%80",
       "destination": "/cases.html",
       "statusCode": 301
@@ -828,12 +1228,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e7%9b%b4%e5%8d%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e5%a4%a7%e7%9b%b4%e5%8d%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8C%97%E5%B8%82-%E6%96%87%E5%B1%B1%E5%8D%80-%E5%BE%AE%E5%B1%B1%E4%B8%98",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8C%97%E5%B8%82-%E6%96%87%E5%B1%B1%E5%8D%80-%E5%BE%AE%E5%B1%B1%E4%B8%98/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%96%87%e5%b1%b1%e5%8d%80-%e5%be%ae%e5%b1%b1%e4%b8%98",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%96%87%e5%b1%b1%e5%8d%80-%e5%be%ae%e5%b1%b1%e4%b8%98/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -848,6 +1268,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/北市-松山區-2",
       "destination": "/cases.html",
       "statusCode": 301
@@ -858,12 +1288,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%80-2",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80-2/",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%80-2/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%80/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -878,12 +1328,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%8002",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E5%8C%97%E5%B8%82-%E6%9D%BE%E5%B1%B1%E5%8D%80/",
+      "source": "/product/%e5%8c%97%e5%b8%82-%e6%9d%be%e5%b1%b1%e5%8d%8002/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -908,12 +1358,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/台中-南屯-大聚",
+      "source": "/product/%e5%8f%b0%e4%b8%ad-%e5%8d%97%e5%b1%af-%e5%a4%a7%e8%81%9a",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/台中-南屯-大聚/",
+      "source": "/product/%e5%8f%b0%e4%b8%ad-%e5%8d%97%e5%b1%af-%e5%a4%a7%e8%81%9a/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -928,12 +1378,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/台中-南屯-大聚",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/台中-南屯-大聚/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8F%B0%E4%B8%AD-%E6%9F%90%E5%BB%A0%E8%BE%A6",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8F%B0%E4%B8%AD-%E6%9F%90%E5%BB%A0%E8%BE%A6/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8f%b0%e4%b8%ad-%e6%9f%90%e5%bb%a0%e8%be%a6",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8f%b0%e4%b8%ad-%e6%9f%90%e5%bb%a0%e8%be%a6/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -948,6 +1418,26 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e4%b8%89%e9%87%8d%e5%8d%80-%e5%b7%a6%e5%b2%b8%e4%ba%ac%e7%ab%99",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e4%b8%89%e9%87%8d%e5%8d%80-%e5%b7%a6%e5%b2%b8%e4%ba%ac%e7%ab%99/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/新北-三重區-左岸京站",
       "destination": "/cases.html",
       "statusCode": 301
@@ -958,12 +1448,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99",
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%9d%bf%e6%a9%8b%e5%8d%80-%e5%ba%9c%e4%b8%ad%e5%bf%83",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%96%B0%E5%8C%97-%E4%B8%89%E9%87%8D%E5%8D%80-%E5%B7%A6%E5%B2%B8%E4%BA%AC%E7%AB%99/",
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%9d%bf%e6%a9%8b%e5%8d%80-%e5%ba%9c%e4%b8%ad%e5%bf%83/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -988,6 +1478,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%9d%bf%e6%a9%8b%e5%8d%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%9d%bf%e6%a9%8b%e5%8d%80/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E6%96%B0%E5%8C%97-%E6%9D%BF%E6%A9%8B%E5%8D%80",
       "destination": "/cases.html",
       "statusCode": 301
@@ -1008,16 +1508,6 @@
       "statusCode": 301
     },
     {
-      "source": "/product/新北-永和區-仁愛柏麗01",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/product/新北-永和區-仁愛柏麗01/",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
       "source": "/product/%E6%96%B0%E5%8C%97-%E6%B0%B8%E5%92%8C%E5%8D%80-%E4%BB%81%E6%84%9B%E6%9F%8F%E9%BA%9701",
       "destination": "/cases.html",
       "statusCode": 301
@@ -1028,12 +1518,22 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82",
+      "source": "/product/新北-永和區-仁愛柏麗01",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82/",
+      "source": "/product/新北-永和區-仁愛柏麗01/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%b0%b8%e5%92%8c%e5%8d%80-%e4%bb%81%e6%84%9b%e6%9f%8f%e9%ba%9701",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%b0%b8%e5%92%8c%e5%8d%80-%e4%bb%81%e6%84%9b%e6%9f%8f%e9%ba%9701/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1048,12 +1548,42 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%b1%90%e6%ad%a2%e5%8d%80-%e6%98%a5%e7%94%b0%e5%90%89%e5%b8%82",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%96%b0%e5%8c%97-%e6%b1%90%e6%ad%a2%e5%8d%80-%e6%98%a5%e7%94%b0%e5%90%89%e5%b8%82/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E6%96%B0%E5%8C%97-%E6%B1%90%E6%AD%A2%E5%8D%80-%E6%98%A5%E7%94%B0%E5%90%89%E5%B8%82/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E4%BA%AC%E6%87%8B%E6%9C%83",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E6%A1%83%E5%B8%82-%E6%A1%83%E5%9C%92%E5%8D%80-%E4%BA%AC%E6%87%8B%E6%9C%83/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%a1%83%e5%b8%82-%e6%a1%83%e5%9c%92%e5%8d%80-%e4%ba%ac%e6%87%8b%e6%9c%83",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%a1%83%e5%b8%82-%e6%a1%83%e5%9c%92%e5%8d%80-%e4%ba%ac%e6%87%8b%e6%9c%83/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1088,12 +1618,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%85%8b%e9%87%8c%e7%89%b9%e7%81%b0",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%85%8b%e9%87%8c%e7%89%b9%e7%81%b0/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E5%8A%A0%E9%87%8C%E5%A5%A7%E9%87%91",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E5%8A%A0%E9%87%8C%E5%A5%A7%E9%87%91/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8a%a0%e9%87%8c%e5%a5%a7%e9%87%91",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8a%a0%e9%87%8c%e5%a5%a7%e9%87%91/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1128,6 +1678,26 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%8d%a1%e6%8b%89%e6%8b%89",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%8d%a1%e6%8b%89%e6%8b%89/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%ae%89%e6%a0%bc%e6%8b%89",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%ae%89%e6%a0%bc%e6%8b%89/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/安格拉",
       "destination": "/products.html",
       "statusCode": 301
@@ -1158,22 +1728,22 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e5%b8%9d%e5%af%b6%e7%b1%b3%e9%bb%83",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e5%b8%9d%e5%af%b6%e7%b1%b3%e9%bb%83/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/帝寶米黃",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/帝寶米黃/",
-      "destination": "/products.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/product/帝諾",
-      "destination": "/products.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/product/帝諾/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1188,12 +1758,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86",
+      "source": "/product/%e5%b8%9d%e8%ab%be",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86/",
+      "source": "/product/%e5%b8%9d%e8%ab%be/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/帝諾",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/帝諾/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%8a%bd%e8%b1%a1%e7%b4%8b%e7%90%86",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%8a%bd%e8%b1%a1%e7%b4%8b%e7%90%86/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1208,12 +1798,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/深灰石紋",
+      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/深灰石紋/",
+      "source": "/product/%E6%8A%BD%E8%B1%A1%E7%B4%8B%E7%90%86/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1224,6 +1814,36 @@
     },
     {
       "source": "/product/%E6%B7%B1%E7%81%B0%E7%9F%B3%E7%B4%8B/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/深灰石紋",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/深灰石紋/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%b7%b1%e7%81%b0%e7%9f%b3%e7%b4%8b",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e6%b7%b1%e7%81%b0%e7%9f%b3%e7%b4%8b/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e7%90%a5%e7%8f%80",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e7%90%a5%e7%8f%80/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1248,6 +1868,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e7%90%a5%e7%8f%80-2",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e7%90%a5%e7%8f%80-2/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E7%90%A5%E7%8F%80-2",
       "destination": "/products.html",
       "statusCode": 301
@@ -1268,6 +1898,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/白玉蘭",
       "destination": "/products.html",
       "statusCode": 301
@@ -1278,12 +1918,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD",
+      "source": "/product/%e7%99%bd%e7%8e%89%e8%98%ad",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E7%99%BD%E7%8E%89%E8%98%AD/",
+      "source": "/product/%e7%99%bd%e7%8e%89%e8%98%ad/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/紫丁黑",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/紫丁黑/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e7%b4%ab%e4%b8%81%e9%bb%91",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e7%b4%ab%e4%b8%81%e9%bb%91/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1298,12 +1958,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/紫丁黑",
+      "source": "/product/%e8%81%96%e7%be%85%e8%98%ad%e9%bb%91",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/紫丁黑/",
+      "source": "/product/%e8%81%96%e7%be%85%e8%98%ad%e9%bb%91/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1328,12 +1988,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E9%8A%80%E7%8B%90",
+      "source": "/product/%e9%8a%80%e7%8b%90",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E9%8A%80%E7%8B%90/",
+      "source": "/product/%e9%8a%80%e7%8b%90/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1348,12 +2008,22 @@
       "statusCode": 301
     },
     {
-      "source": "/product/%E9%8F%BD%E8%9D%95",
+      "source": "/product/%E9%8A%80%E7%8B%90",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/%E9%8F%BD%E8%9D%95/",
+      "source": "/product/%E9%8A%80%E7%8B%90/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1368,12 +2038,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-1",
+      "source": "/product/%E9%8F%BD%E8%9D%95",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-1/",
+      "source": "/product/%E9%8F%BD%E8%9D%95/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1388,12 +2058,22 @@
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-2",
+      "source": "/product/鏽蝕-1",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-2/",
+      "source": "/product/鏽蝕-1/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-1",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-1/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1408,12 +2088,22 @@
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-3",
+      "source": "/product/%e9%8f%bd%e8%9d%95-2",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product/鏽蝕-3/",
+      "source": "/product/%e9%8f%bd%e8%9d%95-2/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/鏽蝕-2",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/鏽蝕-2/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1428,12 +2118,42 @@
       "statusCode": 301
     },
     {
+      "source": "/product/鏽蝕-3",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/鏽蝕-3/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-3",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-3/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E9%8F%BD%E8%9D%95-4",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E9%8F%BD%E8%9D%95-4/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-4",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-4/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1468,6 +2188,16 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e9%8f%bd%e8%9d%95-6",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-6/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/鏽蝕-6-2",
       "destination": "/products.html",
       "statusCode": 301
@@ -1478,12 +2208,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e9%8f%bd%e8%9d%95-6-2",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%8f%bd%e8%9d%95-6-2/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E9%8F%BD%E8%9D%95-6-2",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E9%8F%BD%E8%9D%95-6-2/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%9b%85%e4%bb%95%e7%99%bd",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%9b%85%e4%bb%95%e7%99%bd/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1528,12 +2278,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e9%9b%95%e5%88%bb%e7%99%bd",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%9b%95%e5%88%bb%e7%99%bd/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/%E9%9B%AA%E7%99%BD%E7%B4%B0%E7%B4%8B",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/%E9%9B%AA%E7%99%BD%E7%B4%B0%E7%B4%8B/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%9b%aa%e7%99%bd%e7%b4%b0%e7%b4%8b",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%9b%aa%e7%99%bd%e7%b4%b0%e7%b4%8b/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1568,12 +2338,32 @@
       "statusCode": 301
     },
     {
+      "source": "/product/%e9%bb%83%e9%87%91%e9%9b%95%e5%88%bb%e7%99%bd",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%bb%83%e9%87%91%e9%9b%95%e5%88%bb%e7%99%bd/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/product/黑網石",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
       "source": "/product/黑網石/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%bb%91%e7%b6%b2%e7%9f%b3",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/%e9%bb%91%e7%b6%b2%e7%9f%b3/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1608,12 +2398,12 @@
       "statusCode": 301
     },
     {
-      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2",
+      "source": "/%e5%af%a6%e7%b8%be%e6%a1%88%e4%be%8b",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2/",
+      "source": "/%e5%af%a6%e7%b8%be%e6%a1%88%e4%be%8b/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1624,6 +2414,26 @@
     },
     {
       "source": "/實績案例-2-2/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e5%af%a6%e7%b8%be%e6%a1%88%e4%be%8b-2-2",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e5%af%a6%e7%b8%be%e6%a1%88%e4%be%8b-2-2/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%E5%AF%A6%E7%B8%BE%E6%A1%88%E4%BE%8B-2-2/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1648,6 +2458,16 @@
       "statusCode": 301
     },
     {
+      "source": "/%e7%85%8c%e7%9b%9b%e8%88%88%e6%a5%ad%e8%82%a1%e4%bb%bd%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8",
+      "destination": "/#about",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e7%85%8c%e7%9b%9b%e8%88%88%e6%a5%ad%e8%82%a1%e4%bb%bd%e6%9c%89%e9%99%90%e5%85%ac%e5%8f%b8/",
+      "destination": "/#about",
+      "statusCode": 301
+    },
+    {
       "source": "/about-us",
       "destination": "/#about",
       "statusCode": 301
@@ -1655,16 +2475,6 @@
     {
       "source": "/about-us/",
       "destination": "/#about",
-      "statusCode": 301
-    },
-    {
-      "source": "/產品介紹-product",
-      "destination": "/products.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/產品介紹-product/",
-      "destination": "/products.html",
       "statusCode": 301
     },
     {
@@ -1678,12 +2488,32 @@
       "statusCode": 301
     },
     {
-      "source": "/石紋系列",
+      "source": "/%e7%94%a2%e5%93%81%e4%bb%8b%e7%b4%b9-product",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/石紋系列/",
+      "source": "/%e7%94%a2%e5%93%81%e4%bb%8b%e7%b4%b9-product/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/產品介紹-product",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/產品介紹-product/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e7%9f%b3%e7%b4%8b%e7%b3%bb%e5%88%97",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e7%9f%b3%e7%b4%8b%e7%b3%bb%e5%88%97/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1698,6 +2528,16 @@
       "statusCode": 301
     },
     {
+      "source": "/石紋系列",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/石紋系列/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
       "source": "/shop",
       "destination": "/products.html",
       "statusCode": 301
@@ -1705,6 +2545,16 @@
     {
       "source": "/shop/",
       "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e8%81%af%e7%b5%a1%e6%88%91%e5%80%91",
+      "destination": "/#contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e8%81%af%e7%b5%a1%e6%88%91%e5%80%91/",
+      "destination": "/#contact",
       "statusCode": 301
     },
     {
@@ -1748,6 +2598,16 @@
       "statusCode": 301
     },
     {
+      "source": "/%e8%97%9d%e6%a0%bc%e6%9d%bf",
+      "destination": "/#tech",
+      "statusCode": 301
+    },
+    {
+      "source": "/%e8%97%9d%e6%a0%bc%e6%9d%bf/",
+      "destination": "/#tech",
+      "statusCode": 301
+    },
+    {
       "source": "/%E8%97%9D%E6%A0%BC%E6%9D%BF",
       "destination": "/#tech",
       "statusCode": 301
@@ -1778,16 +2638,6 @@
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
-      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1/",
-      "destination": "/cases.html",
-      "statusCode": 301
-    },
-    {
       "source": "/product-category/消防箱",
       "destination": "/cases.html",
       "statusCode": 301
@@ -1798,12 +2648,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80",
+      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1",
       "destination": "/cases.html",
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80/",
+      "source": "/product-category/%E6%B6%88%E9%98%B2%E7%AE%B1/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e6%b6%88%e9%98%b2%e7%ae%b1",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e6%b6%88%e9%98%b2%e7%ae%b1/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e9%98%b2%e7%81%ab%e9%96%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e9%98%b2%e7%81%ab%e9%96%80/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1814,6 +2684,16 @@
     },
     {
       "source": "/product-category/防火門/",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80",
+      "destination": "/cases.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%E9%98%B2%E7%81%AB%E9%96%80/",
       "destination": "/cases.html",
       "statusCode": 301
     },
@@ -1838,12 +2718,12 @@
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97",
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97/",
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1858,12 +2738,22 @@
       "statusCode": 301
     },
     {
-      "source": "/product-category/藝格板/石紋系列",
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product-category/藝格板/石紋系列/",
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E6%9C%A8%E7%B4%8B%E7%B3%BB%E5%88%97/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e6%9c%a8%e7%b4%8b%e7%b3%bb%e5%88%97",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e6%9c%a8%e7%b4%8b%e7%b3%bb%e5%88%97/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1878,12 +2768,32 @@
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97",
+      "source": "/product-category/藝格板/石紋系列",
       "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97/",
+      "source": "/product-category/藝格板/石紋系列/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e7%9f%b3%e7%b4%8b%e7%b3%bb%e5%88%97",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e7%9f%b3%e7%b4%8b%e7%b3%bb%e5%88%97/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e7%b9%a1%e8%9d%95%e7%b3%bb%e5%88%97",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%e8%97%9d%e6%a0%bc%e6%9d%bf/%e7%b9%a1%e8%9d%95%e7%b3%bb%e5%88%97/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1894,6 +2804,16 @@
     },
     {
       "source": "/product-category/藝格板/繡蝕系列/",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/product-category/%E8%97%9D%E6%A0%BC%E6%9D%BF/%E7%B9%A1%E8%9D%95%E7%B3%BB%E5%88%97/",
       "destination": "/products.html",
       "statusCode": 301
     },
@@ -1918,12 +2838,12 @@
       "statusCode": 301
     },
     {
-      "source": "/portfolio-item",
-      "destination": "/cases.html",
+      "source": "/portfolio-tag/%e8%97%9d%e6%a0%bc%e6%9d%bf",
+      "destination": "/products.html",
       "statusCode": 301
     },
     {
-      "source": "/product",
+      "source": "/portfolio-tag/%e8%97%9d%e6%a0%bc%e6%9d%bf/",
       "destination": "/products.html",
       "statusCode": 301
     },
