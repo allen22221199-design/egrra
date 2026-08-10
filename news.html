@@ -29,6 +29,10 @@
    因此每個主題自製一款品牌化的圖案：深色底＋金色線條＋主題圖示。 */
 .nw-th{position:relative;aspect-ratio:16/10;overflow:hidden;background:#14110d}
 .nw-th .pat{position:absolute;inset:0}
+/* 用自有案場照當卡面時，壓一層暗罩，主題標籤與日期才讀得清楚 */
+.nw-th .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.nw-th .ph::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(15,12,9,.52),rgba(15,12,9,.18) 42%,rgba(15,12,9,.62))}
 .nw-th .ic{position:absolute;inset:0;display:grid;place-items:center}
 .nw-th .ic svg{width:64px;height:64px;stroke:#fff;fill:none;stroke-width:1.25;
   opacity:.92;filter:drop-shadow(0 8px 22px rgba(0,0,0,.6))}
@@ -53,6 +57,13 @@
   overflow:auto;position:relative;box-shadow:0 40px 90px -20px rgba(0,0,0,.5)}
 .nwmod .hd{position:relative;aspect-ratio:21/8;overflow:hidden;background:#14110d}
 .nwmod .hd .pat{position:absolute;inset:0}
+.nwmod .hd .ph{position:absolute;inset:0;background-size:cover;background-position:center}
+.nwmod .hd .ph::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(15,12,9,.48),rgba(15,12,9,.12) 45%,rgba(15,12,9,.5))}
+/* 圖說：明確說明這是自家實績照，不是新聞現場 —— 不寫的話讀者會誤以為是報導中的現場 */
+.nwmod .hd .cap{position:absolute;right:16px;bottom:12px;font-size:11.5px;
+  color:rgba(255,255,255,.72);background:rgba(20,17,13,.5);padding:3px 10px;border-radius:99px;
+  backdrop-filter:blur(3px);max-width:70%;text-align:right}
 .nwmod .hd .ic{position:absolute;inset:0;display:grid;place-items:center}
 .nwmod .hd .ic svg{width:76px;height:76px;stroke:#fff;fill:none;stroke-width:1.25;opacity:.92}
 .nwmod .hd .tp{position:absolute;left:22px;top:20px;font-size:12px;letter-spacing:.08em;
@@ -170,6 +181,44 @@
   var HUE={"土方與工期":32,"防火法規":8,"耐燃安全":18,"綠建材低碳":110,
            "室內設計":205,"公設與都更":260,"健康建材":160};
   function icon(t){ return ICON[t]||'<path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/>'; }
+
+  /* 卡面優先用自己的案場照。
+     不用圖庫照或 AI 生成圖，是因為新聞旁配一張不相干的照片，
+     讀者會以為那就是報導中的現場 —— 一篇講火災的文章配上某棟大樓，
+     等於暗示那棟樓失火了。用自家實績照則零授權風險、不會誤導，
+     還順便展示做過的工程；圖說會註明是實績照而非新聞現場。
+     找不到對應照片的主題（例如土方）就退回自製圖案。 */
+  var TOPIC_CAT={
+    "防火法規":["防火門"],
+    "耐燃安全":["防火門","消防箱・檢修門"],
+    "公設與都更":["全棟廊道","牆面・天花"],
+    "室內設計":["牆面・天花"],
+    "健康建材":["牆面・天花"],
+    "綠建材低碳":["牆面・天花","全棟廊道"]
+  };
+  var PHOTO=null;
+  function photoFor(x){
+    if(x.image)return {url:x.image,from:""};          /* 後台指定的優先 */
+    var cats=TOPIC_CAT[x.topic]; if(!cats)return null;
+    if(!PHOTO){
+      PHOTO={};
+      var D=(window.EGRRA_LOCAL&&EGRRA_LOCAL())||window.EGRRA_DEFAULT_DATA||{};
+      (D.cases||[]).forEach(function(c){
+        ((c.cats&&c.cats.length?c.cats:[c.category])||[]).forEach(function(t){
+          if(!t||!c.img)return;
+          (PHOTO[t]=PHOTO[t]||[]).push({url:c.img,title:c.title,cat:t});
+        });
+      });
+    }
+    var pool=[];
+    cats.forEach(function(c){ pool=pool.concat(PHOTO[c]||[]); });
+    if(!pool.length)return null;
+    /* 依 id 取固定的一張，同一篇每次開都一樣，不會跳來跳去 */
+    var h=0,k=String(x.id||x.title||"");
+    for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;
+    var p=pool[h%pool.length];
+    return {url:p.url,from:p.title+"・"+p.cat};
+  }
   /* 底紋：以主題色相產生的斜線與光暈，SVG 直接內嵌，不必額外載圖 */
   function pat(t){
     var h=HUE[t]!==undefined?HUE[t]:38;
@@ -188,6 +237,18 @@
            'background-size:140px, cover, cover;background-repeat:repeat,no-repeat,no-repeat';
   }
   function thumb(x,big){
+    var ph=photoFor(x);
+    if(ph){
+      /* 網址用 &quot; 包起來 —— 屬性值會先做 HTML 解碼再交給 CSS，
+         直接寫雙引號會把 style="..." 截斷，寫單引號則在這段字串裡難以跳脫 */
+      return '<div class="ph" style="background-image:url(&quot;'+esc(ph.url)+'&quot;)"></div>'+
+        (x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
+        (big
+          ? (ph.from?'<span class="cap">'+L("圖為本公司「"+ph.from+"」實績，非新聞現場",
+                        "Photo: our own project — not the scene reported")+'</span>':"")
+          : '<span class="dt">'+fmt(x.publishedAt)+'</span>'+
+            (x.srcCount?'<span class="cnt">'+L("依 "+x.srcCount+" 則報導","from "+x.srcCount+" reports")+'</span>':""));
+    }
     return '<div class="pat" style="'+pat(x.topic)+'"></div>'+
       '<div class="ic"><svg viewBox="0 0 24 24">'+icon(x.topic)+'</svg></div>'+
       (x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
