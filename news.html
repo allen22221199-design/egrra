@@ -196,9 +196,16 @@
     "健康建材":["牆面・天花"],
     "綠建材低碳":["牆面・天花","全棟廊道"]
   };
+  /* 2026-08-10：暫停使用自家案場照。
+     放在別人的新聞旁邊會像在暗示「那是我們的案子出事」或硬蹭，
+     使用者明確表示不要。改用網路可商用圖庫，但那需要 API 金鑰，
+     取得之前先回到自製圖案 —— 寧可樸素，不要有誤導疑慮。
+     金鑰備妥後把下面這行拿掉即可恢復。 */
+  var USE_OWN_PHOTOS=false;
   var PHOTO=null;
   function photoFor(x){
     if(x.image)return {url:x.image,from:""};          /* 後台指定的優先 */
+    if(!USE_OWN_PHOTOS)return null;
     var cats=TOPIC_CAT[x.topic]; if(!cats)return null;
     if(!PHOTO){
       PHOTO={};
