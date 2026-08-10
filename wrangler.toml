@@ -39,11 +39,16 @@ binding = "EGRRA_DB"
 database_name = "egrra-stats"
 database_id = "16215946-23c7-4660-b2c4-a5403fb3ab3c"
 
-# --- Cron：產業快訊每日蒐集 ---------------------------------------------------
-# 免費方案每個帳號 5 個 cron，我們只用 1 個。
-# 時間是 UTC，01:00 UTC = 台灣早上 9 點。
-[triggers]
-crons = ["0 1 * * *"]
+# --- 產業快訊的排程 -----------------------------------------------------------
+# ★ 這裡「沒有」[triggers] 是刻意的 ★
+#   Cloudflare Pages 不支援 Cron Triggers —— 那是 Workers 專屬功能，
+#   寫在 Pages 專案的 wrangler.toml 裡會被靜靜忽略，看起來有排程其實沒有跑。
+#
+#   改成由 /api/news 在被瀏覽時檢查「距離上次蒐集是否超過 20 小時」，
+#   是就用 waitUntil 丟到背景觸發 /api/news-fetch。訪客不會多等，
+#   也不必為了一天一次的排程另外養一支 Worker（那還要多開 Workers Scripts 權限）。
+#
+#   要手動觸發：GET /api/news-fetch?key=<ADMIN_PASSWORD>&n=1
 
 # --- 環境變數 -----------------------------------------------------------------
 # 密碼與金鑰不要寫在這個檔（會進 git）。到
