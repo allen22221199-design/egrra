@@ -7,7 +7,7 @@
 <link rel="canonical" href="https://egrra.vercel.app/news.html" />
 <script>document.documentElement.classList.add('js');</script>
 <title>產業快訊｜煌盛興業 EGRRA・藝格板</title>
-<meta name="description" content="煌盛興業解讀防火門法規、耐燃建材安全等產業動態：發生什麼事、對你的工程意味什麼、實務上怎麼處理，文末附參考來源。" />
+<meta name="description" content="煌盛興業解讀防火門法規、耐燃建材安全、土方與工期等產業動態：發生什麼事、對你的工程意味什麼、實務上怎麼處理，文末附參考來源。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
@@ -19,33 +19,66 @@
 .nw-tab:hover{border-color:var(--gold-lt);color:var(--ink)}
 .nw-tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
 
-.nw-list{display:grid;gap:16px}
-.nw{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;
-  transition:.3s var(--ease)}
-.nw:hover{box-shadow:var(--sh);border-color:transparent}
-.nw .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.nw .tp{font-size:11.5px;letter-spacing:.06em;padding:3px 10px;border-radius:99px;
-  background:var(--paper2);color:var(--gold-dk)}
-.nw .src{font-size:12.5px;color:var(--faint)}
-.nw h3{font-family:var(--serif);font-size:19px;line-height:1.5;color:var(--ink);margin-bottom:10px}
-/* 本文是煌盛自己寫的短文，不是原文轉貼 */
-.nw .body p{font-size:15px;color:var(--ink-soft);line-height:1.9;margin-bottom:12px}
-.nw .body p:last-child{margin-bottom:0}
-/* 參考來源：只列媒體名，一排排開。
-   把每則新聞標題整串攤出來會蓋過自己的文章，版面也雜；
-   要看細節點進去就有。 */
-.nw .srcs{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
+.nw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.nw-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.nw-grid{grid-template-columns:1fr}}
+.nw-card:hover{transform:translateY(-5px);box-shadow:var(--sh);border-color:transparent}
+
+/* 卡面視覺由程式生成。
+   RSS 沒有提供圖片，而拿各家媒體的新聞配圖來用是侵權；
+   因此每個主題自製一款品牌化的圖案：深色底＋金色線條＋主題圖示。 */
+.nw-th{position:relative;aspect-ratio:16/10;overflow:hidden;background:#14110d}
+.nw-th .pat{position:absolute;inset:0}
+.nw-th .ic{position:absolute;inset:0;display:grid;place-items:center}
+.nw-th .ic svg{width:64px;height:64px;stroke:#fff;fill:none;stroke-width:1.25;
+  opacity:.92;filter:drop-shadow(0 8px 22px rgba(0,0,0,.6))}
+.nw-th .tp{position:absolute;left:14px;top:14px;font-size:11.5px;letter-spacing:.08em;
+  color:var(--gold-lt);background:rgba(20,17,13,.62);border:1px solid rgba(201,168,120,.34);
+  padding:3px 11px;border-radius:99px;backdrop-filter:blur(3px)}
+.nw-th .dt{position:absolute;right:14px;bottom:12px;font-size:11.5px;color:rgba(255,255,255,.55)}
+.nw-th .cnt{position:absolute;left:14px;bottom:12px;font-size:11.5px;color:rgba(255,255,255,.55)}
+
+.nw-card .cap{padding:18px 20px 20px}
+.nw-card .cap h3{font-family:var(--serif);font-size:18px;line-height:1.5;color:var(--ink);
+  margin-bottom:9px}
+.nw-card .cap p{font-size:13.5px;color:var(--ink-soft);line-height:1.75;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nw-card .more{margin-top:12px;font-size:13px;color:var(--gold-dk);font-weight:500}
+
+/* ---- 詳細內容彈窗 ---- */
+.nwov{position:fixed;inset:0;background:rgba(15,12,9,.66);backdrop-filter:blur(4px);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:24px}
+.nwov.show{display:flex}
+.nwmod{background:#fff;border-radius:18px;width:100%;max-width:720px;max-height:88vh;
+  overflow:auto;position:relative;box-shadow:0 40px 90px -20px rgba(0,0,0,.5)}
+.nwmod .hd{position:relative;aspect-ratio:21/8;overflow:hidden;background:#14110d}
+.nwmod .hd .pat{position:absolute;inset:0}
+.nwmod .hd .ic{position:absolute;inset:0;display:grid;place-items:center}
+.nwmod .hd .ic svg{width:76px;height:76px;stroke:#fff;fill:none;stroke-width:1.25;opacity:.92}
+.nwmod .hd .tp{position:absolute;left:22px;top:20px;font-size:12px;letter-spacing:.08em;
+  color:var(--gold-lt);background:rgba(20,17,13,.62);border:1px solid rgba(201,168,120,.34);
+  padding:4px 13px;border-radius:99px}
+.nwx{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;
+  border:none;background:rgba(255,255,255,.9);font-size:22px;line-height:1;cursor:pointer;
+  color:var(--ink);z-index:3;transition:.2s}
+.nwx:hover{background:#fff;transform:rotate(90deg)}
+.nwbody{padding:26px 30px 30px}
+.nwbody .dt{font-size:12.5px;color:var(--faint);margin-bottom:8px}
+.nwbody h2{font-family:var(--serif);font-size:25px;line-height:1.45;color:var(--ink);margin-bottom:18px}
+.nwbody p.tx{font-size:15.5px;color:var(--ink-soft);line-height:1.95;margin-bottom:14px}
+.nwbody .srcs{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);
   display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.nw .srcs>b{font-size:11.5px;letter-spacing:.1em;color:var(--faint);font-weight:500}
-.nw .srcs a{font-size:13px;color:var(--gold-dk);text-decoration:none;
+.nwbody .srcs>b{font-size:11.5px;letter-spacing:.1em;color:var(--faint);font-weight:500}
+.nwbody .srcs a{font-size:13px;color:var(--gold-dk);text-decoration:none;
   border:1px solid var(--line);border-radius:99px;padding:3px 11px;transition:.2s var(--ease)}
-.nw .srcs a:hover{border-color:var(--gold-lt);color:var(--ink)}
+.nwbody .srcs a:hover{border-color:var(--gold-lt);color:var(--ink)}
+.nwbody .dis{margin-top:16px;font-size:12px;color:var(--faint);line-height:1.8}
+@media(max-width:640px){ .nwbody{padding:20px} .nwbody h2{font-size:21px} }
 
 .nw-note{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);
   font-size:12.5px;color:var(--faint);line-height:1.9}
 .nw-empty{background:#fff;border:1px solid var(--line);border-radius:var(--r);
   padding:60px 30px;text-align:center;color:var(--faint)}
-@media(max-width:640px){ .nw{padding:20px} .nw h3{font-size:17px} }
 </style>
 </head>
 <body>
@@ -62,7 +95,7 @@
       <a href="cases.html">實績案例</a>
       <a href="news.html" class="on">產業快訊</a>
       <a href="index.html#contact" class="nav-cta">聯絡我們</a>
-<button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
+      <button class="langbtn" id="langbtn" aria-label="切換語言 / Language">EN</button>
     </nav>
     <button class="burger" aria-label="選單"><span></span><span></span><span></span></button>
   </div>
@@ -73,20 +106,29 @@
   <div class="wrap">
     <span class="eyebrow">Industry News</span>
     <h1 id="nw-h1">產業快訊</h1>
-    <p id="nw-lead">防火門法規、耐燃建材安全等與空間裝修相關的產業動態，由我們整理成解讀短文，並在文末附上參考來源。</p>
+    <p id="nw-lead">土方與工期、防火法規、耐燃安全等與空間裝修相關的產業動態，由我們整理成解讀短文，並在文末附上參考來源。</p>
   </div>
 </section>
 
 <section class="libsec">
   <div class="wrap">
     <div class="nw-tabs" id="tabs"></div>
-    <div class="nw-list" id="list"></div>
+    <div class="nw-grid" id="list"></div>
     <p class="nw-note" id="note"></p>
   </div>
 </section>
 
 <div class="foot">
   <div class="wrap"><b>煌盛興業 EGRRA</b>　·　Tel <a href="tel:0222221199">02-2222-1199</a>　·　<a href="index.html">回首頁</a></div>
+</div>
+
+<!-- 詳細內容彈窗 -->
+<div class="nwov" id="nwov">
+  <div class="nwmod">
+    <button class="nwx" id="nwx" aria-label="關閉">&times;</button>
+    <div class="hd" id="nwhd"></div>
+    <div class="nwbody" id="nwbody"></div>
+  </div>
 </div>
 
 <script src="site-data.js"></script>
@@ -96,7 +138,7 @@
 (function(){
   var ITEMS=[], cur="全部";
   var elTabs=document.getElementById("tabs"), elList=document.getElementById("list"),
-      elNote=document.getElementById("note");
+      elNote=document.getElementById("note"), ov=document.getElementById("nwov");
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
     .replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function en(){return document.documentElement.getAttribute("data-lang")==="en";}
@@ -106,6 +148,54 @@
     var x=new Date(t);
     return x.getFullYear()+"/"+("0"+(x.getMonth()+1)).slice(-2)+"/"+("0"+x.getDate()).slice(-2);
   }
+
+  /* 每個主題一款圖示與底紋。
+     RSS 不提供圖片，而借用各家媒體的新聞配圖是侵權，所以自己畫。 */
+  var ICON={
+    /* 挖土機鏟斗 */
+    "土方與工期":'<path d="M2 20h20"/><path d="M4 20v-4h6v4"/><path d="M10 16l3-7h4l2 4"/><path d="M13 9V5h3"/><circle cx="7" cy="20" r="1.6"/>',
+    /* 門與火焰 */
+    "防火法規":'<rect x="4" y="3" width="10" height="18" rx="1"/><path d="M11 12h.01"/><path d="M19 8c1.6 1.6 2.4 3.2 2.4 4.8A2.4 2.4 0 0 1 19 15a2.4 2.4 0 0 1-2.4-2.2c0-1.6.8-3.2 2.4-4.8z"/>',
+    /* 盾牌內火焰 */
+    "耐燃安全":'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M12 8c1.6 1.7 2.4 3 2.4 4.2A2.4 2.4 0 0 1 12 14.6a2.4 2.4 0 0 1-2.4-2.4C9.6 11 10.4 9.7 12 8z"/>',
+    /* 葉片與循環 */
+    "綠建材低碳":'<path d="M20 4c0 8-5 13-12 13H5"/><path d="M5 17c0-6 4-9 9-9"/><path d="M4 20c1-2 2-3 3-3.6"/>',
+    /* 立面與量測 */
+    "室內設計":'<path d="M3 21h18M5 21V8l7-5 7 5v13"/><rect x="9" y="12" width="6" height="9"/><path d="M9 12h6"/>',
+    /* 兩棟樓與工具 */
+    "公設與都更":'<path d="M3 21V8l5-3 5 3v13"/><path d="M14 21v-8h7v8"/><path d="M6 11h2M6 15h2M17 17h1"/>',
+    /* 屋內心形 */
+    "健康建材":'<path d="M4 11l8-6 8 6v10H4z"/><path d="M12 18s-3-2-3-4.2A1.7 1.7 0 0 1 12 12.5a1.7 1.7 0 0 1 3 1.3c0 2.2-3 4.2-3 4.2z"/>'
+  };
+  var HUE={"土方與工期":32,"防火法規":8,"耐燃安全":18,"綠建材低碳":110,
+           "室內設計":205,"公設與都更":260,"健康建材":160};
+  function icon(t){ return ICON[t]||'<path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/>'; }
+  /* 底紋：以主題色相產生的斜線與光暈，SVG 直接內嵌，不必額外載圖 */
+  function pat(t){
+    var h=HUE[t]!==undefined?HUE[t]:38;
+    /* 斜線紋以主題色相畫，線條夠明顯才看得出是刻意設計而不是純黑底 */
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140">'+
+      '<defs><pattern id="p" width="18" height="18" patternUnits="userSpaceOnUse" '+
+      'patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="18" '+
+      'stroke="hsl('+h+',55%,62%)" stroke-width="1.4" opacity="0.30"/></pattern></defs>'+
+      '<rect width="140" height="140" fill="url(#p)"/></svg>';
+    /* 三層：斜線紋 → 右上角光暈 → 主題色打底，一次寫在同一個 background */
+    /* 一定要用單引號包 data URI —— 這段會塞進 style="..." 屬性裡，
+       用雙引號的話第一個引號就把屬性截斷了，整組樣式都不會生效。 */
+    return "background-image:url('data:image/svg+xml,"+encodeURIComponent(svg)+"'),"+
+           'radial-gradient(70% 90% at 78% 8%, hsla('+h+',62%,52%,.42), transparent 62%),'+
+           'linear-gradient(150deg, hsl('+h+',30%,19%), #14110d 68%);'+
+           'background-size:140px, cover, cover;background-repeat:repeat,no-repeat,no-repeat';
+  }
+  function thumb(x,big){
+    return '<div class="pat" style="'+pat(x.topic)+'"></div>'+
+      '<div class="ic"><svg viewBox="0 0 24 24">'+icon(x.topic)+'</svg></div>'+
+      (x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
+      (big?"":
+        '<span class="dt">'+fmt(x.publishedAt)+'</span>'+
+        (x.srcCount?'<span class="cnt">'+L("依 "+x.srcCount+" 則報導","from "+x.srcCount+" reports")+'</span>':""));
+  }
+
   function draw(){
     var topics=["全部"].concat(ITEMS.map(function(x){return x.topic;})
       .filter(function(v,i,a){return v&&a.indexOf(v)===i;}));
@@ -116,42 +206,64 @@
     }).join("");
     var list=ITEMS.filter(function(x){return cur==="全部"||x.topic===cur;});
     if(!list.length){
-      elList.innerHTML='<div class="nw-empty">'+
+      elList.innerHTML='<div class="nw-empty" style="grid-column:1/-1">'+
         L("目前還沒有發布的快訊，敬請期待。","No news published yet.")+'</div>';
       return;
     }
-    elList.innerHTML=list.map(function(x){
-      var srcs=(x.sources||[]);
-      return '<article class="nw">'+
-        '<div class="top">'+(x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
-          '<span class="src">'+(x.publishedAt?fmt(x.publishedAt):"")+'</span></div>'+
-        '<h3>'+esc(x.title)+'</h3>'+
-        (x.body?'<div class="body">'+String(x.body).split(/\n{2,}/).map(function(p){
-            return '<p>'+esc(p.trim())+'</p>';}).join("")+'</div>':"")+
-        (srcs.length?'<div class="srcs"><b>'+L("參考來源","Sources")+'</b>'+
-          srcs.map(function(s){
-            /* 顯示媒體名即可；完整標題留在 title 屬性，滑過去才看得到 */
-            return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener nofollow" title="'+
-              esc(s.title||"")+'">'+esc(s.source||L("原文","Source"))+'</a>';
-          }).join("")+
-          (x.srcCount&&x.srcCount>srcs.length?
-            '<span style="font-size:12px;color:var(--faint)">'+
-            L("等 "+x.srcCount+" 則報導","and "+x.srcCount+" reports in total")+'</span>':"")+
-        '</div>':"")+
-      '</article>';
+    elList.innerHTML=list.map(function(x,i){
+      var first=String(x.body||"").split(/\n{2,}/)[0]||"";
+      return '<article class="card nw-card" data-i="'+ITEMS.indexOf(x)+'">'+
+        '<div class="nw-th">'+thumb(x)+'</div>'+
+        '<div class="cap"><h3>'+esc(x.title)+'</h3>'+
+          '<p>'+esc(first)+'</p>'+
+          '<div class="more">'+L("看完整內容 →","Read more →")+'</div>'+
+        '</div></article>';
     }).join("");
   }
+
+  function open(i){
+    var x=ITEMS[i]; if(!x)return;
+    document.getElementById("nwhd").innerHTML=thumb(x,true);
+    var srcs=x.sources||[];
+    document.getElementById("nwbody").innerHTML=
+      '<div class="dt">'+fmt(x.publishedAt)+
+        (x.srcCount?'　·　'+L("依 "+x.srcCount+" 則報導整理","compiled from "+x.srcCount+" reports"):"")+'</div>'+
+      '<h2>'+esc(x.title)+'</h2>'+
+      String(x.body||"").split(/\n{2,}/).map(function(p){
+        return '<p class="tx">'+esc(p.trim())+'</p>';}).join("")+
+      (srcs.length?'<div class="srcs"><b>'+L("參考來源","Sources")+'</b>'+
+        srcs.map(function(s){
+          return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener nofollow" title="'+
+            esc(s.title||"")+'">'+esc(s.source||L("原文","Source"))+'</a>';
+        }).join("")+
+        (x.srcCount&&x.srcCount>srcs.length?
+          '<span style="font-size:12px;color:var(--faint)">'+
+          L("等 "+x.srcCount+" 則","of "+x.srcCount+" total")+'</span>':"")+
+      '</div>':"")+
+      '<p class="dis">'+disclaimer()+'</p>';
+    ov.classList.add("show"); document.body.style.overflow="hidden";
+  }
+  function close(){ ov.classList.remove("show"); document.body.style.overflow=""; }
+  document.getElementById("nwx").addEventListener("click",close);
+  ov.addEventListener("click",function(e){ if(e.target===ov)close(); });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&ov.classList.contains("show"))close(); });
+  elList.addEventListener("click",function(e){
+    var c=e.target.closest("[data-i]"); if(c)open(parseInt(c.dataset.i,10));
+  });
   elTabs.addEventListener("click",function(e){
     var b=e.target.closest("[data-t]"); if(!b)return;
     cur=b.dataset.t; draw();
   });
 
+  function disclaimer(){
+    return L("＊ 本文為煌盛興業自行撰寫，非轉載或改寫原始報導。事實部分依各參考來源之報導交叉整理，實際規定以主管機關公告為準；各參考來源之著作權屬其原始媒體所有。",
+      "* Written by EGRRA — not a reproduction or rewrite of the original reports. Facts are cross-checked against the sources listed; official announcements take precedence. Copyright in each source remains with its publisher.");
+  }
+
   fetch("/api/news").then(function(r){return r.json();}).then(function(d){
     ITEMS=(d&&d.items)||[];
-    elNote.textContent=L(
-      "＊ 本頁文章為煌盛興業自行撰寫，非轉載或改寫原始報導。事實部分依各參考來源之報導交叉整理，實際規定以主管機關公告為準；各參考來源之著作權屬其原始媒體所有。",
-      "* These articles are written by EGRRA — they are not reproductions or rewrites of the original reports. Facts are cross-checked against the sources listed; official announcements take precedence. Copyright in each source remains with its publisher.")
-      + (d&&d.updated?"　"+L("最後更新：","Last updated: ")+fmt(d.updated):"");
+    elNote.textContent=disclaimer()+(d&&d.updated?"　"+L("最後更新：","Last updated: ")+fmt(d.updated):"");
     draw();
   }).catch(function(){
     ITEMS=[]; draw();
@@ -161,15 +273,12 @@
   EGRRA_I18N.init({
     dict:{
       "nw.h1":"Industry News",
-      "nw.lead":"Fire-door regulations, fire-rated material safety and other developments relevant to interior fit-out — written up by us, with sources listed at the end of each piece."
+      "nw.lead":"Earthworks and schedule pressure, fire-door regulations, fire-rated material safety and other developments relevant to interior fit-out — written up by us, with sources at the end of each piece."
     },
     sel:[["#nw-h1","nw.h1"],["#nw-lead","nw.lead"]]
   });
-  window.__redraw=function(){ draw();
-    var d=document.getElementById("note");
-    if(d)d.textContent=L("＊ 本頁文章為煌盛興業自行撰寫，非轉載或改寫原始報導。事實部分依各參考來源之報導交叉整理，實際規定以主管機關公告為準；各參考來源之著作權屬其原始媒體所有。",
-      "* These articles are written by EGRRA — they are not reproductions or rewrites of the original reports. Facts are cross-checked against the sources listed; official announcements take precedence. Copyright in each source remains with its publisher.");
-  };
+  window.__redraw=function(){ draw(); close();
+    var n=document.getElementById("note"); if(n)n.textContent=disclaimer(); };
 
   var bg=document.querySelector(".burger");
   if(bg)bg.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("open");});
