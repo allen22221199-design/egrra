@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 網站地圖：搜尋引擎靠這份名單發現頁面。
+     ★ 新增頁面時一定要補進來，沒列的頁面等於沒上架。
+       （2026-08-10 查證：Bing 索引到的正好就是這份名單裡的 4 頁，
+         compare.html 與 news.html 因為沒列，完全沒被收錄。）
+     ★ 日後若把網站搬到 egrra.com，這裡、各頁的 canonical 與 og:url
+       都要一起換掉，否則等於自己叫 Google 不要看新網域。 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://egrra.vercel.app/</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://egrra.vercel.app/products.html</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://egrra.vercel.app/cases.html</loc>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://egrra.vercel.app/cases.html</loc>
-    <lastmod>2026-07-22</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://egrra.vercel.app/compare.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://egrra.vercel.app/certifications.html</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrra.vercel.app/news.html</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
 </urlset>

@@ -28,8 +28,55 @@ document.documentElement.classList.add('js');
 <meta property="og:title" content="煌盛興業 EGRRA｜PrinTex™ 數位紋理・藝格板" />
 <meta property="og:description" content="以 PrinTex™ 專利數位紋理高仿真還原天然石材，通過耐燃一級認證，重量僅天然石材 1/30。藝格板／消防箱／防火門客製解決方案。" />
 <meta property="og:url" content="https://egrra.vercel.app/" />
+<meta property="og:image" content="https://egrra.vercel.app/img/og-cover.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta property="og:locale" content="zh_TW" />
 <meta name="twitter:card" content="summary_large_image" />
+
+<!-- 結構化資料（JSON-LD）：Google 靠這個認出「這是一間公司」，
+     搜尋公司名時右側的資訊卡、電話、社群連結都來自這裡。
+     ★ 只放查證過的事實。地址目前資料裡沒有，寧可不寫也不要編。
+       日後補上營業地址時，加 address（PostalAddress）會更完整。 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://egrra.vercel.app/#org",
+  "name": "煌盛興業",
+  "alternateName": ["EGRRA", "煌盛興業 EGRRA", "藝格板"],
+  "url": "https://egrra.vercel.app/",
+  "logo": "https://egrra.vercel.app/img/og-cover.jpg",
+  "image": "https://egrra.vercel.app/img/og-cover.jpg",
+  "description": "煌盛興業 EGRRA — 專為建築與設計市場打造的數位紋理品牌。以 PrinTex™ 技術高仿真還原石材紋理，通過耐燃一級認證，重量僅天然石材 1/30。提供藝格板、消防箱、防火門表面美化解決方案。",
+  "telephone": "+886-2-2222-1199",
+  "faxNumber": "+886-2-2228-6799",
+  "areaServed": { "@type": "Country", "name": "台灣" },
+  "sameAs": [
+    "https://www.facebook.com/PrinTex22221199",
+    "https://www.tiktok.com/@marblemetal",
+    "https://line.me/R/ti/p/@egrra"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+886-2-2222-1199",
+    "contactType": "sales",
+    "areaServed": "TW",
+    "availableLanguage": ["zh-Hant", "en"]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://egrra.vercel.app/#website",
+  "url": "https://egrra.vercel.app/",
+  "name": "煌盛興業 EGRRA",
+  "inLanguage": "zh-Hant-TW",
+  "publisher": { "@id": "https://egrra.vercel.app/#org" }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
