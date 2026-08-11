@@ -20,6 +20,7 @@ window.EGRRA_I18N = (function () {
     [".nav-links a[href='/#about']", "nav.about"],
     [".nav-links a[href='/#tech']", "nav.tech"],
     [".nav-links a[href='/#products']", "nav.products"],
+    [".nav-links a[href='/compare']", "nav.compare"],
     [".nav-links a[href='/products']", "nav.library"],
     [".nav-links a[href='/cases']", "nav.portfolio"],
     [".nav-links a[href='/media']", "nav.media"],
