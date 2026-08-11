@@ -39,7 +39,7 @@ window.EGRRA_DEFAULT_DATA = {
        3. 時間絕不可填未來，理由同上面 dataVersion 的說明 */
   sectionVersions: {
     products: "2026-08-06T10:30:00Z",   /* 鏽蝕錯字修正；單色系列補上色系標籤 */
-    cases:    "2026-08-10T03:15:00Z"   /* 同步後台 37 件並補全地區 */
+    cases:    "2026-08-11T03:48:01Z"   /* 新增 c28 皇普 Lavie（桃園蘆竹） */
   },
 
   /* ---- 網站資訊（可在後台「網站資訊」分頁修改）---- */
@@ -522,6 +522,9 @@ window.EGRRA_DEFAULT_DATA = {
     { id:"c1785919559078", region:"新北市林口區", title:"頤昌", category:"防火門", cats:["防火門"], stone:"carrara", img:"https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713172332-nWFeXhFmUfXd3qruHHdc2dtjMfHDRI.jpg", imgs:["https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713172332-nWFeXhFmUfXd3qruHHdc2dtjMfHDRI.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713172138-UfRvcexh8xRfHv2uRAeM0RsN9JgWVg.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260709171049-byqMaDOHsDXhIIKuLnN45NWJlivwfv.jpg"], year:"2026" },
     { id:"c1785919663496", region:"新竹", title:"謙恆", category:"防火門", cats:["防火門"], stone:"carrara", img:"https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713145305-PWfFZPTsBqLIYURy2uOuSmV9D0BqlI.jpg", imgs:["https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713145305-PWfFZPTsBqLIYURy2uOuSmV9D0BqlI.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260713145311-VVMevK9h4opbbkv8IeUw14K0v8gr0s.jpg"], year:"2026" },
     { id:"c1785919789686", region:"台中市北屯區", title:"覞山", category:"消防箱・檢修門", cats:["消防箱・檢修門", "防火門"], stone:"carrara", img:"https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718145041-FiFqf6XitNbt99YpjOxrdXb8jPaIib.jpg", imgs:["https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718145041-FiFqf6XitNbt99YpjOxrdXb8jPaIib.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718144629_BURST000_COVER-rUGyuKJIgOhJSQmR1W6tkBP7S41wia.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718144427-1OQAspdEGQ5lVdkfu5N42CxvsrhMJR.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718144808-h54RL1BbWApeOV2TJT3Kl2iTQ7iED1.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718145228-jrFZMKzyYM8CUXBDLt5pajPlcMbHmK.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718144917-e4vY9wVGutel1aLbz3F6rpSuAReo7v.jpg", "https://bnwscm8jz43cfekv.public.blob.vercel-storage.com/uploads/IMG20260718144938-aOCQrkltplUYCfeClrYXW43UO1awiE.jpg"], year:"2026" },
+    /* 2026-08-11：桃園蘆竹「皇普 Lavie」，資料取自 Notion 業務專案「華毅達-皇普Lavie」
+       （地址 桃園蘆竹山鼻二路157號、2026/08/04-06 施工），照片為 08/06 完工當天所拍。 */
+    { id:"c28", region:"桃園市蘆竹區", title:"皇普 Lavie", category:"防火門", cats:["防火門", "消防箱・檢修門", "牆面・天花"], stone:"silver", desc:"梯廳與廊道整體面材美化 —— A～G 棟防火門、消防栓與檢修門箱體，並於電梯梯廳搭配客製圖騰門片。", img:"img/cases/c28.jpg", imgs:["img/cases/c28.jpg", "img/cases/c28/2.jpg", "img/cases/c28/3.jpg", "img/cases/c28/4.jpg", "img/cases/c28/5.jpg", "img/cases/c28/6.jpg", "img/cases/c28/7.jpg", "img/cases/c28/8.jpg", "img/cases/c28/9.jpg", "img/cases/c28/10.jpg", "img/cases/c28/11.jpg", "img/cases/c28/12.jpg", "img/cases/c28/13.jpg", "img/cases/c28/14.jpg"], ba:[{b:"img/cases/c28/b1.jpg", a:"img/cases/c28/7.jpg", note:"E棟梯廳防火門"}], year:"2026" },
   ]
 };
 
