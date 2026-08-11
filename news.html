@@ -227,9 +227,34 @@
      取得之前先回到自製圖案 —— 寧可樸素，不要有誤導疑慮。
      金鑰備妥後把下面這行拿掉即可恢復。 */
   var USE_OWN_PHOTOS=false;
+
+  /* ---- 手動指定的新聞封面圖 ----
+     使用者自行從各則新聞的報導頁取圖，放進 img/news/。
+     鍵是該則的 id（Google News 的不透明識別碼），不是標題 ——
+     標題日後在後台編輯過就對不上了。
+
+     ★ credit 一定要填 ★
+       新聞照片有著作權。放在自家版面上必須標明出處並可連回原文，
+       這是「連結預覽卡」那一套的最低要求；沒有標示就只是單純盜用。
+       填不出確切媒體時寧可寫「圖片來源見下方參考來源」，
+       也不要猜一個媒體名稱掛上去 —— 掛錯比不掛更糟。
+
+     新增新的一則時：把圖放進 img/news/，在這裡加一行。
+     沒有對應項目的仍會退回自製圖案，不會壞。 */
+  var NEWS_IMG={
+    "DN3lOLUM4WWRCWGk5TjhIQkIyaDhQM3dpQ05uMnc":
+      {url:"img/news/n1.jpg", credit:"圖片來源見下方參考來源"},
+    "QXlyTUdLcHVibWFJdjh2eEtmRVFhcFV5dUFFV0lB":
+      {url:"img/news/n2.jpg", credit:"圖片來源見下方參考來源"},
+    "YzU1BkVmFBWThjNWdyVFlWYlhkdC1EQlJmT0JGaQ":
+      {url:"img/news/n3.jpg", credit:"圖片來源見下方參考來源"}
+  };
+
   var PHOTO=null;
   function photoFor(x){
     if(x.image)return {url:x.image,from:""};          /* 後台指定的優先 */
+    var m=NEWS_IMG[x.id];
+    if(m)return {url:m.url, from:"", credit:m.credit};
     if(!USE_OWN_PHOTOS)return null;
     var cats=TOPIC_CAT[x.topic]; if(!cats)return null;
     if(!PHOTO){
@@ -276,8 +301,10 @@
       return '<div class="ph" style="background-image:url(&quot;'+esc(ph.url)+'&quot;)"></div>'+
         (x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
         (big
-          ? (ph.from?'<span class="cap">'+L("圖為本公司「"+ph.from+"」實績，非新聞現場",
-                        "Photo: our own project — not the scene reported")+'</span>':"")
+          ? (ph.credit
+              ? '<span class="cap">'+esc(L(ph.credit,"Image credit: see sources below"))+'</span>'
+              : (ph.from?'<span class="cap">'+L("圖為本公司「"+ph.from+"」實績，非新聞現場",
+                            "Photo: our own project — not the scene reported")+'</span>':""))
           : '<span class="dt">'+fmt(newsDate(x))+'</span>'+
             (x.srcCount?'<span class="cnt">'+L("依 "+x.srcCount+" 則報導","from "+x.srcCount+" reports")+'</span>':""));
     }
