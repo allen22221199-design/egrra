@@ -1203,8 +1203,12 @@ var EV_LABEL={
   contact_tiktok:"點 TikTok", contact_mail:"點 Email",
   nav_colours:"前往花色庫", nav_projects:"前往實績案例", nav_certs:"前往認證頁"
 };
-var PAGE_LABEL={"/":"首頁","/":"首頁","/products":"花色庫",
-  "/cases":"實績案例","/certifications":"認證與規範"};
+/* 頁面代碼 → 中文名。沒列到的頁面照樣會統計，只是顯示成原始路徑；
+   新增頁面時記得補一行，不然「熱門頁面」會出現看不懂的 /media。
+   （原本這裡有兩個重複的 "/"，後面那個會蓋掉前面的，等於白寫一行） */
+var PAGE_LABEL={"/":"首頁","/products":"花色庫","/cases":"實績案例",
+  "/certifications":"認證與規範","/compare":"競品比較","/news":"產業快訊",
+  "/media":"媒體報導"};
 var SEC_LABEL={home:"首屏",about:"關於煌盛",tech:"核心技術",products:"產品系列",
   gallery:"石紋花色",portfolio:"實績案例",qa:"常見問題",contact:"聯絡我們"};
 var SRC_LABEL={direct:"直接進入",google:"Google 搜尋",bing:"Bing 搜尋",facebook:"Facebook",

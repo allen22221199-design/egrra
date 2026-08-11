@@ -27,7 +27,7 @@
     else if (/[?&]notrack=0/.test(q)) { localStorage.removeItem(OPTOUT); }
   } catch (e) {}
 
-  if (/admin\.html/i.test(location.pathname)) {
+  if (/^\/admin(\.html)?\/?$/i.test(location.pathname)) {
     /* 開過後台＝自己人：直接標記，之後逛官網也不計入 */
     try { localStorage.setItem(OPTOUT, "1"); } catch (e) {}
     return;
@@ -66,7 +66,15 @@
     } catch (e) { return "other"; }
   }
 
-  var page = location.pathname.replace(/\/index\.html$/, "/") || "/";
+  /* 全站網址已去掉 .html（/cases 而非 /cases.html）。這裡一併把副檔名去掉，
+     直接輸入舊網址進來的人才不會被分到另一個桶子。 */
+  var page = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "") || "/";
+  /* 把 href 轉成純路徑並去掉副檔名：/products.html、/products、
+     https://egrra.com/products 都會得到 "/products"；#錨點得到目前頁面的路徑。 */
+  function linkPath(href) {
+    try { return new URL(href, location.href).pathname.replace(/\.html$/, "") || "/"; }
+    catch (e) { return ""; }
+  }
   var t0 = Date.now();
   var maxScroll = 0;
   var events = {};       /* 事件名 → 次數 */
@@ -118,9 +126,13 @@
       if (/facebook\.com/i.test(href)) return bump("contact_facebook");
       if (/tiktok\.com/i.test(href)) return bump("contact_tiktok");
       if (/^mailto:/i.test(href)) return bump("contact_mail");
-      if (/products\.html/i.test(href)) return bump("nav_colours");
-      if (/cases\.html/i.test(href)) return bump("nav_projects");
-      if (/certifications\.html/i.test(href)) return bump("nav_certs");
+      /* 用路徑比對，不要比對 ".html" 字串 —— 全站改成無副檔名網址之後，
+         原本的 /products\.html/ 永遠不成立，這三個導覽事件等於沒在記。
+         也不能只比對 "products"，那樣首頁的 /#products 錨點會被誤記成花色庫。 */
+      var lp = linkPath(href);
+      if (lp === "/products") return bump("nav_colours");
+      if (lp === "/cases") return bump("nav_projects");
+      if (lp === "/certifications") return bump("nav_certs");
       if (/#contact/i.test(href)) return bump("cta_contact");
     }
 
@@ -131,7 +143,7 @@
       if (el.classList.contains("cert-doc")) return bump("open_cert");   /* 認證文件放大 */
       if (el.classList.contains("pcard")) return bump("click_product");  /* 產品線卡片 */
       if (el.classList.contains("card")) {
-        return bump(/products\.html/.test(location.pathname) ? "open_colour" : "open_case_detail");
+        return bump(page === "/products" ? "open_colour" : "open_case_detail");
       }
     }
     if (el.id === "langbtn") return bump("switch_language");
