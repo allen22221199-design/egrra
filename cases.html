@@ -76,16 +76,28 @@
       <button class="mnav mprev" id="m-prev" aria-label="上一張照片">&lsaquo;</button>
       <button class="mnav mnext" id="m-next" aria-label="下一張照片">&rsaquo;</button>
       <span class="mcount" id="m-count"></span>
-      <!-- 施工前後對比：完工後當底圖，施工前疊在上面用 clip-path 裁切，拖曳分隔線比較 -->
+      <!-- 施工前後對比：預設「並排」＝前、後各一張完整獨立的照片（點任一張可放大單看）；
+           另可切成「疊合」＝同一畫面拖曳分隔線比較。 -->
       <div class="cmp" id="m-cmp">
-        <div class="ly a" id="cmp-a"></div>
-        <div class="ly b" id="cmp-b"></div>
-        <span class="lb l" id="cmp-lb-b">施工前</span>
-        <span class="lb r" id="cmp-lb-a">完工後</span>
-        <div class="ln" id="cmp-ln">
-          <button class="hd" id="cmp-hd" data-tk="use_before_after" aria-label="左右拖曳比較施工前後"
-                  role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">&lsaquo;&rsaquo;</button>
+        <div class="sbs" id="cmp-sbs">
+          <figure class="side" id="cmp-side-b" data-tk="use_before_after">
+            <div class="ph" id="cmp-ph-b"></div><figcaption id="cmp-lb-b">施工前</figcaption>
+          </figure>
+          <figure class="side" id="cmp-side-a" data-tk="use_before_after">
+            <div class="ph" id="cmp-ph-a"></div><figcaption id="cmp-lb-a">完工後</figcaption>
+          </figure>
         </div>
+        <div class="wipe" id="cmp-wipe">
+          <div class="ly a" id="cmp-a"></div>
+          <div class="ly b" id="cmp-b"></div>
+          <span class="lb l" id="cmp-wlb-b">施工前</span>
+          <span class="lb r" id="cmp-wlb-a">完工後</span>
+          <div class="ln" id="cmp-ln">
+            <button class="hd" id="cmp-hd" data-tk="use_before_after" aria-label="左右拖曳比較施工前後"
+                    role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">&lsaquo;&rsaquo;</button>
+          </div>
+        </div>
+        <button type="button" class="cmpswap" id="cmp-swap" data-tk="use_before_after">⇆ 疊合比較</button>
         <div class="nt" id="cmp-nt"></div>
       </div>
       <div class="mmode" id="m-mode">
@@ -103,6 +115,13 @@
       <a class="mcta" href="/#contact">洽詢類似案例 →</a>
     </div>
   </div>
+</div>
+
+<!-- 單張放大：施工前／完工後各自是獨立的一張照片，點下去可以單獨看整張 -->
+<div class="plx" id="plx">
+  <button class="x" id="plx-x" aria-label="關閉">&times;</button>
+  <div class="im" id="plx-im"></div>
+  <div class="cap" id="plx-cap"></div>
 </div>
 
 <script src="site-data.js"></script>
@@ -125,7 +144,8 @@ EGRRA_I18N.init({
     [".frow:nth-child(1) .lbl","cs.f1"],[".frow:nth-child(2) .lbl","cs.f2"],
     [".mcta","cs.cta"],
     ["#mm-cmp","cs.cmp"],["#mm-gal","cs.gal"],
-    ["#cmp-lb-b","cs.before"],["#cmp-lb-a","cs.after"]
+    ["#cmp-lb-b","cs.before"],["#cmp-lb-a","cs.after"],
+    ["#cmp-wlb-b","cs.before"],["#cmp-wlb-a","cs.after"]
   ]
 });
 </script>
@@ -224,15 +244,20 @@ EGRRA_I18N.init({
   var mimg=document.getElementById("m-img"),mshots=document.getElementById("m-shots"),
       mcount=document.getElementById("m-count"),mprev=document.getElementById("m-prev"),
       mnext=document.getElementById("m-next");
+  var mod=document.querySelector(".mod");
   var cmp=document.getElementById("m-cmp"),cmpA=document.getElementById("cmp-a"),
       cmpB=document.getElementById("cmp-b"),cmpHd=document.getElementById("cmp-hd"),
-      cmpNt=document.getElementById("cmp-nt"),mmode=document.getElementById("m-mode");
+      cmpNt=document.getElementById("cmp-nt"),mmode=document.getElementById("m-mode"),
+      cmpPhB=document.getElementById("cmp-ph-b"),cmpPhA=document.getElementById("cmp-ph-a"),
+      cmpWipe=document.getElementById("cmp-wipe"),cmpSwap=document.getElementById("cmp-swap");
   var gal=[],gi=0;          /* 相簿：所有現場照片 */
   var bas=[],bi=0;          /* 對比：施工前後成對的照片 */
-  var mode="gal",pct=50,sweepT=0,dragging=false;
+  var mode="gal",wipe=false,pct=50,sweepT=0,sweepDone=false,dragging=false;
 
   /* ===== 施工前後對比 =====
      資料格式 case.ba = [{b:"施工前照片", a:"完工後照片", note:"位置說明(選填)"}]
+     前、後是兩張各自獨立的照片：預設並排各看一張完整的，點下去可單獨放大；
+     想疊在一起拉分隔線比較，再按右下角的切換鈕。
      兩張都齊全才算一組；一組都沒有的案例完全不顯示切換鈕，維持原本的相簿體驗。 */
   function pairsOf(c){
     var a=(c&&c.ba)||[];
@@ -244,10 +269,12 @@ EGRRA_I18N.init({
     cmpHd.setAttribute("aria-valuenow",Math.round(pct));
   }
   /* 開啟時讓分隔線輕輕向右掃一次再回到中間，暗示「這條線可以拖」。
-     沒有這個動作，多數訪客只會以為是一張普通的照片。 */
+     沒有這個動作，多數訪客只會以為是一張普通的照片。
+     一個案例只掃一次 —— 每換一組就再掃會變成干擾。 */
   function sweep(){
     if(sweepT)cancelAnimationFrame(sweepT);
-    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){setPct(50);return;}
+    if(sweepDone||(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)){setPct(50);return;}
+    sweepDone=true;
     var t0=null;
     sweepT=requestAnimationFrame(function step(ts){
       if(t0===null)t0=ts;
@@ -260,16 +287,46 @@ EGRRA_I18N.init({
     var r=cmp.getBoundingClientRect();
     if(r.width)setPct((e.clientX-r.left)/r.width*100);
   }
-  cmp.addEventListener("pointerdown",function(e){
+  cmpWipe.addEventListener("pointerdown",function(e){
     if(sweepT){cancelAnimationFrame(sweepT);sweepT=0;}
     dragging=true;
-    try{cmp.setPointerCapture(e.pointerId);}catch(_){}
+    try{cmpWipe.setPointerCapture(e.pointerId);}catch(_){}
     dragTo(e);e.preventDefault();
   });
-  cmp.addEventListener("pointermove",function(e){if(dragging)dragTo(e);});
+  cmpWipe.addEventListener("pointermove",function(e){if(dragging)dragTo(e);});
   ["pointerup","pointercancel","lostpointercapture"].forEach(function(t){
-    cmp.addEventListener(t,function(){dragging=false;});
+    cmpWipe.addEventListener(t,function(){dragging=false;});
   });
+  /* 並排／疊合切換（記住選擇，同一次瀏覽不用每張重按） */
+  function paintSwap(){
+    cmpSwap.textContent=wipe
+      ? (I.en()?"⇆ Side by side":"⇆ 並排比較")
+      : (I.en()?"⇆ Overlay compare":"⇆ 疊合比較");
+    cmpSwap.title=wipe?(I.en()?"Show both photos side by side":"改回左右各一張完整照片")
+                      :(I.en()?"Overlay and drag to compare":"疊在一起拖曳分隔線比較");
+  }
+  cmpSwap.addEventListener("click",function(){
+    wipe=!wipe;
+    cmp.classList.toggle("wipeon",wipe);
+    paintSwap();
+    if(wipe)sweep();
+  });
+  /* 單張放大：前、後各自都是獨立的照片，可以單獨看整張 */
+  var plx=document.getElementById("plx"),plxIm=document.getElementById("plx-im"),
+      plxCap=document.getElementById("plx-cap");
+  function openPlx(src,cap){
+    if(!src)return;
+    plxIm.style.backgroundImage="url('"+src+"')";
+    plxCap.textContent=cap||"";
+    plx.classList.add("show");
+  }
+  function closePlx(){plx.classList.remove("show");}
+  document.getElementById("plx-x").addEventListener("click",closePlx);
+  plx.addEventListener("click",function(e){if(e.target!==document.getElementById("plx-x"))closePlx();});
+  document.getElementById("cmp-side-b").addEventListener("click",function(){
+    var p=bas[bi];if(p)openPlx(p.b,(I.en()?"BEFORE":"施工前")+(p.note?"　·　"+p.note:""));});
+  document.getElementById("cmp-side-a").addEventListener("click",function(){
+    var p=bas[bi];if(p)openPlx(p.a,(I.en()?"AFTER":"完工後")+(p.note?"　·　"+p.note:""));});
   /* 把手可用鍵盤操作（焦點在把手上時，左右鍵＝移動分隔線而非換下一組） */
   cmpHd.addEventListener("keydown",function(e){
     var d=e.key==="ArrowLeft"?-4:e.key==="ArrowRight"?4:0;
@@ -284,13 +341,13 @@ EGRRA_I18N.init({
 
   function paintPair(){
     var p=bas[bi];if(!p)return;
-    cmpB.style.backgroundImage="url('"+p.b+"')";
-    cmpA.style.backgroundImage="url('"+p.a+"')";
+    cmpPhB.style.backgroundImage=cmpB.style.backgroundImage="url('"+p.b+"')";
+    cmpPhA.style.backgroundImage=cmpA.style.backgroundImage="url('"+p.a+"')";
     var parts=[];
     if(p.note)parts.push(esc(p.note));
     if(bas.length>1)parts.push(I.en()?("Comparison "+(bi+1)+" / "+bas.length):("第 "+(bi+1)+" / "+bas.length+" 組"));
-    cmpNt.innerHTML=parts.join("　·　");
-    sweep();
+    cmpNt.innerHTML=parts.length?("<span>"+parts.join("　·　")+"</span>"):"";
+    if(wipe)sweep();
     mshots.querySelectorAll(".s").forEach(function(s,k){s.classList.toggle("on",k===bi);});
   }
   function paintShot(){
@@ -330,7 +387,10 @@ EGRRA_I18N.init({
   function setMode(m){
     mode=(m==="cmp"&&bas.length)?"cmp":"gal";
     cmp.classList.toggle("on",mode==="cmp");
+    cmp.classList.toggle("wipeon",wipe);
+    paintSwap();
     mimg.classList.toggle("cmpmode",mode==="cmp");
+    if(mod)mod.classList.toggle("cmpw",mode==="cmp");   /* 並排要寬一點才看得清楚 */
     mmode.querySelectorAll("button[data-m]").forEach(function(b){
       b.classList.toggle("on",b.dataset.m===mode);});
     renderShots();
@@ -351,7 +411,7 @@ EGRRA_I18N.init({
   function step(d){if(mode==="cmp")stepPair(d);else stepShot(d);}
   function openModal(c){
     gal=shots(c);gi=0;
-    bas=pairsOf(c);bi=0;
+    bas=pairsOf(c);bi=0;sweepDone=false;
     mimg.style.backgroundImage=gal.length?("url('"+gal[0]+"')"):bg(c);
     mmode.classList.toggle("on",bas.length>0);
     /* 有前後對比的案例就直接停在對比畫面 —— 這是訪客最想看到的一頁；
@@ -379,6 +439,8 @@ EGRRA_I18N.init({
   mimg.addEventListener("click",function(e){if(e.target===mimg)step(1);});
   ov.addEventListener("click",function(e){if(e.target===ov)ov.classList.remove("show");});
   document.addEventListener("keydown",function(e){
+    /* 單張放大蓋在最上層 → Esc 先關它，不要一次把詳情也關掉 */
+    if(plx.classList.contains("show")){if(e.key==="Escape")closePlx();return;}
     if(!ov.classList.contains("show"))return;
     if(e.key==="Escape")ov.classList.remove("show");
     /* 焦點在拖曳把手上時，左右鍵留給把手移動分隔線（見上方 cmpHd 的 keydown） */

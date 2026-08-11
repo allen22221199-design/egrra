@@ -508,9 +508,8 @@ table.cmp col.c-us{width:31%}
   window.__redraw=draw;   /* 語言切換時重繪表格 */
   draw();
 
-  /* 手機選單 */
-  var bg=document.querySelector(".burger");
-  if(bg)bg.addEventListener("click",function(){document.querySelector(".nav-links").classList.toggle("open");});
+    /* 手機選單的處理程式已移到 i18n-sub.js（五個子頁共用）。
+       兩份同時綁在同一顆按鈕上會 toggle 兩次互相抵消。 */
 })();
 </script>
 </body>

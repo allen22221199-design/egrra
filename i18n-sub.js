@@ -319,3 +319,52 @@ window.EGRRA_I18N = (function () {
     if (++n >= 5) { n = 0; location.href = "/admin"; }
   });
 })();
+
+/* =========================================================================
+   手機版導覽選單
+   -------------------------------------------------------------------------
+   ★ 原本這是壞的，而且壞得很安靜 ★
+     lib.css 在窄螢幕下把 .nav-links 藏起來、把漢堡鈕顯示出來，但
+     (1) 沒有任何 .nav-links.open 的樣式，(2) 花色庫／實績案例／認證
+     三頁連處理程式都沒有。結果是手機上按了漢堡鈕完全沒反應，
+     使用者無法從任何內頁導覽到別的主題頁 —— 桌機版完全看不出問題。
+
+   放在這裡是因為五個子頁都會載入本檔（首頁有自己一整套，不走這裡）。
+   compare.html 與 news.html 原本各自寫了一份，已經移除 ——
+   兩份同時綁在同一顆按鈕上會 toggle 兩次互相抵消。
+   ========================================================================= */
+(function () {
+  var burger = document.querySelector(".burger");
+  var links = document.querySelector(".nav-links");
+  if (!burger || !links) return;
+
+  function setOpen(on) {
+    links.classList.toggle("open", on);
+    burger.classList.toggle("on", on);
+    burger.setAttribute("aria-expanded", on ? "true" : "false");
+  }
+  burger.setAttribute("aria-expanded", "false");
+  burger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    setOpen(!links.classList.contains("open"));
+  });
+
+  /* 點了選單裡的連結就收起來。同頁錨點（/#contact 之類）不會換頁，
+     不收的話面板會一直蓋在內容上。 */
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") setOpen(false);
+  });
+
+  /* 點面板以外的地方、或按 Esc，也收起來 */
+  document.addEventListener("click", function (e) {
+    if (links.classList.contains("open") && !links.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setOpen(false);
+  });
+
+  /* 轉成橫向或放大視窗後，面板的 fixed 定位會殘留在畫面上，要收掉 */
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 600) setOpen(false);
+  });
+})();
