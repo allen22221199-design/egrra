@@ -150,8 +150,6 @@ table.cmp col.c-us{width:31%}
   .cgrp{background:var(--ink);color:var(--gold-lt);font-size:12px;letter-spacing:.16em;
     padding:10px 16px;border-radius:8px;margin:18px 0 10px}
   .cmp-legend{font-size:12px}
-  .cmp-score{padding:18px 20px;gap:12px}
-  .cmp-score .big{font-size:36px}
 }
 @media(max-width:520px){
   .cmp-tab{padding:10px 15px;font-size:13.5px}
@@ -192,7 +190,6 @@ table.cmp col.c-us{width:31%}
   <div class="wrap">
     <div class="cmp-tabs" id="tabs"></div>
     <div class="cmp-sub" id="tsub"></div>
-    <div class="cmp-score" id="score"></div>
     <div class="cmp-legend">
       <span><i class="lg-us"></i><span data-i18n="cmp.lg1">煌盛自家產品</span></span>
       <span><i class="lg-win"></i><span data-i18n="cmp.lg2">該項表現最佳（不限本公司）</span></span>
@@ -367,10 +364,6 @@ table.cmp col.c-us{width:31%}
     "成本與總結":"Cost & summary","規格與應用":"Specs & applications","耐用性能":"Durability",
     "結構・重量・成本":"Structure, weight & cost","安全與客製":"Safety & customisation",
     "索取樣品 / 型錄 →":"Request samples / catalogue →",
-    /* 計分條 */
-    "項規格由 ":"rows won by "," 勝出":"",
-    "其餘項目中，競品有 ":"Competitors are equally strong in ",
-    " 處表現同樣出色，一併標示於表中":" other rows — marked in the table",
     /* 競品優勢的補充說明 */
     "本身即為真石材":"It is real stone","天然礦脈形成，無可複製":"Formed by natural veining — cannot be replicated",
     "石材本身不燃":"Stone is inherently non-combustible","四者中最低":"Lowest of the four",
@@ -406,21 +399,6 @@ table.cmp col.c-us{width:31%}
       (c.note?'<div class="note">'+tt(c.note)+'</div>':"")+
       (c.dim ?'<div class="dim">'+tt(c.dim)+'</div>':"");
   }
-  /* 計分：藝格板在這張表拿下幾項。先給結論，再讓人看細節 */
-  function scoreHtml(T){
-    var rows=T.rows||[];
-    if(!rows.length) return "";
-    var win=rows.filter(function(r){return r.us&&(r.us.flag==="win"||r.us.flag==="top");}).length;
-    /* 競品也會有勝出的項目，一併講出來。只報自己贏的，懂行的人一看就打折扣 */
-    var other=0;
-    rows.forEach(function(r){ (r.cells||[]).forEach(function(c){ if(c&&c.flag==="win")other++; }); });
-    var pct=Math.round(win/rows.length*100);
-    return '<div class="big">'+win+'<small>/ '+rows.length+'</small></div>'+
-      '<div class="txt">'+tt("項規格由 ")+'<b>'+tt(T.us&&T.us.name||"")+'</b>'+tt(" 勝出")+
-      (other?'<br><span style="color:rgba(255,255,255,.55);font-size:13px">'+
-        tt("其餘項目中，競品有 ")+other+tt(" 處表現同樣出色，一併標示於表中")+'</span>':"")+'</div>'+
-      '<div class="bar"><i style="width:'+pct+'%"></i></div>';
-  }
   function pad(i){ return (i+1)<10 ? "0"+(i+1) : String(i+1); }
 
   function draw(){
@@ -435,7 +413,6 @@ table.cmp col.c-us{width:31%}
       return '<button class="cmp-tab'+(i===cur?" on":"")+'" data-i="'+i+'">'+tt(x.name||"")+'</button>';
     }).join("");
     elSub.textContent=t(T.sub||"");
-    document.getElementById("score").innerHTML=scoreHtml(T);
 
     /* --- 桌機表格 --- */
     var cols='<col class="c-lab"/><col class="c-us"/>'+(T.cols||[]).map(function(){return '<col/>';}).join("");
