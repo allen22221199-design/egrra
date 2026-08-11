@@ -23,7 +23,6 @@ window.EGRRA_I18N = (function () {
     [".nav-links a[href='/products']", "nav.library"],
     [".nav-links a[href='/cases']", "nav.portfolio"],
     [".nav-links a[href='/media']", "nav.media"],
-    [".nav-links a[href='/compare']", "nav.compare"],
     [".nav-links a[href='/news']", "nav.news"],
     [".nav-links a[href='/certifications']", "nav.certs"],
     [".nav-links a[href='/#contact']", "nav.contact"],

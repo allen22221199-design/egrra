@@ -326,8 +326,12 @@ header.solid .burger span{background:var(--ink)}
 .mc-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
   margin-bottom:22px}
 .mc-head h3{font-size:23px}
-.mc-head a{font-size:14px;color:var(--gold-dk);text-decoration:none;font-weight:500;white-space:nowrap}
-.mc-head a:hover{color:var(--ink)}
+/* 導覽列已不放「競品比較」，這顆按鈕是完整比較表唯一的入口 → 做成看得見的按鈕，
+   不能再只是一行小字連結 */
+.mc-head a{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;
+  white-space:nowrap;text-decoration:none;background:var(--gold);color:#fff;
+  padding:11px 22px;border-radius:99px;transition:.25s var(--ease)}
+.mc-head a:hover{background:var(--gold-dk);transform:translateY(-1px)}
 .mc-row{display:grid;grid-template-columns:150px 1.15fr 1fr 1fr;gap:16px;align-items:center;
   padding:15px 0;border-top:1px solid var(--line)}
 .mc-row>span:first-child{font-size:14px;color:var(--ink);line-height:1.45}
@@ -619,7 +623,6 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <nav class="nav-links" id="menu">
       <a href="#about" data-i18n="nav.about">關於煌盛</a>
       <a href="#tech" data-i18n="nav.tech">核心技術</a>
-      <a href="/compare" data-i18n="nav.compare">競品比較</a>
       <a href="#products" data-i18n="nav.products">產品系列</a>
       <a href="/certifications" data-i18n="nav.certs">認證</a>
       <a href="/products" data-i18n="nav.library">花色庫</a>
@@ -765,7 +768,9 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 </section>
 
 <!-- ==========  FEATURES  ========== -->
-<section class="feats">
+<!-- 競品比較已從導覽列移除，改由本區（產品優勢）收納：
+     下方 .mini-cmp 是精簡對照＋完整比較表的入口。加 id 讓外部可以直接指到這裡。 -->
+<section class="feats" id="advantage">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">產品優勢</span>
@@ -805,11 +810,12 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
       </div>
     </div>
 
-    <!-- 精簡比較：上面的優勢是主張，這裡給對照。完整版在 compare.html -->
+    <!-- 精簡比較：上面的優勢是主張，這裡給對照。完整版在 compare.html。
+         導覽列拿掉「競品比較」後，這裡就是通往完整比較表的唯一入口。 -->
     <div class="mini-cmp reveal">
       <div class="mc-head">
         <h3 data-i18n="mc.h">那，跟其他做法差在哪？</h3>
-        <a href="/compare" data-i18n="mc.more">看完整比較 →</a>
+        <a href="/compare" data-i18n="mc.more">看完整比較表 →</a>
       </div>
       <div class="mc-table">
         <div class="mc-row mc-hd">
