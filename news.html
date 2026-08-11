@@ -171,6 +171,20 @@
     return x.getFullYear()+"/"+("0"+(x.getMonth()+1)).slice(-2)+"/"+("0"+x.getDate()).slice(-2);
   }
 
+  /* 卡片與內文要標的是「事情什麼時候發生的」，不是「我們什麼時候發布的」。
+     ★ 為什麼不能用 publishedAt ★
+       publishedAt 是後台按「發布上線」的時間。一則由 2024、2025 年報導
+       整理成的解讀，掛上今天的日期會讓讀者以為是剛發生的事 ——
+       實測有一則的最新來源是 2025/03，卻標成 2026/08，差了 17 個月。
+     取所有來源裡最新的那一則日期；沒有來源日期時才退回 publishedAt。 */
+  function newsDate(x){
+    var best=0;
+    (x.sources||[]).forEach(function(s){
+      var t=Date.parse(s&&s.date); if(!isNaN(t)&&t>best)best=t;
+    });
+    return best?new Date(best).toISOString():(x.publishedAt||x.addedAt||"");
+  }
+
   /* 每個主題一款圖示與底紋。
      RSS 不提供圖片，而借用各家媒體的新聞配圖是侵權，所以自己畫。 */
   var ICON={
@@ -264,14 +278,14 @@
         (big
           ? (ph.from?'<span class="cap">'+L("圖為本公司「"+ph.from+"」實績，非新聞現場",
                         "Photo: our own project — not the scene reported")+'</span>':"")
-          : '<span class="dt">'+fmt(x.publishedAt)+'</span>'+
+          : '<span class="dt">'+fmt(newsDate(x))+'</span>'+
             (x.srcCount?'<span class="cnt">'+L("依 "+x.srcCount+" 則報導","from "+x.srcCount+" reports")+'</span>':""));
     }
     return '<div class="pat" style="'+pat(x.topic)+'"></div>'+
       '<div class="ic"><svg viewBox="0 0 24 24">'+icon(x.topic)+'</svg></div>'+
       (x.topic?'<span class="tp">'+esc(x.topic)+'</span>':"")+
       (big?"":
-        '<span class="dt">'+fmt(x.publishedAt)+'</span>'+
+        '<span class="dt">'+fmt(newsDate(x))+'</span>'+
         (x.srcCount?'<span class="cnt">'+L("依 "+x.srcCount+" 則報導","from "+x.srcCount+" reports")+'</span>':""));
   }
 
@@ -305,7 +319,7 @@
     document.getElementById("nwhd").innerHTML=thumb(x,true);
     var srcs=x.sources||[];
     document.getElementById("nwbody").innerHTML=
-      '<div class="dt">'+fmt(x.publishedAt)+
+      '<div class="dt">'+fmt(newsDate(x))+
         (x.srcCount?'　·　'+L("依 "+x.srcCount+" 則報導整理","compiled from "+x.srcCount+" reports"):"")+'</div>'+
       '<h2>'+esc(x.title)+'</h2>'+
       String(x.body||"").split(/\n{2,}/).map(function(p){
@@ -342,6 +356,10 @@
 
   fetch("/api/news").then(function(r){return r.json();}).then(function(d){
     ITEMS=(d&&d.items)||[];
+    /* 後端是依「發布上線時間」排的，但畫面上標的是「來源最新日期」。
+       兩者不一致的話，列表看起來會像日期亂跳（新的排在舊的後面），
+       所以這裡照顯示的那個日期重新排一次。 */
+    ITEMS.sort(function(a,b){return String(newsDate(b)).localeCompare(String(newsDate(a)));});
     elNote.textContent=disclaimer()+(d&&d.updated?"　"+L("最後更新：","Last updated: ")+fmt(d.updated):"");
     draw();
   }).catch(function(){
