@@ -37,6 +37,8 @@ export async function onRequestPost({ request, env }) {
   try {
     const body = await request.json().catch(() => ({}));
     const q = (body.q || "").toString().slice(0, 500);
+    /* 訪客把網站切成英文，AI 卻回中文，比沒有英文版更奇怪 */
+    const en = String(body.lang || "") === "en";
     if (!q) return json({ error: "empty_question" }, { status: 400, headers: CORS });
 
     const ctx = body.context || {};
@@ -44,7 +46,9 @@ export async function onRequestPost({ request, env }) {
     const info = ctx.info || {};
 
     const system =
-`你是「煌盛興業 EGRRA」的線上客服。用「繁體中文、親切、簡潔」回答訪客關於藝格板的問題。直接給答案，不要輸出思考或分析過程，回答控制在 2–4 句。
+`${en
+  ? "You are the online assistant for EGRRA (煌盛興業), a Taiwanese maker of PrinTex digital-texture panels. Answer in ENGLISH, warm and concise. Give the answer directly — no reasoning or analysis in the output. Keep it to 2–4 sentences. The reference facts below are in Chinese; read them and answer in English."
+  : "你是「煌盛興業 EGRRA」的線上客服。用「繁體中文、親切、簡潔」回答訪客關於藝格板的問題。直接給答案，不要輸出思考或分析過程，回答控制在 2–4 句。"}
 
 【公司】煌盛興業 EGRRA，源自王子彩色四十餘年彩色印刷，累積超過 46 年，專為建築與設計市場打造的數位紋理品牌。
 【核心技術】PrinTex™ 專利數位紋理：高仿真還原天然石材紋理，可製作於鋁／玻璃／金屬／木等基材，具立體浮雕與專利無縫對花。
@@ -79,7 +83,7 @@ export async function onRequestPost({ request, env }) {
       data.candidates[0].content.parts) || [])
       .map((p) => p.text || "").join("").trim();
 
-    return json({ reply: reply || "不好意思，這題我再幫您確認，也歡迎直接來電洽詢 🙂" }, { headers: CORS });
+    return json({ reply: reply || (en ? "Sorry, let me check that one for you — you're also welcome to call us directly 🙂" : "不好意思，這題我再幫您確認，也歡迎直接來電洽詢 🙂") }, { headers: CORS });
   } catch (e) {
     return json({ error: "server_error", detail: String((e && e.message) || e) },
       { status: 500, headers: CORS });

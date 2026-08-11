@@ -1440,10 +1440,15 @@ content.addEventListener("click",function(e){
   if(e.target.closest("#nw-fetch")){
     var pw=getPw(); if(!pw)return;
     var b=e.target.closest("#nw-fetch"); b.disabled=true; b.textContent="抓取中…";
-    fetch("/api/news-fetch?key="+encodeURIComponent(pw))
+    /* force=1：手動按下就是要現在抓，不要被「兩天一篇」的節流擋掉 ——
+       否則按了只會安靜地什麼都沒發生。自動排程那條路徑不帶 force。 */
+    fetch("/api/news-fetch?force=1&key="+encodeURIComponent(pw))
       .then(function(r){return r.json();}).then(function(d){
         b.disabled=false; b.textContent="抓取一則";
-        if(d&&d.ok){ toast("新增 "+d.kept+" 則待審（共掃描 "+d.fetched+" 則）","ok");
+        if(d&&d.ok){
+          toast(d.skipped?"節流中，還要 "+d.hoursLeft+" 小時":
+            ("新增 "+d.kept+" 則"+(d.publishedNow?"（已直接上線 "+d.publishedNow+" 則）":"待審")+
+             "，共掃描 "+d.fetched+" 則"),d.skipped?"err":"ok");
           NEWS.loaded=false; renderNews(); }
         else toast("抓取失敗："+((d&&(d.detail||d.error))||"未知"),"err");
       }).catch(function(){ b.disabled=false; b.textContent="抓取一則"; toast("連不到後端","err"); });

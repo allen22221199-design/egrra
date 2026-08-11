@@ -5,6 +5,17 @@
    ・要升級成真 AI 對答，把 answer() 換成呼叫你的後端即可（見底部說明）
    ========================================================================= */
 (function(){
+
+/* ---- 中英切換 ----
+   這兩支小工具原本完全沒有 i18n，切成英文後右下角還是「LINE 諮詢」「煌盛小幫手」。
+   語言狀態由 <html data-lang> 決定（i18n 切換時會寫上去），
+   初次載入還沒切換前 fallback 讀 localStorage —— 兩者都看才不會有一瞬間的中文閃動。 */
+function ecLang(){
+  var d=document.documentElement.getAttribute("data-lang");
+  if(d)return d;
+  try{ return localStorage.getItem("egrra_lang")||"zh"; }catch(e){ return "zh"; }
+}
+function L(zh,en){ return ecLang()==="en"?en:zh; }
   "use strict";
 
   /* =========================================================================
@@ -37,7 +48,7 @@
 
   var INTENTS=[
     { id:"greet", keys:["你好","妳好","您好","哈囉","哈嘍","嗨","hi","hello","在嗎","有人在","你是誰","誰"],
-      reply:function(){return {text:"您好！我是煌盛興業的線上小幫手 🙂 可以為您介紹藝格板的產品、計價、保養、防火與客製等資訊。請問想了解什麼呢？",chips:MENU};} },
+      reply:function(){return {text:L("您好！我是煌盛興業的線上小幫手 🙂 可以為您介紹藝格板的產品、計價、保養、防火與客製等資訊。請問想了解什麼呢？","Hello! I'm the EGRRA assistant 🙂 I can help with our panels — products, pricing, care, fire rating and customisation. What would you like to know?"),chips:MENU};} },
 
     { id:"products", keys:["產品","花色","系列","顏色","款式","色卡","有哪些","有什麼","商品","種類","大理石","石材","選擇"],
       reply:function(){
@@ -109,7 +120,7 @@
 
   function answer(raw){
     var q=(raw||"").toLowerCase().replace(/\s+/g,"");
-    if(!q)return {text:"請輸入您的問題，或點下方的常見選項 🙂",chips:MENU};
+    if(!q)return {text:L("請輸入您的問題，或點下方的常見選項 🙂","Type a question, or pick one below 🙂"),chips:MENU};
 
     /* 1) 直接命中花色名稱 */
     for(var i=0;i<PRODUCTS.length;i++){
@@ -194,17 +205,17 @@
     var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
     var root=document.createElement("div");root.id="egrra-chat";document.body.appendChild(root);
 
-    var fab=el("<button class='ec-fab' aria-label='開啟線上客服'><span class='ec-dot'>1</span>"+
+    var fab=el("<button class='ec-fab' aria-label='"+L("開啟線上客服","Open live chat")+"'><span class='ec-dot'>1</span>"+
       "<svg viewBox='0 0 24 24'><path d='M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z'/></svg></button>");
-    var tip=el("<div class='ec-tip'>您好！有<b>藝格板</b>的問題嗎？點我問問看 👋</div>");
+    var tip=el("<div class='ec-tip'>"+L("您好！有<b>藝格板</b>的問題嗎？點我問問看 👋","Questions about <b>EGRRA Panel</b>? Tap to ask 👋")+"</div>");
     var panel=el("<div class='ec-panel' role='dialog' aria-label='線上客服'>"+
-      "<div class='ec-head'><div class='ec-ava'>煌</div><div class='ht'><b>煌盛小幫手</b><span>線上為您服務</span></div>"+
-      "<button class='ec-close' aria-label='關閉'>&times;</button></div>"+
+      "<div class='ec-head'><div class='ec-ava'>"+L("煌","E")+"</div><div class='ht'><b>"+L("煌盛小幫手","EGRRA Assistant")+"</b><span>"+L("線上為您服務","Here to help")+"</span></div>"+
+      "<button class='ec-close' aria-label='"+L("關閉","Close")+"'>&times;</button></div>"+
       "<div class='ec-body' id='ec-body'></div>"+
       "<div class='ec-chips' id='ec-chips'></div>"+
-      "<div class='ec-input'><input id='ec-in' placeholder='輸入您的問題…' autocomplete='off' aria-label='輸入問題'/>"+
-      "<button id='ec-send' aria-label='送出'><svg viewBox='0 0 24 24'><path d='M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z'/></svg></button></div>"+
-      "<div class='ec-foot'>由煌盛興業 EGRRA 提供　·　智能客服</div></div>");
+      "<div class='ec-input'><input id='ec-in' placeholder='"+L("輸入您的問題…","Type your question…")+"' autocomplete='off' aria-label='"+L("輸入問題","Your question")+"'/>"+
+      "<button id='ec-send' aria-label='"+L("送出","Send")+"'><svg viewBox='0 0 24 24'><path d='M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z'/></svg></button></div>"+
+      "<div class='ec-foot'>"+L("由煌盛興業 EGRRA 提供　·　智能客服","Powered by EGRRA · AI assistant")+"</div></div>");
     root.appendChild(fab);root.appendChild(tip);root.appendChild(panel);
 
     var body=panel.querySelector("#ec-body"),chips=panel.querySelector("#ec-chips"),
@@ -250,7 +261,9 @@
     }
     function askAI(q){
       return fetch(AI_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({q:q,context:{
+        /* 把當前語言帶給後端 —— 不帶的話 AI 一律用繁體中文回答，
+           訪客把網站切成英文卻收到中文，比沒有英文版更奇怪。 */
+        body:JSON.stringify({q:q,lang:ecLang(),context:{
           products:PRODUCTS.map(function(p){return {name:p.name,series:p.series,sizes:p.sizes,finish:p.finish};}),
           info:INFO
         }})})
@@ -261,7 +274,7 @@
     function open(){
       opened=true;panel.classList.add("open");fab.classList.add("hide");tip.classList.remove("show");
       if(!greeted){greeted=true;typing(true);setTimeout(function(){typing(false);
-        addBot("您好！我是煌盛興業的線上小幫手 🙂 可以為您介紹藝格板的<b>產品、計價、保養、防火、客製</b>等資訊。請問想了解什麼呢？");
+        addBot(L("您好！我是煌盛興業的線上小幫手 🙂 可以為您介紹藝格板的<b>產品、計價、保養、防火、客製</b>等資訊。請問想了解什麼呢？","Hello! I'm the EGRRA assistant 🙂 I can help with our panels — <b>products, pricing, care, fire rating, customisation</b>. What would you like to know?"));
         setChips(MENU);setTimeout(function(){input.focus();},50);
       },500);}
       else setTimeout(function(){input.focus();},50);
