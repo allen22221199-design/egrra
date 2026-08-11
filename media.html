@@ -66,6 +66,21 @@
 .st-foot{margin-top:42px;padding-top:18px;border-top:1px solid var(--line);
   font-size:12.5px;color:var(--faint);line-height:1.9}
 .st-foot a{color:var(--gold-dk)}
+
+/* ---- 家紋 ----
+   紋章本身是正方形的，硬裁成 16:9 會把上下的光芒切掉，
+   墊底補圖又會出現接縫（前後景的石紋比例對不上）——
+   所以維持原比例，用兩欄把圖與引文並排，版面才不會突然被一個大方塊撐開。 */
+.kamon{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;
+  align-items:center;margin:30px 0;padding:24px;background:var(--paper2);border-radius:14px}
+.kamon img{width:100%;border-radius:10px;display:block}
+.kamon .jp{font-family:var(--serif);font-size:14px;line-height:1.95;color:var(--ink);
+  margin-bottom:12px}
+.kamon .zh{font-size:14.5px;line-height:1.9;color:var(--ink-soft);margin-bottom:10px}
+.kamon .by{font-size:12.5px;color:var(--faint);margin:0}
+@media(max-width:600px){
+  .kamon{grid-template-columns:1fr;gap:16px;padding:18px}
+}
 @media(max-width:600px){
   .st-figs{grid-template-columns:1fr}
   .st-body{padding-left:18px;padding-right:18px}
@@ -150,6 +165,23 @@
   <h2>這趟去日本，想找什麼</h2>
 
   <p>此行最大的目的，是找到懂空間、重細節的在地合作夥伴，特別是室內設計師與建築師。帶去的提案是一套「<strong>零干擾改造體驗</strong>」：多款模組化產品最快 <strong>2 週內完成安裝</strong>，不必為了更換牆面而拉長工期、製造粉塵與噪音。</p>
+
+  <h2>一面帶去京都的家紋</h2>
+
+  <p>這趟行程的協調人依田安生先生，是在台灣出生的依田家後人。出發前，煌盛替他把家族的紋章做成了一面板材。</p>
+
+  <div class="kamon">
+    <img src="img/news/kbs-kamon.jpg" alt="依田家揚羽蝶日輪紋 —— 武士家紋與台灣白日光芒結合的紋樣，以 PrinTex 呈現於石紋板材" loading="lazy" />
+    <div class="kt">
+      <p class="jp">「依田家の揚羽蝶日輪紋は、武士家紋を受け継ぎ、台湾の白日光芒を重ねた私だけの印。」</p>
+      <p class="zh">「依田家的揚羽蝶日輪紋，承襲武士家紋，疊上台灣的白日光芒，是只屬於我一個人的印記。」</p>
+      <p class="by">—— 依田安生</p>
+    </div>
+  </div>
+
+  <p>中央是依田家世代相傳的<strong>揚羽蝶</strong>武士家紋，外圈是台灣的<strong>白日光芒</strong>——兩種來自不同地方的紋樣，疊成一個。</p>
+
+  <p>這正好是 PrinTex™ 在做的事：<strong>紋路本來就是可以被創造的</strong>。它可以是大理石、可以是木紋，也可以是一個家族四百年的印記。技術之所以有意義，是因為它承載得了這種東西。</p>
 
   <div class="st-figs">
     <figure><img src="img/news/kbs-2.jpg" alt="受訪後於棚內合影" loading="lazy" /><figcaption>受訪後於攝影棚內合影</figcaption></figure>
