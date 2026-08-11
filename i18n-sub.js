@@ -67,8 +67,13 @@ window.EGRRA_I18N = (function () {
       else if (el.hasAttribute("data-zh")) el.textContent = el.getAttribute("data-zh");
     });
     document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
-      var k = el.getAttribute("data-i18n-html").replace(/#html$/, "");
-      if (isEn) { if (!el.hasAttribute("data-zh-html")) el.setAttribute("data-zh-html", el.innerHTML); if (DICT[k] != null) el.innerHTML = DICT[k]; }
+      /* ★ 字典的鍵是「帶 #html 的原樣」（頁面寫 "m.h1#html" 就存成 "m.h1#html"），
+           但這裡先把後綴切掉才查表，於是永遠查不到、英文版整段維持中文。
+           兩個鍵都試，舊寫法與新寫法都能命中。 */
+      var raw = el.getAttribute("data-i18n-html");
+      var k = raw.replace(/#html$/, "");
+      var v = DICT[k] != null ? DICT[k] : DICT[raw];
+      if (isEn) { if (!el.hasAttribute("data-zh-html")) el.setAttribute("data-zh-html", el.innerHTML); if (v != null) el.innerHTML = v; }
       else if (el.hasAttribute("data-zh-html")) el.innerHTML = el.getAttribute("data-zh-html");
     });
     var btn = document.getElementById("langbtn");
