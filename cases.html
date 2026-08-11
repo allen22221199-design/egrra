@@ -78,7 +78,7 @@
       <span class="mcount" id="m-count"></span>
       <!-- 施工前後對比：預設「並排」＝前、後各一張完整獨立的照片（點任一張可放大單看）；
            另可切成「疊合」＝同一畫面拖曳分隔線比較。 -->
-      <div class="cmp" id="m-cmp">
+      <div class="bacmp" id="m-cmp">
         <div class="sbs" id="cmp-sbs">
           <figure class="side" id="cmp-side-b" data-tk="use_before_after">
             <div class="ph" id="cmp-ph-b"></div><figcaption id="cmp-lb-b">施工前</figcaption>
@@ -97,10 +97,10 @@
                     role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">&lsaquo;&rsaquo;</button>
           </div>
         </div>
-        <button type="button" class="cmpswap" id="cmp-swap" data-tk="use_before_after">⇆ 疊合比較</button>
+        <button type="button" class="baswap" id="cmp-swap" data-tk="use_before_after">⇆ 疊合比較</button>
         <div class="nt" id="cmp-nt"></div>
       </div>
-      <div class="mmode" id="m-mode">
+      <div class="batoggle" id="m-mode">
         <button type="button" data-m="cmp" id="mm-cmp" data-tk="use_before_after">施工前後</button>
         <button type="button" data-m="gal" id="mm-gal">現場照片</button>
       </div>
@@ -389,8 +389,8 @@ EGRRA_I18N.init({
     cmp.classList.toggle("on",mode==="cmp");
     cmp.classList.toggle("wipeon",wipe);
     paintSwap();
-    mimg.classList.toggle("cmpmode",mode==="cmp");
-    if(mod)mod.classList.toggle("cmpw",mode==="cmp");   /* 並排要寬一點才看得清楚 */
+    mimg.classList.toggle("bamode",mode==="cmp");
+    if(mod)mod.classList.toggle("bawide",mode==="cmp");   /* 並排要寬一點才看得清楚 */
     mmode.querySelectorAll("button[data-m]").forEach(function(b){
       b.classList.toggle("on",b.dataset.m===mode);});
     renderShots();
