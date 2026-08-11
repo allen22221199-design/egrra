@@ -41,6 +41,11 @@ function L(zh,en){ return ecLang()==="en"?en:zh; }
   function seriesNames(sname){
     return PRODUCTS.filter(function(p){return p.series===sname;}).map(function(p){return p.name;});
   }
+  /* 花色名英譯：沿用全站共用字典，不要在這裡再開一份對照表 */
+  function TRN(x){
+    var D=window.EGRRA_DICT;
+    return (ecLang()==="en"&&D&&D.PNAME&&D.PNAME[x])?D.PNAME[x]:x;
+  }
   function sample(arr,n){return arr.slice(0,n).join("、");}
 
   /* ---------- 知識庫 / 意圖 ---------- */
@@ -50,70 +55,82 @@ function L(zh,en){ return ecLang()==="en"?en:zh; }
     { id:"greet", keys:["你好","妳好","您好","哈囉","哈嘍","嗨","hi","hello","在嗎","有人在","你是誰","誰"],
       reply:function(){return {text:L("您好！我是煌盛興業的線上小幫手 🙂 可以為您介紹藝格板的產品、計價、保養、防火與客製等資訊。請問想了解什麼呢？","Hello! I'm the EGRRA assistant 🙂 I can help with our panels — products, pricing, care, fire rating and customisation. What would you like to know?"),chips:MENU};} },
 
-    { id:"products", keys:["產品","花色","系列","顏色","款式","色卡","有哪些","有什麼","商品","種類","大理石","石材","選擇"],
+    { id:"products", keys:["產品","花色","系列","顏色","款式","色卡","有哪些","有什麼","商品","種類","大理石","石材","選擇","product","products","colour","color","finish","finishes","range","series","catalogue","catalog","marble","stone"],
       reply:function(){
         var stone=seriesNames("石紋系列");
-        var t="我們的藝格板主要分三大系列：<b>石紋系列</b>（仿大理石、板岩）、<b>鏽蝕系列</b>（金屬鏽蝕質感）、<b>木紋系列</b>（溫潤木質）。";
-        if(stone.length)t+="<br><br>石紋系列目前有 "+stone.length+" 款花色，例如："+sample(stone,6)+" …";
-        t+="<br><br>另外也有<b>消防箱</b>與<b>防火門</b>的美化應用。想看哪個系列，或直接跟我說花色名稱？";
+        var t=L("我們的藝格板主要分三大系列：<b>石紋系列</b>（仿大理石、板岩）、<b>鏽蝕系列</b>（金屬鏽蝕質感）、<b>木紋系列</b>（溫潤木質）。","Our panels come in three main series: <b>Stone</b> (marble and slate looks), <b>Rust</b> (weathered-metal texture) and <b>Wood</b> (warm timber grain).");
+        if(stone.length)t+=L("<br><br>石紋系列目前有 "+stone.length+" 款花色，例如："+sample(stone,6)+" …","<br><br>The Stone series currently has "+stone.length+" finishes, for example: "+sample(stone,6)+" …");
+        t+=L("<br><br>另外也有<b>消防箱</b>與<b>防火門</b>的美化應用。想看哪個系列，或直接跟我說花色名稱？","<br><br>We also refinish <b>hydrant boxes</b> and <b>fire doors</b>. Which series would you like to see — or just tell me a finish name?");
         return {text:t,chips:["石紋系列","鏽蝕系列","木紋系列","消防箱／防火門","怎麼計價"]};
       } },
 
-    { id:"series-stone", keys:["石紋"],
+    { id:"series-stone", keys:["石紋","stone series","marble series"],
       reply:function(){var n=seriesNames("石紋系列");
-        return {text:"<b>石紋系列</b>重現天然大理石與板岩的紋理，"+(n.length?"包含 "+n.length+" 款：<br>"+n.join("、")+"。":"款式眾多。")+"<br><br>想知道某一款的尺寸或表面處理，直接跟我說名稱即可！",chips:["尺寸規格","怎麼計價","聯絡我們"]};} },
-    { id:"series-rust", keys:["鏽蝕","鏽蝕","鏽","金屬感","工業風","工業"],
+        return {text:L("<b>石紋系列</b>重現天然大理石與板岩的紋理，"+(n.length?"包含 "+n.length+" 款：<br>"+n.join("、")+"。":"款式眾多。")+"<br><br>想知道某一款的尺寸或表面處理，直接跟我說名稱即可！","The <b>Stone series</b> recreates natural marble and slate. "+(n.length?"It includes "+n.length+" finishes:<br>"+n.map(TRN).join(", ")+".":"Many finishes available.")+"<br><br>Tell me a name and I'll give you its sizes and surface options."),chips:["尺寸規格","怎麼計價","聯絡我們"]};} },
+    { id:"series-rust", keys:["鏽蝕","鏽蝕","鏽","金屬感","工業風","工業","rust","rusted","industrial","patina","metal look"],
       reply:function(){var n=seriesNames("鏽蝕系列");
-        return {text:"<b>鏽蝕系列</b>呈現金屬鏽蝕、歲月斑駁的工業美學，冷冽而深邃。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。")+"",chips:["其他系列","聯絡我們"]};} },
-    { id:"series-wood", keys:["木紋","木質","木頭","原木"],
+        return {text:L("<b>鏽蝕系列</b>呈現金屬鏽蝕、歲月斑駁的工業美學，冷冽而深邃。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。"),"The <b>Rust series</b> captures weathered metal and the patina of age — cool, deep, industrial. "+(n.length?"Current finishes: "+n.map(TRN).join(", ")+".":"Call us for the full range.")),chips:["其他系列","聯絡我們"]};} },
+    { id:"series-wood", keys:["木紋","木質","木頭","原木","wood","timber","woodgrain","wood grain"],
       reply:function(){var n=seriesNames("木紋系列");
-        return {text:"<b>木紋系列</b>是溫潤自然的木質紋理，為空間注入柔和暖意。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。")+"",chips:["其他系列","聯絡我們"]};} },
+        return {text:L("<b>木紋系列</b>是溫潤自然的木質紋理，為空間注入柔和暖意。"+(n.length?"目前花色："+n.join("、")+"。":"歡迎來電洽詢完整花色。"),"The <b>Wood series</b> brings warm, natural timber grain into a space. "+(n.length?"Current finishes: "+n.map(TRN).join(", ")+".":"Call us for the full range.")),chips:["其他系列","聯絡我們"]};} },
 
-    { id:"price", keys:["計價","報價","價格","價錢","多少錢","單價","費用","估價","預算","貴","便宜"],
-      reply:function(){return {text:"藝格板以「<b>才</b>」計價。由於數量從數十才到數萬才落差很大，建議由您或設計師提供實際需求數量，我們業務會為您精準報價。<br><br>📞 歡迎來電 <b>"+PHONE+"</b> 或私訊 FB 洽詢。",chips:["聯絡我們","有哪些花色"]};} },
+    { id:"price", keys:["計價","報價","價格","價錢","多少錢","單價","費用","估價","預算","貴","便宜","price","pricing","cost","quote","quotation","how much","budget","cheap","expensive"],
+      reply:function(){return {text:L("藝格板以「<b>才</b>」計價。由於數量從數十才到數萬才落差很大，建議由您或設計師提供實際需求數量，我們業務會為您精準報價。<br><br>📞 歡迎來電 <b>"+PHONE+"</b> 或私訊 FB 洽詢。","Panels are priced per <b>cai</b> (a Taiwanese unit, 30×30 cm). Quantities range from tens to tens of thousands, so please tell us — or have your designer tell us — the quantity you need, and our sales team will quote precisely.<br><br>📞 Call <b>"+PHONE+"</b> or message us on Facebook."),chips:["聯絡我們","有哪些花色"]};} },
 
-    { id:"maintain", keys:["保養","清潔","清洗","擦拭","壞","損壞","刮傷","維護","清理","保固","耐用"],
-      reply:function(){return {text:"藝格板是鋁烤漆製品，耐用度高，少數損壞多屬人為破壞且幾乎都可修復。<br><br>保養很簡單，<b>一般擦拭即可</b>；但請勿使用強酸強鹼、或會溶解樹脂的溶劑（例如松香水、除膠劑）。",chips:["防火安全","客製化"]};} },
+    { id:"maintain", keys:["保養","清潔","清洗","擦拭","壞","損壞","刮傷","維護","清理","保固","耐用","maintain","maintenance","clean","cleaning","care","scratch","damage","durable","warranty"],
+      reply:function(){return {text:L("藝格板是鋁烤漆製品，耐用度高，少數損壞多屬人為破壞且幾乎都可修復。<br><br>保養很簡單，<b>一般擦拭即可</b>；但請勿使用強酸強鹼、或會溶解樹脂的溶劑（例如松香水、除膠劑）。","The panels are baked-enamel aluminium and hold up well; the rare damage we see is impact damage, and it can almost always be repaired.<br><br>Care is simple — <b>just wipe them down</b>. Avoid strong acids or alkalis, and solvents that dissolve resin (turpentine, adhesive remover)."),chips:["防火安全","客製化"]};} },
 
-    { id:"fire", keys:["防火","耐燃","耐火","防焰","燃燒","阻燃"],
-      reply:function(){return {text:"藝格板通過台灣消防規範中<b>最高等級的「耐燃一級」</b>測試，防火安全性高，並可應用於<b>防火門、消防箱</b>的美化，兼顧安全與設計感。",chips:["消防箱／防火門","SGS 抗菌","聯絡我們"]};} },
+    { id:"fire", keys:["防火","耐燃","耐火","防焰","燃燒","阻燃","fire","fireproof","fire rating","flame","non-combustible","class 1"],
+      reply:function(){return {text:L("藝格板通過台灣消防規範中<b>最高等級的「耐燃一級」</b>測試，防火安全性高，並可應用於<b>防火門、消防箱</b>的美化，兼顧安全與設計感。","The panels pass <b>Class 1</b> — the highest fire-resistance grade in Taiwan's fire code. They can be used to refinish <b>fire doors and hydrant boxes</b>, so safety and design don't have to trade off."),chips:["消防箱／防火門","SGS 抗菌","聯絡我們"]};} },
 
-    { id:"firebox", keys:["消防箱","防火門","消防設備","滅火器箱","檢修門"],
-      reply:function(){return {text:"我們提供<b>消防箱</b>與<b>防火門</b>的美化 —— 用藝格板把原本冰冷的消防設備融入整體空間美學，同時保有防火機能。全台已有多件實績。",chips:["實績案例","防火安全"]};} },
+    { id:"firebox", keys:["消防箱","防火門","消防設備","滅火器箱","檢修門","hydrant","hydrant box","fire door","fire equipment","access panel","extinguisher"],
+      reply:function(){return {text:L("我們提供<b>消防箱</b>與<b>防火門</b>的美化 —— 用藝格板把原本冰冷的消防設備融入整體空間美學，同時保有防火機能。全台已有多件實績。","We refinish <b>hydrant boxes</b> and <b>fire doors</b> — the panels let cold-looking fire equipment blend into the space while keeping its fire performance. We have completed many of these across Taiwan."),chips:["實績案例","防火安全"]};} },
 
-    { id:"custom", keys:["客製","訂做","訂製","客制","專屬","量身","開發","自己的圖","圖案","指定"],
-      reply:function(){return {text:"當然可以客製！透過 <b>PrinTex™</b> 技術，您可提供 <b>600×600mm</b> 的紋理樣本，或由我們協助開發專屬圖紋，並選擇<b>鋁、玻璃、金屬、木</b>等基材製作，量身打造專屬花色與尺寸。",chips:["核心技術","基材選擇","聯絡我們"]};} },
+    { id:"custom", keys:["客製","訂做","訂製","客制","專屬","量身","開發","自己的圖","圖案","指定","custom","customise","customize","bespoke","own design","own pattern","made to order"],
+      reply:function(){return {text:L("當然可以客製！透過 <b>PrinTex™</b> 技術，您可提供 <b>600×600mm</b> 的紋理樣本，或由我們協助開發專屬圖紋，並選擇<b>鋁、玻璃、金屬、木</b>等基材製作，量身打造專屬花色與尺寸。","Yes — customisation is what <b>PrinTex™</b> is for. Send us a <b>600×600 mm</b> texture sample, or let us develop an original pattern with you. Choose your substrate — <b>aluminium, glass, metal or wood</b> — and we build the finish and size around your project."),chips:["核心技術","基材選擇","聯絡我們"]};} },
 
-    { id:"substrate", keys:["基材","鋁","玻璃","金屬","底材","貼在","做在","材料"],
-      reply:function(){return {text:"PrinTex™ 能把<b>同一種紋理</b>做在多種基材上：<b>鋁、玻璃、金屬、木質</b>都可以，方便對應不同場域與工法需求。",chips:["核心技術","尺寸規格"]};} },
+    { id:"substrate", keys:["基材","鋁","玻璃","金屬","底材","貼在","做在","材料","substrate","aluminium","aluminum","glass","metal","base material","backing"],
+      reply:function(){return {text:L("PrinTex™ 能把<b>同一種紋理</b>做在多種基材上：<b>鋁、玻璃、金屬、木質</b>都可以，方便對應不同場域與工法需求。","PrinTex™ can put <b>the same texture</b> on several substrates — <b>aluminium, glass, metal, wood</b> — so one design can follow you across different sites and installation methods."),chips:["核心技術","尺寸規格"]};} },
 
     { id:"tech", keys:["printex","技術","原理","怎麼做","製程","專利","數位紋理","怎麼製作"],
-      reply:function(){return {text:"<b>PrinTex™</b> 是我們的專利數位紋理技術，能高精度還原天然石材的色澤與脈絡，印製於金屬、玻璃、陶瓷等基材上，呈現立體浮雕層次；並具備<b>專利無縫對花</b>，大面積拼接紋理也能連續不中斷。",chips:["客製化","有哪些花色"]};} },
+      reply:function(){return {text:L("<b>PrinTex™</b> 是我們的專利數位紋理技術，能高精度還原天然石材的色澤與脈絡，印製於金屬、玻璃、陶瓷等基材上，呈現立體浮雕層次；並具備<b>專利無縫對花</b>，大面積拼接紋理也能連續不中斷。","<b>PrinTex™</b> is our patented digital-texture process. It reproduces the colour and veining of natural stone at high fidelity, prints onto metal, glass or ceramic substrates, and builds up an embossed, three-dimensional surface. Its <b>patented seamless pattern matching</b> means the veining runs continuously across large spans."),chips:["客製化","有哪些花色"]};} },
 
-    { id:"weight", keys:["重量","多重","幾公斤","很輕","輕量","重不重"],
-      reply:function(){return {text:"藝格板重量約為<b>天然石材的 1/30</b>，大幅減輕結構負擔，施工也更方便。",chips:["尺寸規格","防火安全"]};} },
+    { id:"weight", keys:["重量","多重","幾公斤","很輕","輕量","重不重","weight","heavy","how heavy","light","lightweight","kg"],
+      reply:function(){return {text:L("藝格板重量約為<b>天然石材的 1/30</b>，大幅減輕結構負擔，施工也更方便。","The panels weigh about <b>1/30 of natural stone</b> — far less load on the structure, and much easier to install."),chips:["尺寸規格","防火安全"]};} },
 
-    { id:"size", keys:["尺寸","大小","規格","幾尺","多大","表面處理","霧光","平光","消光","厚度"],
-      reply:function(){return {text:"標準尺寸有 <b>4×4、4×8、4×10、5×10 尺</b>（約 120×240 / 120×300 / 150×300 cm），並可依現場需求客製裁切。<br><br>表面處理可選：<b>立體紋路、霧光、平光、消光</b>。",chips:["怎麼計價","客製化"]};} },
+    { id:"size", keys:["尺寸","大小","規格","幾尺","多大","表面處理","霧光","平光","消光","厚度","size","sizes","dimension","dimensions","spec","thickness","surface","matte","satin","gloss"],
+      reply:function(){return {text:L("標準尺寸有 <b>4×4、4×8、4×10、5×10 尺</b>（約 120×240 / 120×300 / 150×300 cm），並可依現場需求客製裁切。<br><br>表面處理可選：<b>立體紋路、霧光、平光、消光</b>。","Standard sizes are <b>4×4, 4×8, 4×10 and 5×10 ft</b> (roughly 120×240 / 120×300 / 150×300 cm), and we cut to site requirements.<br><br>Surface options: <b>embossed, matte, satin, flat</b>."),chips:["怎麼計價","客製化"]};} },
 
-    { id:"sgs", keys:["抗菌","sgs","衛生","細菌","病菌","乾淨"],
-      reply:function(){return {text:"藝格板可提供 <b>SGS 抗菌認證</b>，抑制細菌孳生、維持空間潔淨，適合注重衛生的場域（如飯店、醫療、公共空間）。",chips:["防火安全","實績案例"]};} },
+    { id:"sgs", keys:["抗菌","sgs","衛生","細菌","病菌","乾淨","antibacterial","anti-bacterial","sgs","hygiene","bacteria","clean surface"],
+      reply:function(){return {text:L("藝格板可提供 <b>SGS 抗菌認證</b>，抑制細菌孳生、維持空間潔淨，適合注重衛生的場域（如飯店、醫療、公共空間）。","We can supply the panels with <b>SGS antibacterial certification</b> — it suppresses bacterial growth and keeps surfaces clean, which matters in hotels, healthcare and public spaces."),chips:["防火安全","實績案例"]};} },
 
-    { id:"cases", keys:["案例","實績","做過","工程","案場","作品","完工","業績","經驗","口碑"],
+    { id:"cases", keys:["案例","實績","做過","工程","案場","作品","完工","業績","經驗","口碑","case","cases","project","projects","portfolio","reference","past work","experience"],
       reply:function(){
         var eg=CASES.slice(0,4).map(function(c){return c.region+"-"+c.title;});
-        return {text:"我們累積了 <b>"+CASES.length+" 件以上</b>實績，遍布全台，涵蓋全棟廊道、大廳牆面、防火門／消防箱美化、豪宅客製等。"+(eg.length?"<br><br>例如："+eg.join("、")+" …":"")+"<br><br>想了解特定地區或類型的案例，可以告訴我！",chips:["消防箱／防火門","聯絡我們"]};
+        return {text:L("我們累積了 <b>"+CASES.length+" 件以上</b>實績，遍布全台，涵蓋全棟廊道、大廳牆面、防火門／消防箱美化、豪宅客製等。"+(eg.length?"<br><br>例如："+eg.join("、")+" …":"")+"<br><br>想了解特定地區或類型的案例，可以告訴我！","We have completed <b>"+CASES.length+"+ projects</b> across Taiwan — full-building corridors, lobby feature walls, fire-door and hydrant-box refinishing, and bespoke work for private residences."+(eg.length?"<br><br>For example: "+eg.join(", ")+" …":"")+"<br><br>Tell me a region or a project type and I'll narrow it down."),chips:["消防箱／防火門","聯絡我們"]};
       } },
 
-    { id:"about", keys:["關於","公司","煌盛","egrra","多久","幾年","歷史","介紹","你們是","王子彩色","品牌"],
-      reply:function(){return {text:"煌盛興業（EGRRA）源自「王子彩色」四十餘年的彩色印刷經驗，已累積<b>超過 46 年</b>，轉型專注於數位紋理建材，是專為建築與設計市場打造的品牌，提供從紋理開發到成品的全方位解決方案。",chips:["核心技術","有哪些花色"]};} },
+    { id:"about", keys:["關於","公司","煌盛","egrra","多久","幾年","歷史","介紹","你們是","王子彩色","品牌","about","company","who are you","history","years","brand","background"],
+      reply:function(){return {text:L("煌盛興業（EGRRA）源自「王子彩色」四十餘年的彩色印刷經驗，已累積<b>超過 46 年</b>，轉型專注於數位紋理建材，是專為建築與設計市場打造的品牌，提供從紋理開發到成品的全方位解決方案。","EGRRA grew out of Prince Color, a colour-printing house with four decades behind it — <b>over 46 years</b> in total. We moved that craft into building materials, and today we build digital-texture products for the architecture and design market, from developing the texture through to the finished panel."),chips:["核心技術","有哪些花色"]};} },
 
-    { id:"contact", keys:["聯絡","連絡","電話","怎麼找","地址","在哪","傳真","fb","facebook","臉書","line","客服","怎麼買","購買","哪裡買","門市","據點"],
-      reply:function(){return {text:"歡迎與我們聯繫：<br>📞 電話：<a href='tel:"+PHONERAW+"'><b>"+PHONE+"</b></a><br>📠 傳真："+FAX+"<br>💬 Facebook：<a href='"+FBURL+"' target='_blank' rel='noopener'>大理石魔術師呂哥</a><br><br>也可以在網站下方的<b>洽詢表單</b>留下需求，我們會盡快回覆您！",chips:["怎麼計價","實績案例"]};} },
+    { id:"contact", keys:["聯絡","連絡","電話","怎麼找","地址","在哪","傳真","fb","facebook","臉書","line","客服","怎麼買","購買","哪裡買","門市","據點","contact","phone","call","address","where","fax","facebook","line","buy","purchase","showroom","store"],
+      reply:function(){return {text:L("歡迎與我們聯繫：","Get in touch:")+"<br>📞 電話：<a href='tel:"+PHONERAW+"'><b>"+PHONE+"</b></a><br>📠 傳真："+FAX+"<br>💬 Facebook：<a href='"+FBURL+"' target='_blank' rel='noopener'>大理石魔術師呂哥</a><br><br>"+L("也可以在網站下方的<b>洽詢表單</b>留下需求，我們會盡快回覆您！","You can also leave your requirements in the <b>enquiry form</b> at the bottom of this page and we'll get back to you shortly.")+",chips:["怎麼計價","實績案例"]};} },
 
-    { id:"thanks", keys:["謝謝","感謝","感恩","thank","3q","感激"],
-      reply:function(){return {text:"不客氣，很高興為您服務 🙂 還有任何問題都可以再問我！",chips:MENU};} }
+    { id:"thanks", keys:["謝謝","感謝","感恩","thank","3q","感激","thanks","thank you","cheers","appreciate"],
+      reply:function(){return {text:L("不客氣，很高興為您服務 🙂 還有任何問題都可以再問我！","You're very welcome 🙂 Ask me anything else any time!"),chips:MENU};} }
   ];
+
+  /* 快速鍵的英文標籤。★ 只換顯示文字，送出去比對的仍是中文原值 ★
+     若把 chips 的值本身改成英文，CHIP2Q 與所有 keys 都要跟著改一遍，
+     而且中英兩套比對表會各自漂移 —— 顯示與資料分開才不會有這個問題。 */
+  var CHIP_EN={
+    "產品花色":"Products","怎麼計價":"Pricing","如何保養":"Care","防火安全":"Fire safety",
+    "客製化":"Customisation","實績案例":"Projects","聯絡我們":"Contact",
+    "石紋系列":"Stone series","鏽蝕系列":"Rust series","木紋系列":"Wood series",
+    "消防箱／防火門":"Hydrant box / fire door","其他系列":"Other series",
+    "尺寸規格":"Sizes","核心技術":"Technology","基材選擇":"Substrates",
+    "SGS 抗菌":"SGS antibacterial","有哪些花色":"What finishes?"
+  };
 
   /* 快捷詞 → 對應查詢字 */
   var CHIP2Q={"產品花色":"有哪些花色","消防箱／防火門":"消防箱 防火門","其他系列":"有哪些花色","尺寸規格":"尺寸","核心技術":"printex 技術","基材選擇":"基材","SGS 抗菌":"抗菌"};
@@ -139,7 +156,7 @@ function L(zh,en){ return ecLang()==="en"?en:zh; }
     if(best&&bestScore>0)return best.reply();
 
     /* 3) 聽不懂（weak：若有接 AI，會轉給 AI 回答）*/
-    return {weak:true,text:"不好意思，這個問題我可能需要請專人為您服務 🙏 您可以換個方式問，或直接來電 <b>"+PHONE+"</b>、私訊 FB。以下是常見問題：",chips:MENU};
+    return {weak:true,text:L("不好意思，這個問題我可能需要請專人為您服務 🙏 您可以換個方式問，或直接來電 <b>"+PHONE+"</b>、私訊 FB。以下是常見問題：","Sorry — this one is better handled by a person 🙏 Try rephrasing, or call <b>"+PHONE+"</b> / message us on Facebook. Here are some common questions:"),chips:MENU};
   }
 
   /* ---------- 樣式 ---------- */
@@ -233,14 +250,17 @@ function L(zh,en){ return ecLang()==="en"?en:zh; }
     }
     function typing(on){
       var ex=body.querySelector(".ec-typing-row");
-      if(on){if(ex)return;var r=el("<div class='ec-row bot ec-typing-row'><div class='ec-bava'>煌</div><div class='ec-bub' style='padding:0'><div class='ec-typing'><i></i><i></i><i></i></div></div></div>");body.appendChild(r);scrollDown();}
+      if(on){if(ex)return;var r=el("<div class='ec-row bot ec-typing-row'><div class='ec-bava'>"+L("煌","E")+"</div><div class='ec-bub' style='padding:0'><div class='ec-typing'><i></i><i></i><i></i></div></div></div>");body.appendChild(r);scrollDown();}
       else if(ex)ex.remove();
     }
     function setChips(list){
       chips.innerHTML="";
       (list||[]).forEach(function(c){
-        var b=el("<button class='ec-chip'></button>");b.textContent=c;
-        b.addEventListener("click",function(){handle(CHIP2Q[c]||c,c);});
+        var b=el("<button class='ec-chip'></button>");
+        /* 只換顯示文字，送出去比對的仍是中文原值 —— 見 CHIP_EN 的說明 */
+        var lbl=(ecLang()==="en"&&CHIP_EN[c])?CHIP_EN[c]:c;
+        b.textContent=lbl;
+        b.addEventListener("click",function(){handle(CHIP2Q[c]||c,lbl);});
         chips.appendChild(b);
       });
     }
