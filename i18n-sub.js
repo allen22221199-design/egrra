@@ -12,6 +12,7 @@ window.EGRRA_I18N = (function () {
   var DICT = {
     "nav.about": "About", "nav.tech": "Technology", "nav.products": "Products",
     "nav.library": "Colours", "nav.portfolio": "Projects", "nav.certs": "Certifications",
+      "nav.media": "Media",
     "nav.compare": "Comparison", "nav.news": "News", "nav.contact": "Contact",
     "foot.home": "Home"
   };
@@ -21,6 +22,7 @@ window.EGRRA_I18N = (function () {
     [".nav-links a[href='/#products']", "nav.products"],
     [".nav-links a[href='/products']", "nav.library"],
     [".nav-links a[href='/cases']", "nav.portfolio"],
+    [".nav-links a[href='/media']", "nav.media"],
     [".nav-links a[href='/compare']", "nav.compare"],
     [".nav-links a[href='/news']", "nav.news"],
     [".nav-links a[href='/certifications']", "nav.certs"],

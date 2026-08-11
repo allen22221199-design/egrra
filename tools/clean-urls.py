@@ -39,6 +39,7 @@ PAGES = {
     "compare.html": "/compare",
     "certifications.html": "/certifications",
     "news.html": "/news",
+    "media.html": "/media",
     "admin.html": "/admin",
     "maintenance.html": "/maintenance",
 }
