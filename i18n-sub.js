@@ -365,8 +365,11 @@ window.EGRRA_I18N = (function () {
     if (e.key === "Escape") setOpen(false);
   });
 
-  /* 轉成橫向或放大視窗後，面板的 fixed 定位會殘留在畫面上，要收掉 */
+  /* 轉成橫向或放大視窗後，面板的 fixed 定位會殘留在畫面上，要收掉。
+     ★ 這個數字要跟 lib.css 的斷點一致（900px）★
+       導覽列變 10 項後斷點從 600 改成 900，這裡沒跟著改的話，
+       601～900px 之間會出現「漢堡鈕還在、面板卻被判定成該收起」的錯亂。 */
   window.addEventListener("resize", function () {
-    if (window.innerWidth > 600) setOpen(false);
+    if (window.innerWidth > 900) setOpen(false);
   });
 })();

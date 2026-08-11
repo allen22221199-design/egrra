@@ -209,7 +209,17 @@ html[data-lang="en"] .mod .mimg::after{content:"⤢ Click to enlarge"}
   /* 對比模式要看得出差別，圖片區不能太扁 */
   .mod .mimg.bamode{min-height:330px}
 }
-@media(max-width:600px){
+/* 導覽列有 10 項，在 900～1180px 之間會擠到品牌名，先把間距與字級縮小 */
+@media(max-width:1180px){
+  .nav-links{gap:17px}
+  .nav-links a{font-size:13.5px}
+  .nav-cta{padding:8px 14px}
+}
+
+/* 手機／平板選單。★ 斷點是 900px 不是 600px ★
+   導覽列從 9 項變 10 項之後，1024px 的螢幕上「煌盛興業」會和「關於煌盛」
+   疊在一起。斷點放在 600 只有手機吃得到，平板與小筆電會壞掉。 */
+@media(max-width:900px){
   .wrap{padding:0 18px}
 
   /* ---- 手機版導覽選單 ----
@@ -260,6 +270,9 @@ html[data-lang="en"] .mod .mimg::after{content:"⤢ Click to enlarge"}
   .burger.on span:nth-child(2){opacity:0}
   .burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
   .burger span{transition:transform .28s var(--ease),opacity .2s}
+}
+
+@media(max-width:600px){
   .grid.sw,.grid.pf{grid-template-columns:repeat(2,1fr)}
   .filters{position:static}
   .fcount{width:100%;margin-left:0}
