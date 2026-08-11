@@ -643,6 +643,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
     <a href="#home" class="on">首頁</a>
     <a href="#about">關於煌盛</a>
     <a href="#tech">核心技術</a>
+    <a href="#compare">競品分析</a>
     <a href="#products">產品系列</a>
     <a href="#gallery">石紋花色</a>
     <a href="#portfolio">實績案例</a>
@@ -812,7 +813,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
 
     <!-- 精簡比較：上面的優勢是主張，這裡給對照。完整版在 compare.html。
          導覽列拿掉「競品比較」後，這裡就是通往完整比較表的唯一入口。 -->
-    <div class="mini-cmp reveal">
+    <div class="mini-cmp reveal" id="compare">
       <div class="mc-head">
         <h3 data-i18n="mc.h">那，跟其他做法差在哪？</h3>
         <a href="/compare" data-i18n="mc.more">看完整比較表 →</a>
@@ -1533,7 +1534,7 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
     "mat.substrate":"Substrate","mat.texture":"Texture",
     "cta.line":"LINE Chat","cta.sample":"Request Sample / Catalog",
     /* 目錄 */
-    "toc.h":"On this page","toc.home":"Home","toc.about":"About","toc.tech":"Technology","toc.products":"Products","toc.gallery":"Colours","toc.portfolio":"Projects","toc.contact":"Contact",
+    "toc.h":"On this page","toc.home":"Home","toc.about":"About","toc.tech":"Technology","toc.compare":"Comparison","toc.products":"Products","toc.gallery":"Colours","toc.portfolio":"Projects","toc.contact":"Contact",
     /* 關於 */
     "ab.eye":"About EGRRA",
     "ab.h2":"Four decades of colour expertise,<br>translated into architectural warmth",
@@ -1611,7 +1612,8 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
   /* 尚未帶 data-i18n 屬性的元素：以選擇器批次指派（#html 結尾＝整段 innerHTML 置換） */
   var SEL=[
     [".toc .h","toc.h"],[".toc a[href='#home']","toc.home"],[".toc a[href='#about']","toc.about"],
-    [".toc a[href='#tech']","toc.tech"],[".toc a[href='#products']","toc.products"],
+    [".toc a[href='#tech']","toc.tech"],[".toc a[href='#compare']","toc.compare"],
+    [".toc a[href='#products']","toc.products"],
     [".toc a[href='#gallery']","toc.gallery"],[".toc a[href='#portfolio']","toc.portfolio"],[".toc a[href='#contact']","toc.contact"],
     [".about .eyebrow","ab.eye"],[".about h2","ab.h2#html"],["#aboutP2","ab.p2"],["#missionText","ab.quote"],
     [".about-sign span","ab.sign"],[".badge span","ab.badge"],
