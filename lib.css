@@ -250,7 +250,9 @@ html[data-lang="en"] .mod .mimg::after{content:"⤢ Click to enlarge"}
      原本只有 36×28，手指按容易落空 —— 使用者回報「按了沒反應」時，
      除了選單本身壞掉，按不準也是一部分原因。
      用 padding 撐開可點範圍，三條線的視覺大小不變。 */
-  .burger{display:flex;padding:9px 10px;margin-right:-10px}
+  .burger{display:flex;padding:14px 10px;margin-right:-10px}
+  /* 案例／花色視窗的關閉鈕。產業快訊的 .nwx 定義在 news.html 的內嵌
+     樣式裡（載入順序在本檔之後），寫在這裡會被蓋掉，已直接改在那邊。 */
   .mod .mclose{width:44px;height:44px;top:12px;right:12px}
 
   /* 打開時漢堡變叉，讓人知道再按一次會關 */
