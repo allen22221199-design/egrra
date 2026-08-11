@@ -23,7 +23,7 @@
    ========================================================================= */
 
 import { hasStore, put, json, checkPw } from "../_lib/store.js";
-import { loadTopics, loadConfig, loadQueue, saveQueue, CONFIG_KEY } from "../_lib/news-store.js";
+import { loadConfig, loadQueue, saveQueue, CONFIG_KEY } from "../_lib/news-store.js";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
