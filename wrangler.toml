@@ -14,7 +14,9 @@
 #               去重。改成每天輪一個主題。
 #=============================================================================
 
-name = "egrra-official"
+name = "egrra"
+# 專案名稱決定 pages.dev 的子網域：egrra → https://egrra.pages.dev
+# ★ Pages 專案不能改名，要換只能砍掉重建（接了自訂網域之後就麻煩了，趁早決定）
 compatibility_date = "2026-08-10"
 pages_build_output_dir = "."
 

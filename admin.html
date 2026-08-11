@@ -802,7 +802,8 @@ function caseCard(c){
     '</div>'+
     '<div class="body"><h4>'+esc(c.title||c.region||"(未命名)")+'</h4><div class="meta">'+
       [esc(c.region||""),esc(c.year||"")].filter(Boolean).join(" ・ ")+
-      ((c.imgs&&c.imgs.length>1)?' <span class="galtag">相簿 '+c.imgs.length+'</span>':'')+'</div></div>'+
+      ((c.imgs&&c.imgs.length>1)?' <span class="galtag">相簿 '+c.imgs.length+'</span>':'')+
+      ((c.ba&&c.ba.length)?' <span class="galtag">前後對比 '+c.ba.length+'</span>':'')+'</div></div>'+
     '<div class="act">'+moveBtns("cases",c.id)+
       '<button class="btn sm" data-edit="'+c.id+'">編輯</button>'+
       '<button class="btn sm danger" data-del="'+c.id+'">刪除</button></div>';
@@ -854,10 +855,10 @@ function delItem(type,id){
 }
 
 /* ============ 編輯 Modal ============ */
-var editing={type:null,id:null,draftImg:undefined,draftImgs:null};
+var editing={type:null,id:null,draftImg:undefined,draftImgs:null,draftBA:null};
 var pendingDelete=[]; /* 這次編輯移除的雲端照片；按下儲存才真的刪，取消就不動 */
 function openEditor(type,id){
-  editing.type=type;editing.id=id;editing.draftImg=undefined;editing.draftImgs=null;
+  editing.type=type;editing.id=id;editing.draftImg=undefined;editing.draftImgs=null;editing.draftBA=null;
   pendingDelete=[];
   var isNew=!id;
   var it=isNew?{}:clone(DATA[type].find(function(x){return x.id===id;}));
@@ -882,11 +883,14 @@ function openEditor(type,id){
       '<div class="f"><label>年份 <span>(選填)</span></label><input id="e-year" placeholder="例：2025" value="'+esc(it.year||"")+'"/></div>'+
       imgField(it.img)+
       galleryField(it.imgs)+
+      baField()+
     '</div>';
     editing.draftImgs=(it.imgs||[]).slice();
+    editing.draftBA=(it.ba||[]).map(function(x){
+      return {b:(x&&x.b)||"",a:(x&&x.a)||"",note:(x&&x.note)||""};});
   }
   bindImgField();
-  if(type==="cases"){ bindCatField(); bindGallery(); }
+  if(type==="cases"){ bindCatField(); bindGallery(); bindBA(); }
   document.getElementById("overlay").classList.add("show");
 }
 function selField(id,label,opts,cur){
@@ -919,6 +923,113 @@ function galleryField(imgs){
       '<label class="btn filebtn">＋ 加入照片(可多選)<input type="file" id="e-galfile" accept="image/*" multiple /></label>'+
       '<input class="pathin" id="e-galpath" placeholder="或填路徑後按 Enter：img/cases/c1/2.jpg" />'+
     '</div></div>';
+}
+/* 施工前後對比：一組＝同一個位置的「施工前」＋「完工後」各一張。
+   照片可從這個案例的相簿挑，也可以單獨上傳（施工前的照片通常不會放進成品相簿）。 */
+function baField(){
+  return '<div class="f full"><label>施工前後對比 '+
+    '<span>(選填。設定後訪客在案例詳情就能左右拖曳，比較同一個位置的前後差異)</span></label>'+
+    '<div class="ba" id="e-ba"></div>'+
+    '<div style="margin-top:9px"><button type="button" class="btn sm" id="e-ba-add">＋ 新增一組對比</button></div>'+
+  '</div>';
+}
+function bindBA(){
+  var host=document.getElementById("e-ba");
+  if(!host)return;
+  if(!editing.draftBA)editing.draftBA=[];
+  var openPick=null;   /* 目前展開的挑照片面板 {i:第幾組, k:"b"或"a"} */
+
+  function slot(i,k,src){
+    return '<div class="baslot" data-bi="'+i+'" data-k="'+k+'">'+
+      '<div class="im'+(src?'':' empty')+'"'+(src?' style="background-image:url(\''+esc(src)+'\')"':'')+'></div>'+
+      '<div class="cap">'+(k==="b"?"施工前":"完工後")+'</div></div>';
+  }
+  function pickPanel(i,k){
+    var imgs=galImgs();
+    return '<div class="bapick">'+
+      '<div class="hint">選一張「'+(k==="b"?"施工前":"完工後")+'」的照片：從下方相簿點選，或直接上傳。</div>'+
+      '<div class="pk">'+(imgs.length
+        ? imgs.map(function(s,n){return '<div class="p" data-pi="'+n+'" title="相簿第 '+(n+1)+' 張" '+
+            'style="background-image:url(\''+esc(s)+'\')"></div>';}).join("")
+        : '<div class="galempty">這個案例還沒有照片，直接上傳一張吧。</div>')+'</div>'+
+      '<div class="up-actions" style="margin-top:9px">'+
+        '<label class="btn sm filebtn">上傳照片<input type="file" class="bafile" accept="image/*"/></label>'+
+        '<input class="pathin bapath" placeholder="或填路徑後按 Enter：img/cases/c1/before.jpg"/>'+
+      '</div>'+
+      '<div style="margin-top:8px"><button type="button" class="btn sm ghost baclear">清除這一格</button></div>'+
+    '</div>';
+  }
+  function galImgs(){
+    return (editing.draftImgs||[]).filter(function(s){return s&&s.length>3;});
+  }
+  function redraw(){
+    var rows=editing.draftBA;
+    if(!rows.length){
+      host.innerHTML='<div class="galempty">尚未設定。按下方「新增一組對比」，再分別挑一張施工前與完工後的照片。</div>';
+      return;
+    }
+    host.innerHTML=rows.map(function(r,i){
+      return '<div class="barow">'+
+        '<div class="batop">'+
+          slot(i,"b",r.b)+'<div class="baarrow">→</div>'+slot(i,"a",r.a)+
+          '<input class="banote" data-bi="'+i+'" placeholder="位置說明（選填），例：B1 梯廳消防箱" value="'+esc(r.note||"")+'"/>'+
+          '<button type="button" class="badel" data-bi="'+i+'" title="刪除這一組">✕</button>'+
+        '</div>'+
+        ((openPick&&openPick.i===i)?pickPanel(i,openPick.k):"")+
+        ((r.b&&r.a)?"":'<div class="bawarn">兩張都選好才會顯示在官網。</div>')+
+      '</div>';
+    }).join("");
+    bind();
+  }
+  function setSlot(v){
+    if(!openPick)return;
+    editing.draftBA[openPick.i][openPick.k]=v||"";
+    openPick=null;redraw();
+  }
+  function bind(){
+    host.querySelectorAll(".baslot").forEach(function(el){
+      el.addEventListener("click",function(){
+        var i=parseInt(el.dataset.bi,10),k=el.dataset.k;
+        openPick=(openPick&&openPick.i===i&&openPick.k===k)?null:{i:i,k:k};
+        redraw();
+      });
+    });
+    /* 說明欄只更新資料、不重畫，否則每打一個字輸入框就被換掉（中文注音會被拆掉） */
+    host.querySelectorAll(".banote").forEach(function(el){
+      el.addEventListener("input",function(){
+        editing.draftBA[parseInt(el.dataset.bi,10)].note=el.value;});
+    });
+    host.querySelectorAll(".badel").forEach(function(el){
+      el.addEventListener("click",function(){
+        editing.draftBA.splice(parseInt(el.dataset.bi,10),1);openPick=null;redraw();});
+    });
+    var pk=host.querySelector(".bapick");
+    if(!pk)return;
+    var imgs=galImgs();
+    pk.querySelectorAll(".p").forEach(function(el){
+      el.addEventListener("click",function(){setSlot(imgs[parseInt(el.dataset.pi,10)]);});
+    });
+    var f=pk.querySelector(".bafile");
+    if(f)f.addEventListener("change",function(){
+      var file=f.files[0];if(!file)return;
+      processImage(file,function(data){setSlot(data);toast("照片已載入（記得按儲存）","ok");});
+    });
+    var p=pk.querySelector(".bapath");
+    if(p)p.addEventListener("keydown",function(e){
+      if(e.key!=="Enter")return;
+      e.preventDefault();
+      var v=p.value.trim();if(v)setSlot(v);
+    });
+    var c=pk.querySelector(".baclear");
+    if(c)c.addEventListener("click",function(){setSlot("");});
+  }
+  var add=document.getElementById("e-ba-add");
+  if(add)add.addEventListener("click",function(){
+    editing.draftBA.push({b:"",a:"",note:""});
+    openPick={i:editing.draftBA.length-1,k:"b"};
+    redraw();
+  });
+  redraw();
 }
 function bindImgField(){
   var file=document.getElementById("e-file");
@@ -1052,15 +1163,16 @@ document.getElementById("msave").onclick=function(){
     obj={region:val("e-region"),title:val("e-title"),category:cs[0],cats:cs,
          stone:val("e-stone"),year:val("e-year")};
   }
+  baDropped=0;
   if(editing.id){
     var it=DATA[type].find(function(x){return x.id===editing.id;});
     for(var kk in obj)it[kk]=obj[kk];
     if(editing.draftImg!==undefined)it.img=editing.draftImg;
-    if(type==="cases")applyGallery(it);
+    if(type==="cases"){applyGallery(it);applyBA(it);}
   }else{
     obj.id=(type==="products"?"p":"c")+Date.now();
     obj.img=editing.draftImg||"";
-    if(type==="cases")applyGallery(obj);
+    if(type==="cases"){applyGallery(obj);applyBA(obj);}
     DATA[type].push(obj);
   }
   setDirty(true);var ok=saveData(true);
@@ -1072,6 +1184,9 @@ document.getElementById("msave").onclick=function(){
   }
   closeModal();render();
   if(ok)toast(editing.id?"已更新":"已新增","ok");
+  /* 只選了一張的對比組沒有被存下來，明講一聲（單一 toast 元素，所以延後蓋掉上一則） */
+  if(baDropped)setTimeout(function(){
+    toast("有 "+baDropped+" 組前後對比只選了一張，尚未儲存","err");},1400);
 };
 
 /* ---- 數據統計 ---- */
@@ -1080,6 +1195,7 @@ var statsDays=14, statsCache=null;
 var EV_LABEL={
   open_swatch:"點開精選花色(首頁)", open_colour:"點開花色詳情(花色庫)",
   open_case:"點開案例大圖(首頁)", open_case_detail:"點開案例詳情(案例牆)",
+  use_before_after:"操作施工前後對比",
   open_cert:"放大檢視認證文件", click_product:"點擊產品線卡片",
   use_3d_scene:"操作 3D 場景", switch_language:"切換中英文",
   cta_contact:"點『聯絡我們』", submit_form:"送出洽詢表單",
@@ -1509,6 +1625,20 @@ function applyGallery(it){
   g=g.filter(function(s,i){return i===0?true:(s&&s.length>3);});
   if(g.length>1)it.imgs=g; else delete it.imgs;
 }
+/* 前後對比寫回：只留兩張都齊全的組（缺一張在官網比不了，留著只是髒資料）。
+   被丟掉的組數記在 baDropped，儲存後提醒使用者，不要無聲吃掉他填的東西。 */
+var baDropped=0;
+function applyBA(it){
+  var r=editing.draftBA;
+  if(!r){ return; }                       /* 沒動過就不碰 */
+  var clean=r.filter(function(x){return x&&x.b&&x.a;}).map(function(x){
+    var o={b:x.b,a:x.a};
+    if(x.note&&x.note.trim())o.note=x.note.trim();
+    return o;
+  });
+  baDropped=r.length-clean.length;
+  if(clean.length)it.ba=clean; else delete it.ba;
+}
 
 /* ============ 共用小工具 ============ */
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -1666,7 +1796,7 @@ var TOUR=[
     tip:"照片可以直接上傳，也可以填站內路徑（例如 img/tex/SCS001.jpg），填路徑比較省空間。" },
   { el:'[data-tab="cases"]', tab:"cases", title:"實績案例：工程實績",
     text:"59 件案例都在這裡。每件可以設定建案名稱、地區、類別、年份，還能放多張現場照片。",
-    tip:"編輯視窗裡的「相簿」可以加多張照片，訪客點案例時就能左右翻看。" },
+    tip:"編輯視窗裡的「相簿」可以加多張照片，訪客點案例時就能左右翻看；再往下的「施工前後對比」可以配一組前後照片，訪客能左右拖曳比較同一個位置的差異。" },
   { el:'[data-tab="clients"]', tab:"clients", title:"合作建商：首頁跑馬燈名單",
     text:"這 40 家公司會顯示在首頁的跑馬燈與合作夥伴名單。直接在欄位裡打字就能改，順序就是顯示順序。",
     tip:"新增建商後記得按下面教的「發布上線」，否則訪客看不到。" },
