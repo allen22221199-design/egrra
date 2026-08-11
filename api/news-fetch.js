@@ -27,6 +27,30 @@ const MAX_TO_AI = 70;          // 一次最多丟給 AI 幾則 —— 太多會�
    要一次多抓幾篇就把網址加上 ?n=3。 */
 const DEFAULT_ARTICLES = 1;
 
+/* ---- 每兩天自動產出並上線一篇 ----------------------------------------------
+   節流的權威放在這支自己，不是放在觸發端。原因是觸發來源有三個：
+   Vercel Cron（隔日 01:00 UTC）、Cloudflare 那邊由訪客瀏覽驅動、以及手動網址。
+   只要兩個平台同時活著，光靠排程設定就會一天冒出兩篇。改成不管誰來敲，
+   距離上次實際執行不到 MIN_HOURS 一律跳過，節奏就穩定在兩天一篇。
+
+   RETRY_HOURS 是給「上次跑完一篇都沒產出」用的（那幾天真的沒有相關新聞）。
+   若一律等滿兩天，一次空手就要多空兩天；隔幾小時再試一次比較合理。 */
+const MIN_HOURS = 40;      /* 有產出 → 至少隔 40 小時（排程是 48，留 8 小時餘裕） */
+const RETRY_HOURS = 6;     /* 沒產出 → 6 小時後可再試 */
+
+/* 自動上線：抓完直接 published，不進待審。可在後台「產業快訊 → 追蹤主題」
+   取消勾選改回人工審核，或用環境變數 NEWS_AUTO_PUBLISH=0 強制關閉。
+   ★ 這代表 AI 寫的短文會直接出現在官網上，沒有人先看過。★ */
+const AUTO_PUBLISH_DEFAULT = true;
+
+function tooSoon(data) {
+  const last = Date.parse(data.lastRunAt || "") || 0;
+  if (!last) return 0;                       /* 沒跑過就直接放行 */
+  const need = (data.lastRunAdded > 0 ? MIN_HOURS : RETRY_HOURS) * 3600e3;
+  const left = last + need - Date.now();
+  return left > 0 ? left : 0;
+}
+
 /* 預設追蹤主題。實際使用哪些、關鍵字寫什麼，都可以在後台「追蹤主題」調整，
    設定存在 Blob 的 news/config.json；沒有設定檔時就用這一份。
    關鍵字刻意寫得具體 —— 只打「建材」兩個字會抓回一堆上市公司財報與
@@ -49,18 +73,23 @@ const DEFAULT_TOPICS = [
 ];
 const CONFIG_PATH = "news/config.json";
 
-async function loadTopics() {
+/* 一次把設定讀齊（主題＋是否自動上線），不要為了兩個欄位讀兩次 Blob */
+async function loadConfig() {
+  const cfg = { topics: DEFAULT_TOPICS, autoPublish: AUTO_PUBLISH_DEFAULT };
   try {
     const { blobs } = await list({ prefix: CONFIG_PATH, limit: 1 });
     if (blobs?.[0]?.url) {
       const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
       if (r.ok) {
         const c = await r.json();
-        if (Array.isArray(c.topics) && c.topics.length) return c.topics;
+        if (Array.isArray(c.topics) && c.topics.length) cfg.topics = c.topics;
+        if (typeof c.autoPublish === "boolean") cfg.autoPublish = c.autoPublish;
       }
     }
   } catch (e) { /* 沒有設定檔就用預設 */ }
-  return DEFAULT_TOPICS;
+  /* 環境變數是最後一道總開關：設 0 就一定不自動上線，設定檔怎麼寫都無效 */
+  if (String(process.env.NEWS_AUTO_PUBLISH || "") === "0") cfg.autoPublish = false;
+  return cfg;
 }
 
 const RSS = q =>
@@ -215,6 +244,20 @@ export default async function handler(req, res) {
     } catch (e) { /* 第一次執行時還沒有這個檔案，屬正常 */ }
     if (!Array.isArray(data.items)) data.items = [];
 
+    /* ---- 節流閘門：兩天一篇 ----
+       ?force=1（需帶 key）可以略過，供臨時補一篇或測試用。 */
+    const force = String((req.query && req.query.force) || "") === "1" && key === process.env.ADMIN_PASSWORD;
+    const wait = force ? 0 : tooSoon(data);
+    if (wait > 0) {
+      return res.status(200).json({
+        ok: true, skipped: "too_soon",
+        lastRunAt: data.lastRunAt, lastRunAdded: data.lastRunAdded || 0,
+        nextAt: new Date(Date.now() + wait).toISOString(),
+        hoursLeft: Math.round(wait / 3600e3 * 10) / 10,
+      });
+    }
+    const stamp = (added) => { data.lastRunAt = new Date().toISOString(); data.lastRunAdded = added; };
+
     /* 已收錄過的原始報導：一篇解讀對應多則報導，所以要把 sources 全部展開，
        否則同一則新聞下次會被別的關鍵字再抓一次。 */
     const seen = new Set();
@@ -228,7 +271,8 @@ export default async function handler(req, res) {
     /* ---- 抓取 ----
        六類主題共二十幾組關鍵字，逐一序列抓會超過 Serverless 的執行時限，
        因此並行發出；單一來源失敗不影響其他（allSettled）。 */
-    const TOPICS = (await loadTopics()).filter(t => t.on !== false && Array.isArray(t.qs));
+    const CFG = await loadConfig();
+    const TOPICS = CFG.topics.filter(t => t.on !== false && Array.isArray(t.qs));
     const jobs = [];
     for (const t of TOPICS)
       for (const q of t.qs)
@@ -257,6 +301,13 @@ export default async function handler(req, res) {
     fresh = dedupe(rr, seen).slice(0, MAX_TO_AI);
 
     if (!fresh.length) {
+      /* 空手而回也要記時間，否則沒有節流、每個觸發都會重跑一次整輪 RSS。
+         記成 added:0，依 RETRY_HOURS 幾小時後可再試，不必空等滿兩天。 */
+      stamp(0);
+      await put(BLOB_PATH, JSON.stringify(data), {
+        access: "public", addRandomSuffix: false, allowOverwrite: true,
+        contentType: "application/json; charset=utf-8", cacheControlMaxAge: 0,
+      });
       return res.status(200).json({ ok: true, fetched: 0, kept: 0, note: "沒有新項目" });
     }
 
@@ -300,8 +351,10 @@ export default async function handler(req, res) {
         sources: srcs,
         srcCount: idxs.length,
         aiOk,
-        status: "pending",
+        /* AI 掛掉時（aiOk=false）內文是空的，那種一律留待審，不要讓空白文章上線 */
+        status: (CFG.autoPublish && aiOk) ? "published" : "pending",
         addedAt: now,
+        ...((CFG.autoPublish && aiOk) ? { publishedAt: now, autoPublished: true } : {}),
       });
     }
     /* 同一批裡若有多組共用同一則來源，只留第一組，避免重複文章 */
@@ -327,6 +380,7 @@ export default async function handler(req, res) {
       data.items = pending.concat(rest);
     }
     data.updated = now;
+    stamp(uniq.length);
 
     await put(BLOB_PATH, JSON.stringify(data), {
       access: "public", addRandomSuffix: false, allowOverwrite: true,
@@ -336,7 +390,10 @@ export default async function handler(req, res) {
     return res.status(200).json({
       ok: true, fetched: fresh.length, kept: uniq.length, dropped,
       total: data.items.length,
+      autoPublish: CFG.autoPublish,
+      publishedNow: uniq.filter(x => x.status === "published").length,
       pending: data.items.filter(x => x.status === "pending").length,
+      nextAt: new Date(Date.now() + (uniq.length ? MIN_HOURS : RETRY_HOURS) * 3600e3).toISOString(),
     });
   } catch (e) {
     return res.status(500).json({ error: "server_error", detail: String(e?.message || e) });

@@ -36,7 +36,7 @@
    ========================================================================= */
 
 import { hasStore, json, checkPw } from "../_lib/store.js";
-import { loadTopics, loadQueue, saveQueue } from "../_lib/news-store.js";
+import { loadConfig, loadQueue, saveQueue } from "../_lib/news-store.js";
 
 const MAX_KEEP = 120;          /* 佇列上限。原本 300，調小是為了壓低 JSON.stringify
                                   的 CPU —— 每次寫回都要序列化整份佇列。 */
@@ -45,6 +45,21 @@ const MAX_TO_AI = 24;          /* 一次最多丟給 AI 幾則。只抓一個主
 const RECENT_KEYS = 40;        /* 去重只跟最近這幾篇的來源比對 */
 const DEFAULT_ARTICLES = 1;    /* 一次只產出一篇。一次丟十幾篇待審，人不會真的
                                   一篇篇看，最後不是全發就是全放著。 */
+
+/* ---- 每兩天一篇的節流 ----
+   觸發來源有三個（這邊由訪客瀏覽驅動、Vercel 那邊還有 Cron、加上手動網址），
+   節流因此放在 runFetch 自己，而不是放在任何一個觸發端 —— 只要兩個平台同時
+   活著，光靠觸發端的間隔設定就會一天冒兩篇。 */
+const MIN_HOURS = 40;          /* 有產出 → 至少隔 40 小時 */
+const RETRY_HOURS = 6;         /* 空手而回 → 6 小時後可再試，不必空等兩天 */
+
+function tooSoon(data) {
+  const last = Date.parse(data.lastRunAt || "") || 0;
+  if (!last) return 0;
+  const need = (data.lastRunAdded > 0 ? MIN_HOURS : RETRY_HOURS) * 3600e3;
+  const left = last + need - Date.now();
+  return left > 0 ? left : 0;
+}
 
 const RSS = (q) =>
   "https://news.google.com/rss/search?q=" + encodeURIComponent(q) +
@@ -169,8 +184,18 @@ ${list.map((x, i) => `${i}. ${x.title}（${x.source}）`).join("\n")}`;
 
 /* 這支同時給 HTTP 手動觸發與 /api/news 的背景自動觸發用，
    所以主要邏輯抽出來，兩邊都呼叫這個。 */
-export async function runFetch(env, want) {
+export async function runFetch(env, want, force) {
   const data = await loadQueue(env);
+
+  /* 兩天一篇的閘門。?force=1（需帶 key）可略過，供補一篇或測試 */
+  const wait = force ? 0 : tooSoon(data);
+  if (wait > 0) {
+    return { ok: true, skipped: "too_soon", lastRunAt: data.lastRunAt,
+             lastRunAdded: data.lastRunAdded || 0,
+             nextAt: new Date(Date.now() + wait).toISOString(),
+             hoursLeft: Math.round(wait / 3600e3 * 10) / 10 };
+  }
+  const stamp = (added) => { data.lastRunAt = new Date().toISOString(); data.lastRunAdded = added; };
 
   /* 已收錄過的原始報導：一篇解讀對應多則報導，所以要把 sources 全部展開，
      否則同一則新聞下次會被別的關鍵字再抓一次。 */
@@ -184,7 +209,8 @@ export async function runFetch(env, want) {
   /* id 的精確比對很便宜，整份佇列都要看 —— 這是擋重複最有效的一道 */
   data.items.forEach((x) => (x.ids || [x.id]).forEach((i) => i && seenIds.add(i)));
 
-  const TOPICS = (await loadTopics(env)).filter((t) => t.on !== false && Array.isArray(t.qs) && t.qs.length);
+  const CFG = await loadConfig(env);
+  const TOPICS = CFG.topics.filter((t) => t.on !== false && Array.isArray(t.qs) && t.qs.length);
   if (!TOPICS.length) return { ok: true, fetched: 0, kept: 0, note: "沒有啟用的主題" };
 
   /* ★ 一次只抓一個主題，依「第幾天」輪流，七天走完一輪。
@@ -204,7 +230,11 @@ export async function runFetch(env, want) {
   let fresh = results.flatMap((r) => (r.status === "fulfilled" ? r.value : []));
   fresh = dedupe(fresh, seenSets).slice(0, MAX_TO_AI);
 
-  if (!fresh.length) return { ok: true, topic: topic.key, fetched: 0, kept: 0, note: "沒有新項目" };
+  if (!fresh.length) {
+    stamp(0);
+    await saveQueue(env, data);
+    return { ok: true, topic: topic.key, fetched: 0, kept: 0, note: "沒有新項目" };
+  }
 
   let picked = [];
   let aiOk = true;
@@ -243,7 +273,9 @@ export async function runFetch(env, want) {
       sources: srcs,
       srcCount: idxs.length,
       aiOk,
-      status: "pending",
+      /* AI 掛掉時內文是空的，那種一律留待審，不要讓空白文章上線 */
+      status: (CFG.autoPublish && aiOk) ? "published" : "pending",
+      ...((CFG.autoPublish && aiOk) ? { publishedAt: now, autoPublished: true } : {}),
       addedAt: now,
     });
   }
@@ -271,12 +303,16 @@ export async function runFetch(env, want) {
     data.items = pending.concat(rest);
   }
   data.updated = now;
+  stamp(uniq.length);
   await saveQueue(env, data);
 
   return {
     ok: true, topic: topic.key, fetched: fresh.length, kept: uniq.length, dropped,
     total: data.items.length,
+    autoPublish: CFG.autoPublish,
+    publishedNow: uniq.filter((x) => x.status === "published").length,
     pending: data.items.filter((x) => x.status === "pending").length,
+    nextAt: new Date(Date.now() + (uniq.length ? MIN_HOURS : RETRY_HOURS) * 3600e3).toISOString(),
   };
 }
 
@@ -287,7 +323,7 @@ export async function onRequestGet({ request, env }) {
   if (!hasStore(env)) return json({ error: "kv_not_configured" }, { status: 500 });
 
   try {
-    return json(await runFetch(env, q.get("n")));
+    return json(await runFetch(env, q.get("n"), q.get("force") === "1"));
   } catch (e) {
     return json({ error: "server_error", detail: String((e && e.message) || e) }, { status: 500 });
   }

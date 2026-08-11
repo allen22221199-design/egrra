@@ -1087,6 +1087,7 @@ footer{background:#0f0c09;color:rgba(255,255,255,.6);padding:64px 0 30px}
   </div>
 </footer>
 
+<script src="i18n-dict.js"></script>
 <script src="site-data.js"></script>
 <script src="/api/published"></script><!-- 後台「發布上線」的內容（Blob），覆蓋上方預設；無/失敗則沿用預設 -->
 <script>
@@ -1516,7 +1517,7 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
 /* ----------  中英雙語切換（完整版：全頁靜態文案 + 動態標籤）---------- */
 (function(){
   var DICT={
-    "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.library":"Colours","nav.certs":"Certifications","nav.portfolio":"Projects","nav.compare":"Comparison","nav.news":"News","nav.contact":"Contact",
+    "nav.about":"About","nav.tech":"Technology","nav.products":"Products","nav.library":"Colours","nav.certs":"Certifications","nav.portfolio":"Projects","nav.media":"Media","nav.compare":"Comparison","nav.news":"News","nav.contact":"Contact",
     /* 首頁精簡比較 */
     "mc.h":"So how does it compare?","mc.more":"See the full comparison →",
     "mc.c1":"EGRRA Panel","mc.c2":"Natural stone","mc.c3":"Transfer film / vinyl",
@@ -1674,18 +1675,13 @@ document.getElementById("year").textContent=(new Date()).getFullYear();
   /* 表單 placeholder */
   var PH=[["#contactForm input[name='name']","Your name"],["#contactForm input[name='phone']","Best number to reach you"],
           ["#contactForm input[name='need']","e.g. Stone Series, ~2000 units"],["#contactForm textarea[name='msg']","Briefly describe your needs"]];
-  /* 動態標籤翻譯（案例分類 / 地區 / 花色名稱）—— data-tr 元素在切換時重譯 */
-  var CAT={"空間美化":"Interior","防火門":"Fire Door","消防箱":"Hydrant Box","檢修門":"Access Panel",
-    "牆面美化":"Feature Wall","天花板":"Ceiling","電視牆":"TV Wall","長照空間":"Care Facility",
-    "牆面":"Wall","全棟廊道":"Corridor","防火消防美化":"Fire Equipment","豪宅客製":"Luxury Custom","其他":"Other",
-    "石紋系列":"Stone Series","鏽蝕系列":"Rust Series","木紋系列":"Wood Series"};
-  var CITY={"台北":"Taipei","新北":"New Taipei","台中":"Taichung","新竹":"Hsinchu","宜蘭":"Yilan","高雄":"Kaohsiung","桃園":"Taoyuan","台南":"Tainan"};
-  var PNAME={"卡拉拉":"Carrara","雅仕白":"Elegant White","白玉蘭":"White Magnolia","雪白細紋":"Snow White Fine-Vein",
-    "帝寶米黃":"Imperial Beige","加里奧金":"Galio Gold","琥珀":"Amber","聖羅蘭黑":"Laurent Black","紫丁黑":"Lilac Black",
-    "深灰石紋":"Deep Grey Stone","安格拉":"Angola Pearl","克里特灰":"Crete Grey","黑網石":"Black Web Stone","銀狐":"Silver Fox",
-    "雕刻白":"Statuario","黃金雕刻白":"Golden Statuario","帝諾":"Tino Grey","琥珀金紋":"Amber Gold-Vein","抽象紋理":"Abstract",
-    "鏽蝕 01":"Rust 01","鏽蝕 02":"Rust 02","鏽蝕 03":"Rust 03","鏽蝕 04":"Rust 04","鏽蝕 05":"Rust 05","鏽蝕 06":"Rust 06",
-    "木紋經典":"Classic Wood","木紋 EN521":"Wood EN521","木紋 GEH1215":"Wood GEH1215","木紋 UE106C":"Wood UE106C","木紋 EN628":"Wood EN628"};
+  /* 動態標籤翻譯（案例分類 / 地區 / 花色名稱）—— data-tr 元素在切換時重譯。
+     ★ 字典在 i18n-dict.js，不要在這裡再開一份 ★
+       以前這裡自己存了一份 CAT/CITY/PNAME，跟 i18n-sub.js 那份各走各的。
+       2026-08 新增 178 款花色時只加進 i18n-sub.js，結果首頁精選花色區切成
+       英文後一半以上還是中文 —— 兩邊都「有字典」，看程式碼看不出哪裡壞。 */
+  var D=window.EGRRA_DICT||{STR:{},CITY:{},PNAME:{}};
+  var CAT=D.STR, CITY=D.CITY, PNAME=D.PNAME;
   window.EGRRA_TR=function(s){
     if(document.documentElement.getAttribute("data-lang")!=="en"||!s)return s;
     if(CAT[s])return CAT[s];

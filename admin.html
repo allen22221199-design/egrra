@@ -1225,7 +1225,7 @@ function bars(list,labelMap){
    排程每天抓回來的東西一律是「待審」，按了發布才會出現在官網。
    這是刻意的：公司的賣點是耐燃一級、SGS 這種技術可信度，
    讓未經確認的內容自動上線，省下的時間遠不及寫錯一句的代價。 */
-var NEWS={items:[],updated:"",loaded:false,filter:"pending",topics:[],showTopics:false};
+var NEWS={items:[],updated:"",loaded:false,filter:"pending",topics:[],showTopics:false,autoPublish:true};
 function newsPw(){ return sessionStorage.getItem(PW_KEY)||""; }
 function renderNews(){
   var f=NEWS.filter;
@@ -1257,6 +1257,16 @@ function renderNews(){
               'border-radius:8px;padding:8px 11px;font-family:inherit;font-size:13.5px" />'+
           '</div>';
         }).join(""):'<div style="color:var(--faint);font-size:13px">載入中…</div>')+
+        '<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">'+
+          '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">'+
+            '<input type="checkbox" id="nw-auto"'+(NEWS.autoPublish?" checked":"")+' style="margin-top:3px" />'+
+            '<span style="font-size:13.5px;line-height:1.6"><b>每兩天自動抓一篇並直接上線</b>'+
+              '<br><span style="color:var(--faint);font-size:12.5px">'+
+              '取消勾選就回到原本的流程：一樣兩天抓一篇，但先進「待審」，等你看過再發布。'+
+              '<br>維持勾選代表 AI 寫的短文會直接出現在官網上，沒有人先看過 —— '+
+              '牽涉法規、罰則、金額的敘述有寫錯的風險，建議還是定期回來看一下已發布的內容。'+
+              '</span></span></label>'+
+        '</div>'+
         '<div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
           '<button class="btn sm gold" id="nw-topics-save">儲存主題設定</button>'+
           '<button class="btn sm" id="nw-topics-add">新增一個主題</button>'+
@@ -1317,7 +1327,8 @@ function loadTopics(){
   var pw=newsPw(); if(!pw)return;
   fetch("/api/news?config=1&key="+encodeURIComponent(pw))
     .then(function(r){return r.json();})
-    .then(function(d){ if(d&&d.topics){ NEWS.topics=d.topics; renderNews(); } })
+    .then(function(d){ if(d&&d.topics){ NEWS.topics=d.topics;
+      if(typeof d.autoPublish==="boolean")NEWS.autoPublish=d.autoPublish; renderNews(); } })
     .catch(function(){});
 }
 function loadNews(){
@@ -1415,10 +1426,13 @@ content.addEventListener("click",function(e){
     }).filter(function(t){return t.qs.length;});
     if(!out.length){ toast("至少要留一個主題，而且要有關鍵字","err"); return; }
     fetch("/api/news",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({password:pw,action:"topics",topics:out})})
+      body:JSON.stringify({password:pw,action:"topics",topics:out,
+        autoPublish:(function(){var c=document.getElementById("nw-auto");return c?c.checked:NEWS.autoPublish;})()})})
       .then(function(r){return r.json();})
       .then(function(d){
-        if(d&&d.ok){ NEWS.topics=out; toast("已儲存 "+d.changed+" 個主題","ok"); renderNews(); }
+        if(d&&d.ok){ NEWS.topics=out;
+          var c=document.getElementById("nw-auto"); if(c)NEWS.autoPublish=c.checked;
+          toast("已儲存 "+d.changed+" 個主題（自動上線："+(NEWS.autoPublish?"開":"關")+"）","ok"); renderNews(); }
         else toast("儲存失敗："+((d&&(d.detail||d.error))||"未知"),"err");
       }).catch(function(){ toast("連不到後端","err"); });
     return;

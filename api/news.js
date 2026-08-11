@@ -79,7 +79,17 @@ export default async function handler(req, res) {
       if (req.query && req.query.config) {
         if ((req.query.key || "") !== process.env.ADMIN_PASSWORD)
           return res.status(401).json({ error: "bad_password" });
-        return res.status(200).json({ topics: await loadTopics() });
+        {
+          let auto = true;
+          try {
+            const { blobs } = await list({ prefix: CONFIG_PATH, limit: 1 });
+            if (blobs?.[0]?.url) {
+              const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
+              if (r.ok) { const c = await r.json(); if (typeof c.autoPublish === "boolean") auto = c.autoPublish; }
+            }
+          } catch (e) {}
+          return res.status(200).json({ topics: await loadTopics(), autoPublish: auto });
+        }
       }
       const data = await load();
       const wantAll = req.query && req.query.all;
@@ -183,11 +193,22 @@ export default async function handler(req, res) {
         }))
         .filter(t => t.key && t.qs.length);
       if (!ts.length) return res.status(400).json({ error: "no_topics", detail: "至少要留一個主題" });
-      await put(CONFIG_PATH, JSON.stringify({ topics: ts, updated: now }), {
+      /* autoPublish 與主題共用同一個設定檔。沒帶這個欄位就沿用原值 ——
+         直接寫死 true/false 會讓「只改主題」的動作順手把自動上線的設定改掉。 */
+      let auto = true;
+      try {
+        const { blobs } = await list({ prefix: CONFIG_PATH, limit: 1 });
+        if (blobs?.[0]?.url) {
+          const r = await fetch(blobs[0].url + "?t=" + Date.now(), { cache: "no-store" });
+          if (r.ok) { const c = await r.json(); if (typeof c.autoPublish === "boolean") auto = c.autoPublish; }
+        }
+      } catch (e) { /* 讀不到就用預設 */ }
+      if (typeof body.autoPublish === "boolean") auto = body.autoPublish;
+      await put(CONFIG_PATH, JSON.stringify({ topics: ts, autoPublish: auto, updated: now }), {
         access: "public", addRandomSuffix: false, allowOverwrite: true,
         contentType: "application/json; charset=utf-8", cacheControlMaxAge: 0,
       });
-      return res.status(200).json({ ok: true, changed: ts.length });
+      return res.status(200).json({ ok: true, changed: ts.length, autoPublish: auto });
     } else {
       return res.status(400).json({ error: "unknown_action" });
     }

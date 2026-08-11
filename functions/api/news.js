@@ -23,7 +23,7 @@
    ========================================================================= */
 
 import { hasStore, put, json, checkPw } from "../_lib/store.js";
-import { loadTopics, loadQueue, saveQueue, CONFIG_KEY } from "../_lib/news-store.js";
+import { loadTopics, loadConfig, loadQueue, saveQueue, CONFIG_KEY } from "../_lib/news-store.js";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -34,13 +34,16 @@ const CORS = {
 /* 距離上次蒐集超過這麼久，就在背景補抓一次。
    Cloudflare Pages 不支援 Cron Triggers（那是 Workers 專屬），
    所以改由「有人看產業快訊頁」來驅動 —— 用 waitUntil 丟到背景，
-   訪客不會多等，也不必為了一天一次的排程另外養一支 Worker。
-   抓進來的一律是待審，不會自動上線，所以多跑一次也不會有事。 */
-const STALE_HOURS = 20;
+   訪客不會多等，也不必為了兩天一次的排程另外養一支 Worker。
+
+   ★ 這裡的數字只是「多久之後值得去敲一次」，真正決定節奏的是 runFetch 自己的
+     閘門（有產出隔 40 小時、空手 6 小時）。抓進來現在會直接上線，所以節流
+     一定要在被呼叫的那一端把關，不能靠這裡 —— Vercel 的 Cron 也會敲同一份資料。 */
+const STALE_HOURS = 44;
 
 async function maybeRefresh(env, ctx, data) {
   if (!env.GEMINI_API_KEY || !ctx || !ctx.waitUntil) return;
-  const last = Date.parse(data.updated || "") || 0;
+  const last = Date.parse(data.lastRunAt || data.updated || "") || 0;
   if (Date.now() - last < STALE_HOURS * 3600 * 1000) return;
   /* 動態載入：news-fetch 會 import 這個檔案共用的資料層，
      靜態 import 回去會形成循環。 */
@@ -66,7 +69,7 @@ export async function onRequestGet(ctx) {
     /* 主題設定不需要讀佇列，先處理掉，省一次讀取 */
     if (q.get("config")) {
       if (!checkPw(env, q.get("key"))) return json({ error: "bad_password" }, { status: 401, headers: CORS });
-      return json({ topics: await loadTopics(env) }, { headers: CORS });
+      return json(await loadConfig(env), { headers: CORS });
     }
 
     const data = await loadQueue(env);
@@ -135,7 +138,10 @@ export async function onRequestPost({ request, env }) {
         }))
         .filter((t) => t.key && t.qs.length);
       if (!ts.length) return json({ error: "no_topics", detail: "至少要留一個主題" }, { status: 400, headers: CORS });
-      await put(env, CONFIG_KEY, JSON.stringify({ topics: ts, updated: now }));
+      /* 沒帶 autoPublish 就沿用原值，避免只改主題卻順手改掉自動上線 */
+      const cur = await loadConfig(env);
+      const auto = typeof body.autoPublish === "boolean" ? body.autoPublish : cur.autoPublish;
+      await put(env, CONFIG_KEY, JSON.stringify({ topics: ts, autoPublish: auto, updated: now }));
       return json({ ok: true, changed: ts.length }, { headers: CORS });
     }
 

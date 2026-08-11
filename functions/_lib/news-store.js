@@ -27,22 +27,40 @@ export const DEFAULT_TOPICS = [
 ];
 
 export async function loadTopics(env) {
+  return (await loadConfig(env)).topics;
+}
+
+/* 設定檔一次讀齊：追蹤主題 ＋ 是否自動上線。
+   autoPublish 預設開（使用者要求兩天自動添加一篇），後台可取消勾選改回人工審核；
+   環境變數 NEWS_AUTO_PUBLISH=0 是不看設定檔的總開關。 */
+export async function loadConfig(env) {
+  const cfg = { topics: DEFAULT_TOPICS, autoPublish: true };
   try {
     const t = await getText(env, CONFIG_KEY);
     if (t) {
       const c = JSON.parse(t);
-      if (Array.isArray(c.topics) && c.topics.length) return c.topics;
+      if (Array.isArray(c.topics) && c.topics.length) cfg.topics = c.topics;
+      if (typeof c.autoPublish === "boolean") cfg.autoPublish = c.autoPublish;
     }
   } catch (e) { /* 沒有設定檔或格式壞掉就用預設，不要讓蒐集停擺 */ }
-  return DEFAULT_TOPICS;
+  if (String((env && env.NEWS_AUTO_PUBLISH) || "") === "0") cfg.autoPublish = false;
+  return cfg;
 }
 
 export async function loadQueue(env) {
+  /* lastRunAt / lastRunAdded 是節流用的欄位，一定要一起帶回來 ——
+     這裡若照舊只挑 updated 與 items，寫回時那兩個欄位就被抹掉，
+     節流永遠判定成「沒跑過」而失效。 */
   try {
     const t = await getText(env, QUEUE_KEY);
     if (!t) return { updated: "", items: [] };
     const d = JSON.parse(t);
-    return { updated: d.updated || "", items: Array.isArray(d.items) ? d.items : [] };
+    return {
+      updated: d.updated || "",
+      items: Array.isArray(d.items) ? d.items : [],
+      lastRunAt: d.lastRunAt || "",
+      lastRunAdded: Number(d.lastRunAdded) || 0,
+    };
   } catch (e) {
     return { updated: "", items: [] };
   }
