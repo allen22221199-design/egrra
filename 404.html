@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ★ 這個檔存在，Cloudflare Pages 才會對「找不到的路徑」回正確的 404。
+     沒有它的話 Pages 會把 index.html 當成單頁應用的進入點、以 200 送出去 ——
+     舊站那 116 個佈景主題樣板網址（/standard/、/elements/typohraphy/ …）
+     就會全部變成「內容與首頁相同的 200 頁面」，Google 判定為大量重複內容。 -->
+<meta name="robots" content="noindex, follow" />
+<title>找不到頁面｜煌盛興業 EGRRA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#211d18;--muted:#6d6459;--gold:#c6a468;--bg:#faf8f5;--line:#e4ded4}
+body{font-family:"Noto Sans TC",system-ui,sans-serif;background:var(--bg);color:var(--ink);
+     min-height:100vh;display:flex;flex-direction:column}
+header{border-bottom:1px solid var(--line);background:#fff}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+.nav{display:flex;align-items:center;gap:14px;height:64px}
+.brand{text-decoration:none;color:var(--ink);display:flex;align-items:baseline;gap:8px}
+.brand b{font-family:"Noto Serif TC",serif;font-size:19px;letter-spacing:.04em}
+.brand span{font-size:12px;letter-spacing:.22em;color:var(--gold)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:72px 24px}
+.box{max-width:560px;text-align:center}
+.num{font-family:"Noto Serif TC",serif;font-size:clamp(64px,14vw,120px);line-height:1;
+     color:var(--gold);opacity:.34;letter-spacing:.04em}
+h1{font-family:"Noto Serif TC",serif;font-size:clamp(21px,4vw,28px);margin:14px 0 12px;font-weight:600}
+p{color:var(--muted);line-height:1.9;font-size:15px}
+.links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+.links a{text-decoration:none;font-size:14px;padding:11px 20px;border:1px solid var(--line);
+        border-radius:2px;color:var(--ink);background:#fff;transition:.18s}
+.links a:hover{border-color:var(--gold);color:var(--gold)}
+.links a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.links a.on:hover{background:var(--gold);border-color:var(--gold);color:#fff}
+.foot{border-top:1px solid var(--line);padding:20px 0;font-size:13px;color:var(--muted);text-align:center}
+.foot a{color:var(--muted)}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#f0ece5;--muted:#a49a8d;--bg:#191612;--line:#332c24}
+  header,.links a{background:#211d18}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="/" class="brand"><b>煌盛興業</b><span>EGRRA</span></a>
+  </div>
+</header>
+
+<main>
+  <div class="box">
+    <div class="num">404</div>
+    <h1>找不到這個頁面</h1>
+    <p>網址可能已經變更，或是從舊網站帶過來的連結。<br />
+       您要找的內容應該在下面其中一處。</p>
+    <div class="links">
+      <a class="on" href="/">回首頁</a>
+      <a href="/products">花色庫</a>
+      <a href="/cases">實績案例</a>
+      <a href="/compare">競品比較</a>
+      <a href="/certifications">認證與規範</a>
+      <a href="/#contact">聯絡我們</a>
+    </div>
+  </div>
+</main>
+
+<div class="foot">
+  <div class="wrap">煌盛興業 EGRRA　·　Tel <a href="tel:0222221199">02-2222-1199</a></div>
+</div>
+</body>
+</html>

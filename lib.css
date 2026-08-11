@@ -120,6 +120,45 @@ header{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdro
 .mshots .s:hover{opacity:.9}
 .mshots .s.on{opacity:1;border-color:var(--gold)}
 
+/* ---- 施工前後對比（案例詳情）----
+   .cmp 疊在主圖之上填滿整個圖片區：完工後當底圖，施工前用 clip-path 依 --p 裁掉右半邊，
+   拖曳分隔線就是改變 --p。兩層都用 contain＋置中，同一個畫面基準才比得準。
+   （--p 設在 .cmp 上，分隔線與裁切都吃這個變數，一次設定兩邊同步）*/
+.mmode{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:6;display:none;
+  background:rgba(15,12,9,.5);backdrop-filter:blur(6px);border-radius:100px;padding:3px}
+.mmode.on{display:inline-flex}
+.mmode button{border:none;background:none;color:rgba(255,255,255,.75);font-family:inherit;font-size:12px;
+  letter-spacing:.04em;padding:5px 14px;border-radius:100px;cursor:pointer;transition:.2s;white-space:nowrap}
+.mmode button:hover{color:#fff}
+.mmode button.on{background:var(--gold);color:#fff}
+.cmp{position:absolute;inset:0;z-index:2;display:none;overflow:hidden;background:#f2f0ec;
+  cursor:ew-resize;touch-action:none;user-select:none;-webkit-user-select:none}
+.cmp.on{display:block}
+.cmp .ly{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center}
+.cmp .ly.b{clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+.cmp .ln{position:absolute;top:0;bottom:0;left:var(--p,50%);width:2px;margin-left:-1px;
+  background:rgba(255,255,255,.92);box-shadow:0 0 0 1px rgba(15,12,9,.22)}
+.cmp .hd{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;
+  border:none;border-radius:50%;background:#fff;box-shadow:0 5px 16px rgba(15,12,9,.32);
+  color:var(--gold-dk);font-size:13px;letter-spacing:.04em;line-height:1;cursor:ew-resize;font-family:inherit;
+  display:flex;align-items:center;justify-content:center}
+.cmp .hd:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.cmp .lb{position:absolute;top:13px;color:#fff;font-size:11.5px;letter-spacing:.1em;padding:4px 11px;
+  border-radius:20px;background:rgba(15,12,9,.55);backdrop-filter:blur(4px);pointer-events:none}
+.cmp .lb.l{left:12px}
+.cmp .lb.r{right:12px}
+.cmp .nt{position:absolute;left:12px;right:12px;bottom:12px;text-align:center;color:#fff;font-size:12px;
+  line-height:1.5;pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.65)}
+.cmp .nt:empty{display:none}
+/* 對比模式：關掉「點擊放大」提示與放大鏡游標（此時點擊＝拖曳比較，提示會誤導） */
+.mod .mimg.cmpmode{cursor:default}
+.mod .mimg.cmpmode::after{display:none}
+.mnav,.mcount{z-index:5}
+/* 縮圖列的「對比組」：左右各半張（左＝施工前、右＝完工後） */
+.mshots .s.pr{display:flex;overflow:hidden;background:#e8e2da}
+.mshots .s.pr i{flex:1;background-size:cover;background-position:center}
+.mshots .s.pr i+i{border-left:1px solid rgba(255,255,255,.85)}
+
 /* ---- 紋理放大燈箱（花色庫：點 modal 大圖看整張紋理） ---- */
 .mod .mimg{cursor:zoom-in}
 .mod .mimg::after{content:"⤢ 點擊放大";position:absolute;right:12px;bottom:12px;background:rgba(22,19,15,.62);
@@ -144,6 +183,8 @@ html[data-lang="en"] .mod .mimg::after{content:"⤢ Click to enlarge"}
   .grid.pf{grid-template-columns:repeat(3,1fr)}
   .mod{grid-template-columns:1fr;max-height:90vh}
   .mod .mimg{min-height:220px}
+  /* 對比模式要看得出差別，圖片區不能太扁 */
+  .mod .mimg.cmpmode{min-height:330px}
 }
 @media(max-width:600px){
   .wrap{padding:0 18px}

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "description": "哪些路徑要進 Pages Functions。exclude 到的由 CDN 直送靜態檔、不叫用 Worker —— 免費方案每天 10 萬次呼叫，圖片與腳本不排除的話光載入一次首頁就吃掉十幾次。★ 不要加 /*.jpg 這種副檔名規則：這裡的 * 會跨過斜線，會把後台上傳圖的端點 /f/uploads/xxx.jpg 一起排除掉，那條路徑必須進 Function 才讀得到 KV（2026-08-10 踩過，圖全變 404）。",
+  "include": [
+    "/*"
+  ],
+  "exclude": [
+    "/img/*",
+    "/*.js",
+    "/*.css",
+    "/*.ico",
+    "/*.txt",
+    "/*.xml",
+    "/*.html"
+  ]
+}

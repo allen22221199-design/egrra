@@ -174,6 +174,31 @@ a{color:inherit}
 .galempty{color:var(--faint);font-size:13px}
 .galtag{display:inline-block;background:var(--line2);color:var(--muted);border-radius:20px;
   padding:1px 8px;font-size:11px;margin-left:4px}
+/* 施工前後對比：一列＝一組（前 → 後），照片可從相簿挑或另外上傳 */
+.ba{display:flex;flex-direction:column;gap:10px}
+.barow{border:1px solid var(--line);border-radius:11px;padding:12px;background:var(--panel)}
+.batop{display:flex;align-items:center;gap:12px}
+.baslot{width:96px;flex:0 0 auto;text-align:center;cursor:pointer}
+.baslot .im{width:96px;height:74px;border-radius:9px;border:1px solid var(--line);
+  background:#f6f6f6 center/cover no-repeat;position:relative;transition:.2s}
+.baslot:hover .im{border-color:var(--gold)}
+.baslot .im.empty::after{content:"點此選照片";position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--faint);font-size:11.5px;text-align:center;padding:4px}
+.baslot .cap{font-size:11.5px;color:var(--muted);margin-top:5px;letter-spacing:.06em}
+.baarrow{color:var(--gold);font-size:18px;flex:0 0 auto;margin-top:-16px}
+.barow .banote{flex:1;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13.5px;
+  color:var(--ink);font-family:inherit;min-width:0}
+.barow .banote:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.13)}
+.badel{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--danger);border-radius:8px;
+  width:32px;height:32px;font-size:15px;cursor:pointer;line-height:1}
+.badel:hover{border-color:var(--danger)}
+.bapick{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.bapick .pk{display:flex;flex-wrap:wrap;gap:7px}
+.bapick .pk .p{width:62px;height:62px;border-radius:7px;border:2px solid transparent;
+  background:#f6f6f6 center/cover no-repeat;cursor:pointer;transition:.2s}
+.bapick .pk .p:hover{border-color:var(--gold)}
+.bapick .hint{font-size:12px;color:var(--faint);margin-bottom:8px}
+.bawarn{font-size:12.5px;color:var(--warn);margin-top:8px}
 /* 合作建商列 */
 .cl-rows{display:flex;flex-direction:column;gap:8px}
 .cl-row{display:flex;align-items:center;gap:10px}

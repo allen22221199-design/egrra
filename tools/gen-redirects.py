@@ -199,10 +199,68 @@ def write_cloudflare(rules):
         raise SystemExit("★ 超過 Cloudflare Pages 上限")
 
 
+def write_cf_function_map():
+    """
+    產生 functions/_legacy-map.js。
+
+    ★ 為什麼 Cloudflare 不能只靠 _redirects ★
+      實測（2026-08-10，egrra-official.pages.dev）：
+        /portfolio-item/%E8%8F%AF%E5%B1%B133  → 301 /cases?case=c21   ✓
+        /portfolio-item/%e8%8f%af%e5%b1%b133  → 掉進萬用規則           ✗
+      Cloudflare 會把 _redirects 的「規則來源」正規化成大寫百分比編碼，
+      再拿請求原文逐字比對。所以我為 Vercel 準備的小寫規則在這裡會被摺疊
+      掉，而舊站 Yoast 的 sitemap 用的正是小寫 —— 真實流量會全部落空。
+      （Vercel 剛好相反：它逐字比對，所以那邊大小寫兩份都要放。）
+
+      _redirects 沒有正規表示式也沒有大小寫不敏感選項，解不了這件事。
+      改成在 Function 裡自己 decodeURIComponent 再查表，編碼大小寫、
+      結尾斜線就全都不重要了。
+
+    所以這支現在產三份，三邊要一致：
+      vercel.json           留在 Vercel 時用
+      _redirects            Cloudflare 上只當備援（ASCII 規則它處理得很好）
+      functions/_legacy-map.js   Cloudflare 的主要機制
+    """
+    seen, lines = {}, []
+    for kind, mp in CASE.items():
+        for slug, cid in mp.items():
+            seen[f"/{kind}/{slug}".lower()] = f"/cases?case={cid}"
+    for slug in PROD_AS_CASE:
+        seen[f"/product/{slug}".lower()] = "/cases"
+    for h in HUE:
+        seen[f"/product/{h}".lower()] = "/products"
+    for k, v in PAGE.items():
+        seen[k.lower()] = v
+
+    for k in sorted(seen):
+        lines.append(f'  {json.dumps(k, ensure_ascii=False)}: {json.dumps(seen[k], ensure_ascii=False)},')
+
+    body = (
+        "/* 這個檔由 tools/gen-redirects.py 產生，不要手改。\n"
+        "   鍵是「解碼後、去掉結尾斜線、轉小寫」的路徑；\n"
+        "   functions/_middleware.js 會用同樣的方式正規化請求再查這張表。 */\n"
+        "export const LEGACY = {\n" + "\n".join(lines) + "\n};\n\n"
+        "/* 舊站的目錄前綴：查不到明確對應時，整個前綴導到這裡。\n"
+        "   舊站 60 件實績案例只有 20 件對得上新站，其餘走這裡進列表頁。 */\n"
+        "export const PREFIX = [\n"
+        '  ["/portfolio-item", "/cases"],\n'
+        '  ["/product-category", "/products"],\n'
+        '  ["/portfolio-tag", "/products"],\n'
+        '  ["/product", "/products"],\n'
+        '  ["/shop", "/products"],\n'
+        "];\n"
+    )
+    p = os.path.join(ROOT, "functions", "_legacy-map.js")
+    with open(p, "w", encoding="utf-8", newline="\n") as f:
+        f.write(body)
+    print(f"functions/_legacy-map.js：{len(seen)} 條明確對應 + 5 條前綴")
+
+
 def main():
     rules = build()
     write_vercel(rules)
     write_cloudflare(rules)
+    write_cf_function_map()
 
 
 if __name__ == "__main__":
